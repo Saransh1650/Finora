@@ -27,6 +27,7 @@ struct HomePage: View {
                 
                 // Sidebar with overlay
                 if isDrawerOpen {
+                    
                     // Background overlay
                     AppColors.textPrimary.opacity(0.4)
                         .ignoresSafeArea()
