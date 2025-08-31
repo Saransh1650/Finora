@@ -1,0 +1,17 @@
+//
+//  FitCheck_AIApp.swift
+//  FitCheck.AI
+//
+//  Created by Saransh Singhal on 30/8/25.
+//
+
+import SwiftUI
+
+@main
+struct FitCheck_AIApp: App {
+    var body: some Scene {
+        WindowGroup {
+            ContentView()
+        }
+    }
+}

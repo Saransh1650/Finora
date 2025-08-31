@@ -1,0 +1,571 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		63CAE40E2E6319CE00F111CD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63CAE3F82E6319CC00F111CD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 63CAE3FF2E6319CC00F111CD;
+			remoteInfo = FitCheck.AI;
+		};
+		63CAE4182E6319CE00F111CD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63CAE3F82E6319CC00F111CD /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 63CAE3FF2E6319CC00F111CD;
+			remoteInfo = FitCheck.AI;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		63CAE4002E6319CC00F111CD /* FitCheck.AI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FitCheck.AI.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		63CAE40D2E6319CE00F111CD /* FitCheck.AITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FitCheck.AITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		63CAE4172E6319CE00F111CD /* FitCheck.AIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FitCheck.AIUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		63CAE4022E6319CC00F111CD /* FitCheck.AI */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = FitCheck.AI;
+			sourceTree = "<group>";
+		};
+		63CAE4102E6319CE00F111CD /* FitCheck.AITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = FitCheck.AITests;
+			sourceTree = "<group>";
+		};
+		63CAE41A2E6319CE00F111CD /* FitCheck.AIUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = FitCheck.AIUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		63CAE3FD2E6319CC00F111CD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		63CAE40A2E6319CE00F111CD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		63CAE4142E6319CE00F111CD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		63CAE3F72E6319CC00F111CD = {
+			isa = PBXGroup;
+			children = (
+				63CAE4022E6319CC00F111CD /* FitCheck.AI */,
+				63CAE4102E6319CE00F111CD /* FitCheck.AITests */,
+				63CAE41A2E6319CE00F111CD /* FitCheck.AIUITests */,
+				63CAE4012E6319CC00F111CD /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		63CAE4012E6319CC00F111CD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				63CAE4002E6319CC00F111CD /* FitCheck.AI.app */,
+				63CAE40D2E6319CE00F111CD /* FitCheck.AITests.xctest */,
+				63CAE4172E6319CE00F111CD /* FitCheck.AIUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		63CAE3FF2E6319CC00F111CD /* FitCheck.AI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 63CAE4212E6319CE00F111CD /* Build configuration list for PBXNativeTarget "FitCheck.AI" */;
+			buildPhases = (
+				63CAE3FC2E6319CC00F111CD /* Sources */,
+				63CAE3FD2E6319CC00F111CD /* Frameworks */,
+				63CAE3FE2E6319CC00F111CD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				63CAE4022E6319CC00F111CD /* FitCheck.AI */,
+			);
+			name = FitCheck.AI;
+			packageProductDependencies = (
+			);
+			productName = FitCheck.AI;
+			productReference = 63CAE4002E6319CC00F111CD /* FitCheck.AI.app */;
+			productType = "com.apple.product-type.application";
+		};
+		63CAE40C2E6319CE00F111CD /* FitCheck.AITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 63CAE4242E6319CE00F111CD /* Build configuration list for PBXNativeTarget "FitCheck.AITests" */;
+			buildPhases = (
+				63CAE4092E6319CE00F111CD /* Sources */,
+				63CAE40A2E6319CE00F111CD /* Frameworks */,
+				63CAE40B2E6319CE00F111CD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				63CAE40F2E6319CE00F111CD /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				63CAE4102E6319CE00F111CD /* FitCheck.AITests */,
+			);
+			name = FitCheck.AITests;
+			packageProductDependencies = (
+			);
+			productName = FitCheck.AITests;
+			productReference = 63CAE40D2E6319CE00F111CD /* FitCheck.AITests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		63CAE4162E6319CE00F111CD /* FitCheck.AIUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 63CAE4272E6319CE00F111CD /* Build configuration list for PBXNativeTarget "FitCheck.AIUITests" */;
+			buildPhases = (
+				63CAE4132E6319CE00F111CD /* Sources */,
+				63CAE4142E6319CE00F111CD /* Frameworks */,
+				63CAE4152E6319CE00F111CD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				63CAE4192E6319CE00F111CD /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				63CAE41A2E6319CE00F111CD /* FitCheck.AIUITests */,
+			);
+			name = FitCheck.AIUITests;
+			packageProductDependencies = (
+			);
+			productName = FitCheck.AIUITests;
+			productReference = 63CAE4172E6319CE00F111CD /* FitCheck.AIUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		63CAE3F82E6319CC00F111CD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1640;
+				LastUpgradeCheck = 1640;
+				TargetAttributes = {
+					63CAE3FF2E6319CC00F111CD = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					63CAE40C2E6319CE00F111CD = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = 63CAE3FF2E6319CC00F111CD;
+					};
+					63CAE4162E6319CE00F111CD = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = 63CAE3FF2E6319CC00F111CD;
+					};
+				};
+			};
+			buildConfigurationList = 63CAE3FB2E6319CC00F111CD /* Build configuration list for PBXProject "FitCheck.AI" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 63CAE3F72E6319CC00F111CD;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 63CAE4012E6319CC00F111CD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				63CAE3FF2E6319CC00F111CD /* FitCheck.AI */,
+				63CAE40C2E6319CE00F111CD /* FitCheck.AITests */,
+				63CAE4162E6319CE00F111CD /* FitCheck.AIUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		63CAE3FE2E6319CC00F111CD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		63CAE40B2E6319CE00F111CD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		63CAE4152E6319CE00F111CD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		63CAE3FC2E6319CC00F111CD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		63CAE4092E6319CE00F111CD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		63CAE4132E6319CE00F111CD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		63CAE40F2E6319CE00F111CD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 63CAE3FF2E6319CC00F111CD /* FitCheck.AI */;
+			targetProxy = 63CAE40E2E6319CE00F111CD /* PBXContainerItemProxy */;
+		};
+		63CAE4192E6319CE00F111CD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 63CAE3FF2E6319CC00F111CD /* FitCheck.AI */;
+			targetProxy = 63CAE4182E6319CE00F111CD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		63CAE41F2E6319CE00F111CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 63CAE4022E6319CC00F111CD /* FitCheck.AI */;
+			baseConfigurationReferenceRelativePath = Dev.xcconfig;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = LLX8488H9A;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		63CAE4202E6319CE00F111CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 63CAE4022E6319CC00F111CD /* FitCheck.AI */;
+			baseConfigurationReferenceRelativePath = Production.xcconfig;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = LLX8488H9A;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		63CAE4222E6319CE00F111CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 63CAE4022E6319CC00F111CD /* FitCheck.AI */;
+			baseConfigurationReferenceRelativePath = Dev.xcconfig;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LLX8488H9A;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "saransh.FitCheck-AI";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		63CAE4232E6319CE00F111CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 63CAE4022E6319CC00F111CD /* FitCheck.AI */;
+			baseConfigurationReferenceRelativePath = Production.xcconfig;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LLX8488H9A;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "saransh.FitCheck-AI";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		63CAE4252E6319CE00F111CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LLX8488H9A;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "saransh.FitCheck-AITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FitCheck.AI.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FitCheck.AI";
+			};
+			name = Debug;
+		};
+		63CAE4262E6319CE00F111CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LLX8488H9A;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "saransh.FitCheck-AITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FitCheck.AI.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FitCheck.AI";
+			};
+			name = Release;
+		};
+		63CAE4282E6319CE00F111CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LLX8488H9A;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "saransh.FitCheck-AIUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = FitCheck.AI;
+			};
+			name = Debug;
+		};
+		63CAE4292E6319CE00F111CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LLX8488H9A;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "saransh.FitCheck-AIUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = FitCheck.AI;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		63CAE3FB2E6319CC00F111CD /* Build configuration list for PBXProject "FitCheck.AI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				63CAE41F2E6319CE00F111CD /* Debug */,
+				63CAE4202E6319CE00F111CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		63CAE4212E6319CE00F111CD /* Build configuration list for PBXNativeTarget "FitCheck.AI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				63CAE4222E6319CE00F111CD /* Debug */,
+				63CAE4232E6319CE00F111CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		63CAE4242E6319CE00F111CD /* Build configuration list for PBXNativeTarget "FitCheck.AITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				63CAE4252E6319CE00F111CD /* Debug */,
+				63CAE4262E6319CE00F111CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		63CAE4272E6319CE00F111CD /* Build configuration list for PBXNativeTarget "FitCheck.AIUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				63CAE4282E6319CE00F111CD /* Debug */,
+				63CAE4292E6319CE00F111CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 63CAE3F82E6319CC00F111CD /* Project object */;
+}

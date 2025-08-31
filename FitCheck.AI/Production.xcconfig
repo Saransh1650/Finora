@@ -1,0 +1,17 @@
+//
+//  Production.xcconfig
+//  med_tech
+//
+//  Created by Saransh Singhal on 11/8/25.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://developer.apple.com/documentation/xcode/adding-a-build-configuration-file-to-your-project
+
+ANON_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd5Z25ibHZzYm9lY2VrdXlsYXByIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc0Mzc3MTQsImV4cCI6MjA1MzAxMzcxNH0.y5-0CaIZbWpuISCpzo-_P27t9v3n-fSKJo6HYczxn5g
+SUPABASE_INIT_URL = https://gygnblvsboecekuylapr.supabase.co
+DEFAULT_HOST = api.domidomi.com
+
+SWIFT_OPTIMIZATION_LEVEL = -Onone
+SWIFT_COMPILATION_MODE = singlefile
+
