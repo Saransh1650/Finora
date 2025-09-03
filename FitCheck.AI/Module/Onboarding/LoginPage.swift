@@ -9,12 +9,12 @@ import AuthenticationServices
 import SwiftUI
 
 struct LoginPage: View {
-    @StateObject private var authManager = AuthManager(authRepo: AuthRepo())
+    @StateObject private var authManager = AuthManager()
     @State private var showingAlert = false
 
     var body: some View {
         ZStack {
-            // Background
+
             AppColors.pureBackground
                 .ignoresSafeArea()
 

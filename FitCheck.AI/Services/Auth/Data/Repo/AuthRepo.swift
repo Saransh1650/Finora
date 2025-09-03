@@ -13,22 +13,14 @@ import Supabase
 // MARK: - AuthRepo Implementation
 @MainActor
 class AuthRepo {
-    private let supabase: SupabaseClient
-    private var currentUser: User?
-
-    // MARK: - Initialization
-    init() {
-        self.supabase = SupabaseClient(
-            supabaseURL: URL(string: "https://your-project.supabase.co")!,
-            supabaseKey: "your-anon-key"
-        )
-        Task {
-            await checkExistingSession()
-        }
-    }
+    static let supabase = SupabaseClient(
+        supabaseURL: URL(string: AppConfig.supabaseInitUrl)!,
+        supabaseKey: AppConfig.anonKey
+    )
+    static var currentUser: User?
 
     // MARK: - Session Check
-    private func checkExistingSession() async {
+    static func checkExistingSession() async {
         do {
             let user = try await supabase.auth.user()
             currentUser = user
@@ -38,7 +30,7 @@ class AuthRepo {
     }
 
     // MARK: - Sign In Methods
-    func signInWithApple(authorization: ASAuthorization) async
+    static func signInWithApple(authorization: ASAuthorization) async
         -> (User?, Failure?)
     {
         guard
@@ -86,7 +78,7 @@ class AuthRepo {
         }
     }
 
-    func signInWithGoogle(idToken: String, accessToken: String) async
+    static func signInWithGoogle(idToken: String, accessToken: String) async
         -> (User?, Failure?)
     {
         do {
@@ -111,7 +103,7 @@ class AuthRepo {
     }
 
     // MARK: - Session Management
-    func signOut() async -> Failure? {
+    static func signOut() async -> Failure? {
         do {
             try await supabase.auth.signOut()
             return nil
@@ -123,7 +115,7 @@ class AuthRepo {
         }
     }
 
-    func getCurrentUser() async -> (User?, Failure?) {
+    static func getCurrentUser() async -> (User?, Failure?) {
         do {
             let user = try await supabase.auth.user()
             return (user, nil)
@@ -138,7 +130,7 @@ class AuthRepo {
         }
     }
 
-    func refreshSession() async -> (User?, Failure?) {
+    static func refreshSession() async -> (User?, Failure?) {
         do {
             let session = try await supabase.auth.refreshSession()
             return (session.user, nil)
@@ -154,7 +146,7 @@ class AuthRepo {
     }
 
     // MARK: - Account Management
-    func deleteAccount() async -> Failure? {
+    static func deleteAccount() async -> Failure? {
         guard let currentUser = currentUser else {
             return Failure(
                 message: ErrorType.unAuthorized.message,
@@ -173,9 +165,11 @@ class AuthRepo {
         }
     }
 
-    func updateUserProfile(fullName: String?, avatarUrl: String?) async -> (
-        User?, Failure?
-    ) {
+    static func updateUserProfile(fullName: String?, avatarUrl: String?) async
+        -> (
+            User?, Failure?
+        )
+    {
         do {
             var userMetadata: [String: AnyJSON] = [:]
 

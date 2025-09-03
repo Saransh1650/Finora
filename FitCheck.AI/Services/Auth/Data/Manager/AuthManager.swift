@@ -19,17 +19,9 @@ class AuthManager: ObservableObject {
     @Published var isAuthenticated: Bool = false
     @Published var errorMessage: String?
 
-    private let authRepo: AuthRepo
-
-    // MARK: - Initialization
-    init(authRepo: AuthRepo) {
-        self.authRepo = authRepo
-        checkAuthStatus()
-    }
-
-    private func checkAuthStatus() {
+    func checkAuthStatus() {
         Task {
-            let (user, failure) = await authRepo.getCurrentUser()
+            let (user, failure) = await AuthRepo.getCurrentUser()
             if failure == nil {
                 currentUser = user
                 isAuthenticated = user != nil
@@ -43,7 +35,7 @@ class AuthManager: ObservableObject {
     // MARK: - Authentication Methods
     func signInWithApple(authorization: ASAuthorization) async -> Failure? {
         loading = true
-        let (user, failure) = await authRepo.signInWithApple(
+        let (user, failure) = await AuthRepo.signInWithApple(
             authorization: authorization
         )
 
@@ -62,7 +54,7 @@ class AuthManager: ObservableObject {
         -> Failure?
     {
         loading = true
-        let (user, failure) = await authRepo.signInWithGoogle(
+        let (user, failure) = await AuthRepo.signInWithGoogle(
             idToken: idToken,
             accessToken: accessToken
         )
@@ -82,7 +74,7 @@ class AuthManager: ObservableObject {
 
     func signOut() async -> Failure? {
         loading = true
-        let failure = await authRepo.signOut()
+        let failure = await AuthRepo.signOut()
 
         if failure == nil {
             currentUser = nil
@@ -99,7 +91,7 @@ class AuthManager: ObservableObject {
 
     func refreshSession() async -> Failure? {
         loading = true
-        let (user, failure) = await authRepo.refreshSession()
+        let (user, failure) = await AuthRepo.refreshSession()
 
         if failure == nil {
             currentUser = user
@@ -123,7 +115,7 @@ class AuthManager: ObservableObject {
             )
         }
         loading = true
-        let (user, failure) = await authRepo.updateUserProfile(
+        let (user, failure) = await AuthRepo.updateUserProfile(
             fullName: fullName,
             avatarUrl: avatarUrl
         )
@@ -142,7 +134,7 @@ class AuthManager: ObservableObject {
 
     func deleteAccount() async -> Failure? {
         loading = true
-        let failure = await authRepo.deleteAccount()
+        let failure = await AuthRepo.deleteAccount()
 
         if failure == nil {
             currentUser = nil

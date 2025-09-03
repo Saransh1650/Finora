@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6304D5ED2E689849002AEEDA /* DotLottie in Frameworks */ = {isa = PBXBuildFile; productRef = 6304D5EC2E689849002AEEDA /* DotLottie */; };
 		63AB6C2A2E658CFE00B7EFDC /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = 63AB6C292E658CFE00B7EFDC /* Auth */; };
 		63AB6C2C2E658CFE00B7EFDC /* Functions in Frameworks */ = {isa = PBXBuildFile; productRef = 63AB6C2B2E658CFE00B7EFDC /* Functions */; };
 		63AB6C2E2E658CFE00B7EFDC /* PostgREST in Frameworks */ = {isa = PBXBuildFile; productRef = 63AB6C2D2E658CFE00B7EFDC /* PostgREST */; };
@@ -67,6 +68,7 @@
 				63AB6C2A2E658CFE00B7EFDC /* Auth in Frameworks */,
 				63AB6C322E658CFE00B7EFDC /* Storage in Frameworks */,
 				63AB6C302E658CFE00B7EFDC /* Realtime in Frameworks */,
+				6304D5ED2E689849002AEEDA /* DotLottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,6 +135,7 @@
 				63AB6C2F2E658CFE00B7EFDC /* Realtime */,
 				63AB6C312E658CFE00B7EFDC /* Storage */,
 				63AB6C332E658CFE00B7EFDC /* Supabase */,
+				6304D5EC2E689849002AEEDA /* DotLottie */,
 			);
 			productName = FitCheck.AI;
 			productReference = 63CAE4002E6319CC00F111CD /* FitCheck.AI.app */;
@@ -218,6 +221,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				63AB6C282E658C3C00B7EFDC /* XCRemoteSwiftPackageReference "supabase-swift" */,
+				6304D5E72E6896A0002AEEDA /* XCRemoteSwiftPackageReference "dotlottie-ios" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 63CAE4012E6319CC00F111CD /* Products */;
@@ -592,6 +596,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		6304D5E72E6896A0002AEEDA /* XCRemoteSwiftPackageReference "dotlottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/LottieFiles/dotlottie-ios";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		63AB6C282E658C3C00B7EFDC /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/supabase/supabase-swift.git";
@@ -603,6 +615,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		6304D5EC2E689849002AEEDA /* DotLottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6304D5E72E6896A0002AEEDA /* XCRemoteSwiftPackageReference "dotlottie-ios" */;
+			productName = DotLottie;
+		};
 		63AB6C292E658CFE00B7EFDC /* Auth */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 63AB6C282E658C3C00B7EFDC /* XCRemoteSwiftPackageReference "supabase-swift" */;
