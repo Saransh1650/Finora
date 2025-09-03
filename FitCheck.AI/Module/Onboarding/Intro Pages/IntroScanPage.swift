@@ -5,10 +5,11 @@
 //  Created by Saransh Singhal on 3/9/25.
 //
 
-import DotLottie
 import SwiftUI
 
 struct IntroScanPage: View {
+    // add optional next action so a container can navigate
+    var nextAction: (() -> Void)? = nil
     @State private var isAnimating = false
     
     var body: some View {
@@ -53,7 +54,20 @@ struct IntroScanPage: View {
                 .padding(.horizontal)
                 
                 Spacer()
-                Spacer()
+                
+                // Bottom Next button
+                if let next = nextAction {
+                    Button(action: { next() }) {
+                        Text("Next")
+                            .fontWeight(.semibold)
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(AppColors.selected)
+                            .foregroundColor(AppColors.background)
+                            .cornerRadius(12)
+                    }
+                    .padding(.horizontal)
+                }
             }
             .padding()
         }
