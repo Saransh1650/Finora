@@ -9,12 +9,14 @@ import Foundation
 
 public struct StockModel: Identifiable, Codable, Hashable {
     public let id: UUID
-    public var name: String
-    public var symbol: String
-    public var portfolioPercentage: Double
-    public var sector: String
-    public var profitLossPercentage: Double
-    public var sectorRank: Int
+    var name: String
+    var symbol: String
+    var portfolioPercentage: Double
+    var sector: String
+    var profitLossPercentage: Double
+    var sectorRank: Int
+    var avgPrice: Double
+    var lastTradingPrice: Double
 
     public init(
         id: UUID = UUID(),
@@ -23,7 +25,9 @@ public struct StockModel: Identifiable, Codable, Hashable {
         portfolioPercentage: Double,
         sector: String,
         profitLossPercentage: Double,
-        sectorRank: Int
+        sectorRank: Int,
+        avgPrice: Double,
+        lastTradingPrice: Double
     ) {
         self.id = id
         self.name = name
@@ -32,6 +36,8 @@ public struct StockModel: Identifiable, Codable, Hashable {
         self.sector = sector
         self.profitLossPercentage = profitLossPercentage
         self.sectorRank = sectorRank
+        self.avgPrice = avgPrice
+        self.lastTradingPrice = lastTradingPrice
     }
 
     public var portfolioFraction: Double {
@@ -56,7 +62,9 @@ public struct StockModel: Identifiable, Codable, Hashable {
             portfolioPercentage: 25.00,
             sector: "Technology",
             profitLossPercentage: 12.34,
-            sectorRank: 1
+            sectorRank: 1,
+            avgPrice: 150.00,
+            lastTradingPrice: 155.00  // Added missing parameter
         )
         static let sample2 = StockModel(
             name: "Tesla, Inc.",
@@ -64,7 +72,9 @@ public struct StockModel: Identifiable, Codable, Hashable {
             portfolioPercentage: 10.50,
             sector: "Automotive",
             profitLossPercentage: -8.42,
-            sectorRank: 3
+            sectorRank: 3,
+            avgPrice: 700.00,
+            lastTradingPrice: 680.00  // Added missing parameter
         )
         static let samples: [StockModel] = [sample1, sample2]
     }
