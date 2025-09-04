@@ -1,7 +1,6 @@
 import SwiftUI
 
 struct IntroAdvicePage: View {
-    // add optional next action so a container can navigate
     var nextAction: (() -> Void)? = nil
     @State private var isAnimating = false
 

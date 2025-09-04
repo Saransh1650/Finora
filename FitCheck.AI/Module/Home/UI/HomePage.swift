@@ -20,9 +20,7 @@ struct HomePage: View {
                     }
                     .background(AppColors.pureBackground)
                     Spacer()
-                    ChatTextField(text: .constant(""),) {
-                        
-                    }
+                    Spacer()
                 }
                 
                 // Sidebar with overlay
@@ -48,7 +46,7 @@ struct HomePage: View {
                 }
             }
             .background(AppColors.pureBackground)
-            .navigationTitle("FitCheck.AI")
+            .navigationTitle("Welcome")
             .toolbarVisibility(
                 isDrawerOpen ? .hidden : .visible,
                 for: .navigationBar
@@ -61,6 +59,9 @@ struct HomePage: View {
                         }
                     } label: {
                         Image(systemName: "person.circle.fill")
+                            .foregroundStyle(AppColors.selected)
+                            .font(.system(size: 24))
+                            
                             
                     }
                 }
