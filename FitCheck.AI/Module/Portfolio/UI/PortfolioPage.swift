@@ -9,23 +9,24 @@ import SwiftUI
 
 struct PortfolioPage: View {
     var stocks: [StockModel] = StockModel.samples
-
+    
     var body: some View {
-
-        NavigationStack {
-            ZStack {
-                
-                List {
-                    ForEach(stocks) { stock in
-                        StockCard(stock: stock)
-                            .listRowSeparator(.automatic)
-                            .listRowBackground(AppColors.background)
-                    }
+        ZStack {
+            AppColors.pureBackground
+                .ignoresSafeArea()
+            
+            List {
+                ForEach(stocks) { stock in
+                    StockCard(stock: stock)
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color.clear)
                 }
-                .listStyle(.insetGrouped)
             }
-            .navigationTitle("Portfolio")
+            .listStyle(.insetGrouped)
+            .scrollContentBackground(.hidden)
         }
+        .navigationTitle("Portfolio")
+        .navigationBarTitleDisplayMode(.large)
     }
 }
 
