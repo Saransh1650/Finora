@@ -14,7 +14,7 @@ protocol AuthRepositoryProtocol {
     
     func signInWithApple(authorization: ASAuthorization) async 
     -> (User?, Failure?)
-    func signInWithGoogle(idToken: String, accessToken: String) async
+    func signInWithGoogle() async
     -> (User?, Failure?)
     func signOut() async -> Failure?
     func getCurrentUser() async throws -> (User?, Failure?)

@@ -50,14 +50,11 @@ class AuthManager: ObservableObject {
         return failure
     }
 
-    func signInWithGoogle(idToken: String, accessToken: String) async
+    func signInWithGoogle() async
         -> Failure?
     {
         loading = true
-        let (user, failure) = await AuthRepo.signInWithGoogle(
-            idToken: idToken,
-            accessToken: accessToken
-        )
+        let (user, failure) = await AuthRepo.signInWithGoogle()
 
         if failure == nil {
             currentUser = user

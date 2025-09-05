@@ -8,6 +8,7 @@
 import AuthenticationServices
 import Combine
 import Foundation
+import GoogleSignIn
 import Supabase
 
 // MARK: - AuthRepo Implementation
@@ -59,10 +60,22 @@ class AuthRepo {
         }
 
         do {
+            guard
+                let idToken = credential.identityToken
+                    .flatMap({ String(data: $0, encoding: .utf8) })
+            else {
+                return (
+                    nil,
+                    Failure(
+                        message: ErrorType.AppleIDTokenNotFound.message,
+                        errorType: ErrorType.AppleIDTokenNotFound
+                    )
+                )
+            }
             let session = try await supabase.auth.signInWithIdToken(
-                credentials: OpenIDConnectCredentials(
+                credentials: .init(
                     provider: .apple,
-                    idToken: tokenString
+                    idToken: idToken
                 )
             )
 
@@ -78,10 +91,24 @@ class AuthRepo {
         }
     }
 
-    static func signInWithGoogle(idToken: String, accessToken: String) async
+    static func signInWithGoogle() async
         -> (User?, Failure?)
     {
         do {
+            let result = try await GIDSignIn.sharedInstance.signIn(
+                withPresenting: UIViewController()
+            )
+
+            guard let idToken = result.user.idToken?.tokenString else {
+                return (
+                    nil,
+                    Failure(
+                        message: ErrorType.unAuthorized.message,
+                        errorType: ErrorType.unAuthorized
+                    )
+                )
+            }
+            let accessToken = result.user.accessToken.tokenString
             let session = try await supabase.auth.signInWithIdToken(
                 credentials: OpenIDConnectCredentials(
                     provider: .google,

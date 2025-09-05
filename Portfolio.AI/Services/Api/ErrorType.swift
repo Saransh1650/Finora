@@ -24,6 +24,8 @@ enum ErrorType {
     case DeleteAccountError
     case UpdateUserProfileError
     case NoCurrentUser
+    case googleIdTokenNotFound
+    case AppleIDTokenNotFound
 
     var message: String {
         switch self {
@@ -43,6 +45,8 @@ enum ErrorType {
         case .DeleteAccountError: return "Failed to delete account."
         case .UpdateUserProfileError: return "Failed to update user profile."
         case .NoCurrentUser: return "No current user."
+        case .googleIdTokenNotFound: return "Google ID token not found."
+        case .AppleIDTokenNotFound: return "Apple ID token not found."
         }
     }
 }

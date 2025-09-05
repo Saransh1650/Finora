@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		636106712E6A07D5005C6547 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 636106702E6A07D5005C6547 /* GoogleSignIn */; };
+		636106732E6A07D5005C6547 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 636106722E6A07D5005C6547 /* GoogleSignInSwift */; };
 		63AB6C2A2E658CFE00B7EFDC /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = 63AB6C292E658CFE00B7EFDC /* Auth */; };
 		63AB6C2C2E658CFE00B7EFDC /* Functions in Frameworks */ = {isa = PBXBuildFile; productRef = 63AB6C2B2E658CFE00B7EFDC /* Functions */; };
 		63AB6C2E2E658CFE00B7EFDC /* PostgREST in Frameworks */ = {isa = PBXBuildFile; productRef = 63AB6C2D2E658CFE00B7EFDC /* PostgREST */; };
@@ -33,15 +35,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		63CAE4002E6319CC00F111CD /* FitCheck.AI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FitCheck.AI.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		63CAE40D2E6319CE00F111CD /* FitCheck.AITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FitCheck.AITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		63CAE4172E6319CE00F111CD /* FitCheck.AIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FitCheck.AIUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		63CAE4002E6319CC00F111CD /* Portfolio.AI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Portfolio.AI.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		63CAE40D2E6319CE00F111CD /* Portfolio.AITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Portfolio.AITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		63CAE4172E6319CE00F111CD /* Portfolio.AIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Portfolio.AIUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		63CAE4022E6319CC00F111CD /* FitCheck.AI */ = {
+		63CAE4022E6319CC00F111CD /* Portfolio.AI */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = FitCheck.AI;
+			path = Portfolio.AI;
 			sourceTree = "<group>";
 		};
 		63CAE4102E6319CE00F111CD /* FitCheck.AITests */ = {
@@ -64,9 +66,11 @@
 				63AB6C2E2E658CFE00B7EFDC /* PostgREST in Frameworks */,
 				63AB6C2C2E658CFE00B7EFDC /* Functions in Frameworks */,
 				63AB6C342E658CFE00B7EFDC /* Supabase in Frameworks */,
+				636106732E6A07D5005C6547 /* GoogleSignInSwift in Frameworks */,
 				63AB6C2A2E658CFE00B7EFDC /* Auth in Frameworks */,
 				63AB6C322E658CFE00B7EFDC /* Storage in Frameworks */,
 				63AB6C302E658CFE00B7EFDC /* Realtime in Frameworks */,
+				636106712E6A07D5005C6547 /* GoogleSignIn in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -90,7 +94,7 @@
 		63CAE3F72E6319CC00F111CD = {
 			isa = PBXGroup;
 			children = (
-				63CAE4022E6319CC00F111CD /* FitCheck.AI */,
+				63CAE4022E6319CC00F111CD /* Portfolio.AI */,
 				63CAE4102E6319CE00F111CD /* FitCheck.AITests */,
 				63CAE41A2E6319CE00F111CD /* FitCheck.AIUITests */,
 				63CAE4012E6319CC00F111CD /* Products */,
@@ -100,9 +104,9 @@
 		63CAE4012E6319CC00F111CD /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				63CAE4002E6319CC00F111CD /* FitCheck.AI.app */,
-				63CAE40D2E6319CE00F111CD /* FitCheck.AITests.xctest */,
-				63CAE4172E6319CE00F111CD /* FitCheck.AIUITests.xctest */,
+				63CAE4002E6319CC00F111CD /* Portfolio.AI.app */,
+				63CAE40D2E6319CE00F111CD /* Portfolio.AITests.xctest */,
+				63CAE4172E6319CE00F111CD /* Portfolio.AIUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -110,9 +114,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		63CAE3FF2E6319CC00F111CD /* FitCheck.AI */ = {
+		63CAE3FF2E6319CC00F111CD /* Portfolio.AI */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 63CAE4212E6319CE00F111CD /* Build configuration list for PBXNativeTarget "FitCheck.AI" */;
+			buildConfigurationList = 63CAE4212E6319CE00F111CD /* Build configuration list for PBXNativeTarget "Portfolio.AI" */;
 			buildPhases = (
 				63CAE3FC2E6319CC00F111CD /* Sources */,
 				63CAE3FD2E6319CC00F111CD /* Frameworks */,
@@ -123,9 +127,9 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				63CAE4022E6319CC00F111CD /* FitCheck.AI */,
+				63CAE4022E6319CC00F111CD /* Portfolio.AI */,
 			);
-			name = FitCheck.AI;
+			name = Portfolio.AI;
 			packageProductDependencies = (
 				63AB6C292E658CFE00B7EFDC /* Auth */,
 				63AB6C2B2E658CFE00B7EFDC /* Functions */,
@@ -133,14 +137,16 @@
 				63AB6C2F2E658CFE00B7EFDC /* Realtime */,
 				63AB6C312E658CFE00B7EFDC /* Storage */,
 				63AB6C332E658CFE00B7EFDC /* Supabase */,
+				636106702E6A07D5005C6547 /* GoogleSignIn */,
+				636106722E6A07D5005C6547 /* GoogleSignInSwift */,
 			);
 			productName = FitCheck.AI;
-			productReference = 63CAE4002E6319CC00F111CD /* FitCheck.AI.app */;
+			productReference = 63CAE4002E6319CC00F111CD /* Portfolio.AI.app */;
 			productType = "com.apple.product-type.application";
 		};
-		63CAE40C2E6319CE00F111CD /* FitCheck.AITests */ = {
+		63CAE40C2E6319CE00F111CD /* Portfolio.AITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 63CAE4242E6319CE00F111CD /* Build configuration list for PBXNativeTarget "FitCheck.AITests" */;
+			buildConfigurationList = 63CAE4242E6319CE00F111CD /* Build configuration list for PBXNativeTarget "Portfolio.AITests" */;
 			buildPhases = (
 				63CAE4092E6319CE00F111CD /* Sources */,
 				63CAE40A2E6319CE00F111CD /* Frameworks */,
@@ -154,16 +160,16 @@
 			fileSystemSynchronizedGroups = (
 				63CAE4102E6319CE00F111CD /* FitCheck.AITests */,
 			);
-			name = FitCheck.AITests;
+			name = Portfolio.AITests;
 			packageProductDependencies = (
 			);
 			productName = FitCheck.AITests;
-			productReference = 63CAE40D2E6319CE00F111CD /* FitCheck.AITests.xctest */;
+			productReference = 63CAE40D2E6319CE00F111CD /* Portfolio.AITests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		63CAE4162E6319CE00F111CD /* FitCheck.AIUITests */ = {
+		63CAE4162E6319CE00F111CD /* Portfolio.AIUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 63CAE4272E6319CE00F111CD /* Build configuration list for PBXNativeTarget "FitCheck.AIUITests" */;
+			buildConfigurationList = 63CAE4272E6319CE00F111CD /* Build configuration list for PBXNativeTarget "Portfolio.AIUITests" */;
 			buildPhases = (
 				63CAE4132E6319CE00F111CD /* Sources */,
 				63CAE4142E6319CE00F111CD /* Frameworks */,
@@ -177,11 +183,11 @@
 			fileSystemSynchronizedGroups = (
 				63CAE41A2E6319CE00F111CD /* FitCheck.AIUITests */,
 			);
-			name = FitCheck.AIUITests;
+			name = Portfolio.AIUITests;
 			packageProductDependencies = (
 			);
 			productName = FitCheck.AIUITests;
-			productReference = 63CAE4172E6319CE00F111CD /* FitCheck.AIUITests.xctest */;
+			productReference = 63CAE4172E6319CE00F111CD /* Portfolio.AIUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -207,7 +213,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 63CAE3FB2E6319CC00F111CD /* Build configuration list for PBXProject "FitCheck.AI" */;
+			buildConfigurationList = 63CAE3FB2E6319CC00F111CD /* Build configuration list for PBXProject "Portfolio.AI" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -218,15 +224,16 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				63AB6C282E658C3C00B7EFDC /* XCRemoteSwiftPackageReference "supabase-swift" */,
+				6361066F2E6A07D5005C6547 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 63CAE4012E6319CC00F111CD /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				63CAE3FF2E6319CC00F111CD /* FitCheck.AI */,
-				63CAE40C2E6319CE00F111CD /* FitCheck.AITests */,
-				63CAE4162E6319CE00F111CD /* FitCheck.AIUITests */,
+				63CAE3FF2E6319CC00F111CD /* Portfolio.AI */,
+				63CAE40C2E6319CE00F111CD /* Portfolio.AITests */,
+				63CAE4162E6319CE00F111CD /* Portfolio.AIUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -282,12 +289,12 @@
 /* Begin PBXTargetDependency section */
 		63CAE40F2E6319CE00F111CD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 63CAE3FF2E6319CC00F111CD /* FitCheck.AI */;
+			target = 63CAE3FF2E6319CC00F111CD /* Portfolio.AI */;
 			targetProxy = 63CAE40E2E6319CE00F111CD /* PBXContainerItemProxy */;
 		};
 		63CAE4192E6319CE00F111CD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 63CAE3FF2E6319CC00F111CD /* FitCheck.AI */;
+			target = 63CAE3FF2E6319CC00F111CD /* Portfolio.AI */;
 			targetProxy = 63CAE4182E6319CE00F111CD /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -295,7 +302,7 @@
 /* Begin XCBuildConfiguration section */
 		63CAE41F2E6319CE00F111CD /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReferenceAnchor = 63CAE4022E6319CC00F111CD /* FitCheck.AI */;
+			baseConfigurationReferenceAnchor = 63CAE4022E6319CC00F111CD /* Portfolio.AI */;
 			baseConfigurationReferenceRelativePath = Dev.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -361,7 +368,7 @@
 		};
 		63CAE4202E6319CE00F111CD /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReferenceAnchor = 63CAE4022E6319CC00F111CD /* FitCheck.AI */;
+			baseConfigurationReferenceAnchor = 63CAE4022E6319CC00F111CD /* Portfolio.AI */;
 			baseConfigurationReferenceRelativePath = Production.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -420,7 +427,7 @@
 		};
 		63CAE4222E6319CE00F111CD /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReferenceAnchor = 63CAE4022E6319CC00F111CD /* FitCheck.AI */;
+			baseConfigurationReferenceAnchor = 63CAE4022E6319CC00F111CD /* Portfolio.AI */;
 			baseConfigurationReferenceRelativePath = Dev.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -440,7 +447,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "saransh.FitCheck-AI";
+				PRODUCT_BUNDLE_IDENTIFIER = saransh.portfolio.ai;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -450,7 +457,7 @@
 		};
 		63CAE4232E6319CE00F111CD /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReferenceAnchor = 63CAE4022E6319CC00F111CD /* FitCheck.AI */;
+			baseConfigurationReferenceAnchor = 63CAE4022E6319CC00F111CD /* Portfolio.AI */;
 			baseConfigurationReferenceRelativePath = Production.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -470,7 +477,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "saransh.FitCheck-AI";
+				PRODUCT_BUNDLE_IDENTIFIER = saransh.portfolio.ai;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -493,7 +500,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FitCheck.AI.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FitCheck.AI";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Portfolio.AI.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Portfolio.AI";
 			};
 			name = Debug;
 		};
@@ -512,7 +519,7 @@
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FitCheck.AI.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/FitCheck.AI";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Portfolio.AI.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Portfolio.AI";
 			};
 			name = Release;
 		};
@@ -553,7 +560,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		63CAE3FB2E6319CC00F111CD /* Build configuration list for PBXProject "FitCheck.AI" */ = {
+		63CAE3FB2E6319CC00F111CD /* Build configuration list for PBXProject "Portfolio.AI" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				63CAE41F2E6319CE00F111CD /* Debug */,
@@ -562,7 +569,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		63CAE4212E6319CE00F111CD /* Build configuration list for PBXNativeTarget "FitCheck.AI" */ = {
+		63CAE4212E6319CE00F111CD /* Build configuration list for PBXNativeTarget "Portfolio.AI" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				63CAE4222E6319CE00F111CD /* Debug */,
@@ -571,7 +578,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		63CAE4242E6319CE00F111CD /* Build configuration list for PBXNativeTarget "FitCheck.AITests" */ = {
+		63CAE4242E6319CE00F111CD /* Build configuration list for PBXNativeTarget "Portfolio.AITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				63CAE4252E6319CE00F111CD /* Debug */,
@@ -580,7 +587,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		63CAE4272E6319CE00F111CD /* Build configuration list for PBXNativeTarget "FitCheck.AIUITests" */ = {
+		63CAE4272E6319CE00F111CD /* Build configuration list for PBXNativeTarget "Portfolio.AIUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				63CAE4282E6319CE00F111CD /* Debug */,
@@ -592,6 +599,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		6361066F2E6A07D5005C6547 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
 		63AB6C282E658C3C00B7EFDC /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/supabase/supabase-swift.git";
@@ -603,6 +618,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		636106702E6A07D5005C6547 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6361066F2E6A07D5005C6547 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		636106722E6A07D5005C6547 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6361066F2E6A07D5005C6547 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
 		63AB6C292E658CFE00B7EFDC /* Auth */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 63AB6C282E658C3C00B7EFDC /* XCRemoteSwiftPackageReference "supabase-swift" */;

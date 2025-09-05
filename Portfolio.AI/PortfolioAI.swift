@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct FitCheck_AIApp: App {
+struct PortfolioAI: App {
     var body: some Scene {
         WindowGroup {
             ContentView()

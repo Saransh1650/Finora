@@ -16,9 +16,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "63CAE3FF2E6319CC00F111CD"
-               BuildableName = "FitCheck.AI.app"
-               BlueprintName = "FitCheck.AI"
-               ReferencedContainer = "container:FitCheck.AI.xcodeproj">
+               BuildableName = "Portfolio.AI.app"
+               BlueprintName = "Portfolio.AI"
+               ReferencedContainer = "container:Portfolio.AI.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -36,9 +36,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "63CAE40C2E6319CE00F111CD"
-               BuildableName = "FitCheck.AITests.xctest"
-               BlueprintName = "FitCheck.AITests"
-               ReferencedContainer = "container:FitCheck.AI.xcodeproj">
+               BuildableName = "Portfolio.AITests.xctest"
+               BlueprintName = "Portfolio.AITests"
+               ReferencedContainer = "container:Portfolio.AI.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -47,9 +47,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "63CAE4162E6319CE00F111CD"
-               BuildableName = "FitCheck.AIUITests.xctest"
-               BlueprintName = "FitCheck.AIUITests"
-               ReferencedContainer = "container:FitCheck.AI.xcodeproj">
+               BuildableName = "Portfolio.AIUITests.xctest"
+               BlueprintName = "Portfolio.AIUITests"
+               ReferencedContainer = "container:Portfolio.AI.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -69,9 +69,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "63CAE3FF2E6319CC00F111CD"
-            BuildableName = "FitCheck.AI.app"
-            BlueprintName = "FitCheck.AI"
-            ReferencedContainer = "container:FitCheck.AI.xcodeproj">
+            BuildableName = "Portfolio.AI.app"
+            BlueprintName = "Portfolio.AI"
+            ReferencedContainer = "container:Portfolio.AI.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -86,9 +86,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "63CAE3FF2E6319CC00F111CD"
-            BuildableName = "FitCheck.AI.app"
-            BlueprintName = "FitCheck.AI"
-            ReferencedContainer = "container:FitCheck.AI.xcodeproj">
+            BuildableName = "Portfolio.AI.app"
+            BlueprintName = "Portfolio.AI"
+            ReferencedContainer = "container:Portfolio.AI.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
