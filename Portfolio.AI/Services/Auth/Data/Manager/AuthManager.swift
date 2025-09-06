@@ -15,19 +15,23 @@ import SwiftUI
 class AuthManager: ObservableObject {
 
     @Published var currentUser: User?
-    @Published var loading: Bool = false
+    @Published var loading: Bool = true
     @Published var isAuthenticated: Bool = false
     @Published var errorMessage: String?
 
-    func checkAuthStatus() {
+    func checkAuthStatus() async {
         Task {
+            loading = true
             let (user, failure) = await AuthRepo.getCurrentUser()
             if failure == nil {
                 currentUser = user
                 isAuthenticated = user != nil
+                loading = false
             } else {
                 currentUser = nil
                 isAuthenticated = false
+                errorMessage = failure?.message
+                loading = false
             }
         }
     }
@@ -50,11 +54,11 @@ class AuthManager: ObservableObject {
         return failure
     }
 
-    func signInWithGoogle() async
+    func signInWithGoogle(presentingController: UIViewController) async
         -> Failure?
     {
         loading = true
-        let (user, failure) = await AuthRepo.signInWithGoogle()
+        let (user, failure) = await AuthRepo.signInWithGoogle(presentingController: presentingController)
 
         if failure == nil {
             currentUser = user

@@ -13,7 +13,7 @@ import Supabase
 
 // MARK: - AuthRepo Implementation
 @MainActor
-class AuthRepo {
+class AuthRepo: UIViewController {
     static let supabase = SupabaseClient(
         supabaseURL: URL(string: AppConfig.supabaseInitUrl)!,
         supabaseKey: AppConfig.anonKey
@@ -48,7 +48,7 @@ class AuthRepo {
         }
 
         guard let identityToken = credential.identityToken,
-            let tokenString = String(data: identityToken, encoding: .utf8)
+              let data = String(data: identityToken, encoding: .utf8)
         else {
             return (
                 nil,
@@ -91,13 +91,11 @@ class AuthRepo {
         }
     }
 
-    static func signInWithGoogle() async
+    static func signInWithGoogle(presentingController: UIViewController) async
         -> (User?, Failure?)
     {
         do {
-            let result = try await GIDSignIn.sharedInstance.signIn(
-                withPresenting: UIViewController()
-            )
+            let result = try await GIDSignIn.sharedInstance.signIn(withPresenting: presentingController)
 
             guard let idToken = result.user.idToken?.tokenString else {
                 return (

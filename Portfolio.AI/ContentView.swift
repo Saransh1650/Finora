@@ -8,17 +8,24 @@
 import SwiftUI
 
 struct ContentView: View {
-    @StateObject private var authManager = AuthManager()
-    
+    @StateObject var authManager: AuthManager = AuthManager()
     var body: some View {
         Group {
-            if authManager.isAuthenticated {
+            if authManager.loading {
+                ProgressView()
+                    .scaleEffect(1.5)
+            } else if authManager.isAuthenticated {
                 NavigationPage()
             } else {
                 LoginPage()
             }
         }
         .environmentObject(authManager)
+        .onAppear {
+            Task {
+                await authManager.checkAuthStatus()
+            }
+        }
     }
 }
 

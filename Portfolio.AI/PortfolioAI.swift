@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct PortfolioAI: App {
+    @StateObject var authManager = AuthManager()
+
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
+        
     }
 }
