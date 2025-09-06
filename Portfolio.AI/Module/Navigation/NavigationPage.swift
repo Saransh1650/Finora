@@ -9,10 +9,11 @@ import SwiftUI
 
 struct NavigationPage: View {
     @State private var selectedTab: TabItem = .home
+    @StateObject var portfolioManager = PortfolioManager()
     
     var body: some View {
         VStack(spacing: 0) {
-            // Content Area
+
             ZStack {
                 switch selectedTab {
                     case .home:
@@ -22,12 +23,12 @@ struct NavigationPage: View {
                     case .portfolio:
                         NavigationView {
                             PortfolioPage()
+                                .environmentObject(portfolioManager)
                         }
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             
-            // Custom Bottom Navigation
             CustomNavBar(selectedTab: $selectedTab)
         }
         .ignoresSafeArea(.keyboard)

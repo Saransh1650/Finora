@@ -8,28 +8,102 @@
 import SwiftUI
 
 struct PortfolioPage: View {
-    var stocks: [StockModel] = StockModel.samples
-    
-    var body: some View {
-        ZStack {
-            AppColors.pureBackground
-                .ignoresSafeArea()
-            
-            List {
-                ForEach(stocks) { stock in
-                    StockCard(stock: stock)
-                        .listRowSeparator(.hidden)
-                        .listRowBackground(Color.clear)
+    @EnvironmentObject var portfolioManager: PortfolioManager
+
+    // MARK: - Portfolio List
+    private var portfolioList: some View {
+        List {
+            ForEach(portfolioManager.stocks, id: \.id) { stock in
+                StockCard(stock: stock)
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
+                    .swipeActions(content: {
+                        Button(role: .destructive) {
+                            if let index = portfolioManager.stocks.firstIndex(
+                                of: stock
+                            ) {
+                                Task {
+                                    await portfolioManager.removeStock(
+                                        at: IndexSet(integer: index)
+                                    )
+                                }
+                            }
+                        } label: {
+                            Label("Remove", systemImage: "trash")
+                        }
+
+                        Button {
+                            Task {
+                                await portfolioManager.updateStock(stock)
+                            }
+
+                        } label: {
+                            Label("Update", systemImage: "slider.vertical.3")
+                        }
+                    })
+                    .contextMenu {
+                        Button(role: .destructive) {
+                            if let index = portfolioManager.stocks.firstIndex(
+                                of: stock
+                            ) {
+                                Task {
+                                    await portfolioManager.removeStock(
+                                        at: IndexSet(integer: index)
+                                    )
+                                }
+                            }
+                        } label: {
+                            Label("Remove", systemImage: "trash")
+                        }
+
+                        Button {
+                            Task {
+                                await portfolioManager.updateStock(stock)
+                            }
+
+                        } label: {
+                            Label("Update Stock", systemImage: "pencil")
+                        }
+
+                    }
+            }
+            .onDelete { indexSet in
+                Task {
+                    await portfolioManager.removeStock(at: indexSet)
                 }
             }
-            .listStyle(.insetGrouped)
-            .scrollContentBackground(.hidden)
+        }
+        .listStyle(.insetGrouped)
+        .scrollContentBackground(.hidden)
+    }
+
+    // MARK: - Body
+    var body: some View {
+        ZStack {
+
+            if portfolioManager.stocks.isEmpty {
+                EmptyPortfolioView()
+            } else {
+                VStack(spacing: 0) {
+                    PortfolioSummaryView()
+                        .padding(.top)
+
+                    portfolioList
+                }
+            }
         }
         .navigationTitle("Portfolio")
         .navigationBarTitleDisplayMode(.large)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                AddStockButton()
+            }
+        }
     }
 }
 
 #Preview {
-    PortfolioPage()
+    NavigationStack {
+        PortfolioPage()
+    }
 }
