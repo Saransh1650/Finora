@@ -10,12 +10,13 @@ import SwiftUI
 struct HomePage: View {
     @State private var isDrawerOpen = false
     
+    
     var body: some View {
         ZStack {
             // Main Content
             VStack(spacing: 0) {
                 ScrollView {
-                    
+                 
                 }
                 .background(AppColors.pureBackground)
                 Spacer()

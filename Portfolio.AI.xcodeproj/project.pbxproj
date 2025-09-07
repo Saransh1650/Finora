@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6313DA0C2E6CAAAE00624F65 /* OpenAI in Frameworks */ = {isa = PBXBuildFile; productRef = 6313DA0B2E6CAAAE00624F65 /* OpenAI */; };
 		636106712E6A07D5005C6547 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 636106702E6A07D5005C6547 /* GoogleSignIn */; };
 		636106732E6A07D5005C6547 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 636106722E6A07D5005C6547 /* GoogleSignInSwift */; };
 		63AB6C2A2E658CFE00B7EFDC /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = 63AB6C292E658CFE00B7EFDC /* Auth */; };
@@ -41,6 +42,7 @@
 				63AB6C2A2E658CFE00B7EFDC /* Auth in Frameworks */,
 				63AB6C322E658CFE00B7EFDC /* Storage in Frameworks */,
 				63AB6C302E658CFE00B7EFDC /* Realtime in Frameworks */,
+				6313DA0C2E6CAAAE00624F65 /* OpenAI in Frameworks */,
 				636106712E6A07D5005C6547 /* GoogleSignIn in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -92,6 +94,7 @@
 				63AB6C332E658CFE00B7EFDC /* Supabase */,
 				636106702E6A07D5005C6547 /* GoogleSignIn */,
 				636106722E6A07D5005C6547 /* GoogleSignInSwift */,
+				6313DA0B2E6CAAAE00624F65 /* OpenAI */,
 			);
 			productName = FitCheck.AI;
 			productReference = 63CAE4002E6319CC00F111CD /* Portfolio.AI.app */;
@@ -124,6 +127,7 @@
 			packageReferences = (
 				63AB6C282E658C3C00B7EFDC /* XCRemoteSwiftPackageReference "supabase-swift" */,
 				6361066F2E6A07D5005C6547 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				6313DA0A2E6CAAAE00624F65 /* XCRemoteSwiftPackageReference "OpenAI" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 63CAE4012E6319CC00F111CD /* Products */;
@@ -369,6 +373,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		6313DA0A2E6CAAAE00624F65 /* XCRemoteSwiftPackageReference "OpenAI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MacPaw/OpenAI.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.4.6;
+			};
+		};
 		6361066F2E6A07D5005C6547 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
@@ -388,6 +400,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		6313DA0B2E6CAAAE00624F65 /* OpenAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6313DA0A2E6CAAAE00624F65 /* XCRemoteSwiftPackageReference "OpenAI" */;
+			productName = OpenAI;
+		};
 		636106702E6A07D5005C6547 /* GoogleSignIn */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6361066F2E6A07D5005C6547 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
