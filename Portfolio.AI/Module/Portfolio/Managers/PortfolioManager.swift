@@ -35,19 +35,6 @@ class PortfolioManager: ObservableObject {
         }
     }
 
-    private func saveStocks() async {
-
-        await PortfolioRepo.addStock(stocks) { result in
-            switch result {
-            case .success():
-                print("Stocks saved successfully to Supabase.")
-            case .failure(let error):
-                print("Failed to save stocks to Supabase: \(error)")
-
-            }
-        }
-    }
-
     func addStock(_ newStocks: [StockModel]) async {
         for stock in newStocks {
             if let index = stocks.firstIndex(where: {
@@ -58,7 +45,15 @@ class PortfolioManager: ObservableObject {
                 stocks.append(stock)
             }
         }
-        await saveStocks()
+        await PortfolioRepo.addStock(newStocks) { result in
+            switch result {
+            case .success():
+                print("Stocks saved successfully to Supabase.")
+            case .failure(let error):
+                print("Failed to save stocks to Supabase: \(error)")
+
+            }
+        }
     }
 
     func removeStock(at indexSet: IndexSet) async {
@@ -75,10 +70,20 @@ class PortfolioManager: ObservableObject {
         }
 
     }
+
     func updateStock(_ stock: StockModel) async {
         if let index = stocks.firstIndex(where: { $0.id == stock.id }) {
             stocks[index] = stock
-            await saveStocks()
+            await PortfolioRepo.updateStock(stock) { result in
+                switch result {
+                case .success():
+                    print("Stock updated successfully in Supabase.")
+                case .failure(let error):
+                    print("Failed to update stock in Supabase: \(error)")
+
+                }
+            }
+
         }
     }
 }

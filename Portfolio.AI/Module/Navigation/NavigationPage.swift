@@ -19,6 +19,7 @@ struct NavigationPage: View {
                     case .home:
                         NavigationView {
                             HomePage()
+                                .environmentObject(portfolioManager)
                         }
                     case .portfolio:
                         NavigationView {

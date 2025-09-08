@@ -9,14 +9,20 @@ import SwiftUI
 
 struct HomePage: View {
     @State private var isDrawerOpen = false
-    
+    @EnvironmentObject var portfolioManager: PortfolioManager
     
     var body: some View {
         ZStack {
             // Main Content
             VStack(spacing: 0) {
                 ScrollView {
-                 
+                    Button {
+                        Task {
+                            await analyzePortfolio()
+                        }
+                    } label: {
+                        Text("Analyze Portfolio with AI")
+                    }
                 }
                 .background(AppColors.pureBackground)
                 Spacer()
@@ -64,6 +70,28 @@ struct HomePage: View {
                         .font(.system(size: 24))
                 }
             }
+        }
+    }
+    
+    private func analyzePortfolio() async {
+
+        
+        // Convert portfolio stocks to a JSON string for analysis
+        do {
+            let portfolioData = try JSONEncoder().encode(portfolioManager.stocks)
+            let portfolioJsonString = String(data: portfolioData, encoding: .utf8) ?? "No portfolio data"
+            
+            await GeminiRepo.analyzePortfolio(portfolioData: portfolioJsonString) { result in
+                switch result {
+                    case .success(let analysis):
+                        print("AI Analysis Result: \(analysis)")
+                        print("Portfolio Analysis Success:")
+                    case .failure(let error):
+                        print("Portfolio Analysis Error: \(error.localizedDescription)")
+                }
+            }
+        } catch {
+            print("Error encoding portfolio data: \(error)")
         }
     }
 }
