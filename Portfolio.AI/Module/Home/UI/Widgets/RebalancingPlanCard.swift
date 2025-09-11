@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RebalancingPlanCard: View {
-    let rebalancingPlans: [PortfolioAnalysisModel.RebalancingPlan]
+    let rebalancingPlans: [PortfolioSummaryByAiModel.RebalancingPlan]
     
     var body: some View {
         VStack(spacing: 16) {
@@ -58,7 +58,7 @@ struct RebalancingPlanCard: View {
 }
 
 struct RebalancingPlanItem: View {
-    let plan: PortfolioAnalysisModel.RebalancingPlan
+    let plan: PortfolioSummaryByAiModel.RebalancingPlan
     
     var body: some View {
         VStack(spacing: 8) {
@@ -144,32 +144,32 @@ struct RebalancingPlanItem: View {
 #Preview {
     RebalancingPlanCard(
         rebalancingPlans: [
-            PortfolioAnalysisModel.RebalancingPlan(
+            PortfolioSummaryByAiModel.RebalancingPlan(
                 action: "Sell",
                 stock: "AAPL",
                 amount: 10000,
                 rationale: "Reduce allocation from 39.9% to ~30% to decrease tech concentration.",
-                fairEntryRange: PortfolioAnalysisModel.RebalancingPlan.FairEntryRange(
+                fairEntryRange: PortfolioSummaryByAiModel.RebalancingPlan.FairEntryRange(
                     minPrice: 160,
                     maxPrice: 175
                 )
             ),
-            PortfolioAnalysisModel.RebalancingPlan(
+            PortfolioSummaryByAiModel.RebalancingPlan(
                 action: "Buy",
                 stock: "JNJ",
                 amount: 15000,
                 rationale: "Increase Healthcare exposure. Current price is attractive for entry.",
-                fairEntryRange: PortfolioAnalysisModel.RebalancingPlan.FairEntryRange(
+                fairEntryRange: PortfolioSummaryByAiModel.RebalancingPlan.FairEntryRange(
                     minPrice: 155,
                     maxPrice: 165
                 )
             ),
-            PortfolioAnalysisModel.RebalancingPlan(
+            PortfolioSummaryByAiModel.RebalancingPlan(
                 action: "Hold",
                 stock: "TSLA",
                 amount: 0,
                 rationale: "Maintain current position as it aligns with the strategy.",
-                fairEntryRange: PortfolioAnalysisModel.RebalancingPlan.FairEntryRange(
+                fairEntryRange: PortfolioSummaryByAiModel.RebalancingPlan.FairEntryRange(
                     minPrice: 280,
                     maxPrice: 310
                 )

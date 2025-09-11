@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PortfolioSummaryCard: View {
-    let summary: PortfolioAnalysisModel.PortfolioSummary
+    let summary: PortfolioSummaryByAiModel.PortfolioSummary
     
     var body: some View {
         VStack(spacing: 16) {
@@ -99,7 +99,7 @@ struct PortfolioSummaryCard: View {
         .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(.white.opacity(0.8))
+                .fill(AppColors.foreground)
                 .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
         )
     }
@@ -153,7 +153,7 @@ struct PortfolioSummaryCard: View {
 
 #Preview {
     PortfolioSummaryCard(
-        summary: PortfolioAnalysisModel.PortfolioSummary(
+        summary: PortfolioSummaryByAiModel.PortfolioSummary(
             totalInvested: 100000,
             currentValue: 105230,
             pnlPercent: 5.23,

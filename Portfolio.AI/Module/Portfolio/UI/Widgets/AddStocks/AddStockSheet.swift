@@ -20,8 +20,8 @@ struct AddStockSheet: View {
     @State private var errorMessage: String? = nil
     
     // Predefined sectors for selection
-    private let sectors = ["Technology", "Healthcare", "Finance", "Consumer Goods", 
-                          "Energy", "Utilities", "Real Estate", "Automotive", "Other"]
+    private let sectors = ["Technology", "Healthcare", "Finance", "Consumer Goods",
+                           "Energy", "Utilities", "Real Estate", "Automotive", "Other"]
     
     var body: some View {
         NavigationStack {
@@ -49,7 +49,7 @@ struct AddStockSheet: View {
                     TextField("Quantity", text: $quantity)
                         .keyboardType(.numberPad)
                         .tint(.blue)
-
+                    
                 }
                 
                 if let errorMessage = errorMessage {
@@ -86,9 +86,9 @@ struct AddStockSheet: View {
     }
     
     private var isFormValid: Bool {
-        !stockSymbol.isEmpty && 
-        !stockName.isEmpty && 
-        !sector.isEmpty && 
+        !stockSymbol.isEmpty &&
+        !stockName.isEmpty &&
+        !sector.isEmpty &&
         !avgPrice.isEmpty &&
         Double(avgPrice) != nil &&
         !quantity.isEmpty &&
@@ -104,6 +104,12 @@ struct AddStockSheet: View {
             return
         }
         
+        // Safely unwrap user id
+        guard let userId = SupabaseManager.shared.client.auth.currentUser?.id else {
+            errorMessage = "User not authenticated. Please log in again."
+            return
+        }
+        
         isLoading = true
         
         // In a real app, we would fetch the latest price from an API
@@ -111,20 +117,21 @@ struct AddStockSheet: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1)  {
             // Create the new stock
             let newStock = StockModel(
+                userId: userId.uuidString,
                 name: stockName,
                 symbol: stockSymbol.uppercased(),
-                portfolioPercentage: 0.0, // This would be calculated based on portfolio value
+                portfolioPercentage: 0.0,
                 sector: sector,
-                profitLossPercentage: 0.0, // This would be calculated from real data
-                sectorRank: 1, // This would be determined by analysis
+                profitLossPercentage: 0.0,
+                sectorRank: 1,
                 avgPrice: price,
-                lastTradingPrice: price // In a real app, this would be fetched from an API
+                lastTradingPrice: price
             )
             
             // Add to portfolio
-             Task{
-                 await portfolioManager.addStock([newStock])
-             }
+            Task{
+                await portfolioManager.addStock([newStock])
+            }
             isLoading = false
             dismiss()
         }

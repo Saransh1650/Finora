@@ -14,7 +14,7 @@ class GeminiRepo {
 
     static func analyzePortfolio(
         portfolioData: String,
-        completion: @escaping (Result<PortfolioAnalysisModel, Error>) -> Void
+        completion: @escaping (Result<PortfolioSummaryByAiModel, Error>) -> Void
     ) async {
         let prompt = createPortfolioAnalysisPrompt(portfolioData: portfolioData)
 
@@ -43,7 +43,7 @@ class GeminiRepo {
             - Stock name  
             - Invested amount  
             - Current value  
-            
+
             Your job:  
             1. Fetch the latest relevant financial information from the internet (stock price, fair value estimates, analyst targets, technical support/resistance, sector outlook, and news if any). The prices should be accurate and correct according to the market.  
             2. Analyze my portfolio for diversification, risks, and concentration.  
@@ -57,48 +57,14 @@ class GeminiRepo {
             - Actions for existing stocks (sell, hold)
             - New stocks to purchase in underrepresented sectors to improve diversification
             6. Return all results strictly in JSON format with this schema: 
-            
+
             Portfolio Data:
             \(portfolioData)
-            
-            
-            {
-            "portfolio_summary": {
-            "total_invested": number,
-            "current_value": number,
-            "pnl_percent": number,
-            "concentration_risk": string,
-            "diversification_advice": string
-            },
-            "stocks": [
-            {
-            "name": string,
-            "invested": number,
-            "current_value": number,
-            "pnl_percent": number,
-            "fair_price_estimate": {
-            "min_price": number,
-            "max_price": number
-            },
-            "valuation": "Undervalued" | "Fairly Valued" | "Overvalued",
-            "recommendation": "Add" | "Hold" | "Reduce" | "Exit",
-            "reason": string
-            }
-            ],
-            "rebalancing_plan": [
-            {
-            "action": "Sell" | "Buy" | "Hold",
-            "stock": string,
-            "amount": number,
-            "rationale": string,
-            "fair_entry_range": {
-            "min_price": number,
-            "max_price": number
-            }
-            }
-            ]
-            }
-            
+
+
+            Output Schema:
+            \(PortfolioSummaryByAiModel.jsonSchema())
+
             Rules:
             - Always fill every field.
             - Be concise but clear in the "reason" and "rationale".
@@ -112,7 +78,7 @@ class GeminiRepo {
 
     static func sendGeminiRequest(
         request: GeminiRequest,
-        completion: @escaping (Result<PortfolioAnalysisModel, Error>) -> Void
+        completion: @escaping (Result<PortfolioSummaryByAiModel, Error>) -> Void
     ) async {
         guard !apiKey.isEmpty else {
             completion(.failure(AIRepoError.missingApiKey))
@@ -166,11 +132,10 @@ class GeminiRepo {
             let responseText = part.text
             print("Gemini Response Text: \(responseText)")
 
-            // Extract JSON from the response text
-            let portfolioAnalysis = try parsePortfolioAnalysis(
+            let portfolioSummaryByAi = try parsePortfolioAnalysis(
                 from: responseText
             )
-            completion(.success(portfolioAnalysis))
+            completion(.success(portfolioSummaryByAi))
 
         } catch {
             print("AIRepo Error: \(error)")
@@ -179,7 +144,7 @@ class GeminiRepo {
     }
 
     static func parsePortfolioAnalysis(from text: String) throws
-        -> PortfolioAnalysisModel
+        -> PortfolioSummaryByAiModel
     {
         // Find JSON in the response text
         let jsonStartPattern = "{"
@@ -197,11 +162,11 @@ class GeminiRepo {
         }
 
         do {
-            let portfolioAnalysis = try JSONDecoder().decode(
-                PortfolioAnalysisModel.self,
+            let portfolioSummaryByAi = try JSONDecoder().decode(
+                PortfolioSummaryByAiModel.self,
                 from: jsonData
             )
-            return portfolioAnalysis
+            return portfolioSummaryByAi
         } catch {
             // If direct decoding fails, try to clean the JSON
             let cleanedJsonString = cleanJsonString(jsonString)
@@ -210,20 +175,18 @@ class GeminiRepo {
                 throw AIRepoError.invalidJSONFormat
             }
 
-            let portfolioAnalysis = try JSONDecoder().decode(
-                PortfolioAnalysisModel.self,
+            let portfolioSummaryByAi = try JSONDecoder().decode(
+                PortfolioSummaryByAiModel.self,
                 from: cleanedJsonData
             )
-            return portfolioAnalysis
+            return portfolioSummaryByAi
         }
     }
 
     static func cleanJsonString(_ jsonString: String) -> String {
         var cleaned = jsonString
-        // Remove any markdown code block markers
         cleaned = cleaned.replacingOccurrences(of: "```json", with: "")
         cleaned = cleaned.replacingOccurrences(of: "```", with: "")
-        // Remove any extra whitespace
         cleaned = cleaned.trimmingCharacters(in: .whitespacesAndNewlines)
         return cleaned
     }

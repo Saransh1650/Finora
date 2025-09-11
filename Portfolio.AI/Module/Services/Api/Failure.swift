@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Failure {
+struct Failure: Error {
     var message: String?
     var errorType: ErrorType
 }

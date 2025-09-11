@@ -10,6 +10,7 @@ import SwiftUI
 struct NavigationPage: View {
     @State private var selectedTab: TabItem = .home
     @StateObject var portfolioManager = PortfolioManager()
+    @StateObject var portfolioAnalysisManager = PortfolioAnalysisManager()
     
     var body: some View {
         VStack(spacing: 0) {
@@ -20,6 +21,7 @@ struct NavigationPage: View {
                         NavigationView {
                             HomePage()
                                 .environmentObject(portfolioManager)
+                                .environmentObject(portfolioAnalysisManager)
                         }
                     case .portfolio:
                         NavigationView {

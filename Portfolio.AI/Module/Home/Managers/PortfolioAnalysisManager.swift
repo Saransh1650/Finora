@@ -6,3 +6,227 @@
 //
 
 import Foundation
+import SwiftUI
+
+@MainActor
+class PortfolioAnalysisManager: ObservableObject {
+    @Published var currentAnalysis: PortfolioAnalysisModel?
+    @Published var analysisHistory: [PortfolioAnalysisModel] = []
+    @Published var portfolioSummaryByAiModel: PortfolioSummaryByAiModel?
+    @Published var isLoading: Bool = false
+    @Published var errorMessage: String?
+
+    init() {
+        Task {
+            print("Fetcing latest analysis")
+            await fetchLatestAnalysis()
+        }
+    }
+
+    // MARK: - Fetch Operations
+
+    /// Fetch all portfolio analysis for the current user
+    func fetchAnalysisHistory() async {
+        isLoading = true
+        errorMessage = nil
+
+        let (analyses, error) =
+            await PortfolioAnalysisRepo.fetchPortfolioAnalysis()
+
+        if let analyses = analyses {
+            analysisHistory = analyses
+            currentAnalysis = analyses.first  // Latest analysis
+        } else if let error = error {
+            errorMessage = error.message
+        }
+
+        isLoading = false
+    }
+
+    /// Fetch the latest portfolio analysis for the current user
+    func fetchLatestAnalysis() async {
+        isLoading = true
+        errorMessage = nil
+
+        let (analysis, error) =
+            await PortfolioAnalysisRepo.fetchLatestPortfolioAnalysis()
+
+        if let analysis = analysis {
+            currentAnalysis = analysis
+        } else if let error = error {
+            errorMessage = error.message
+        }
+
+        isLoading = false
+    }
+
+    // MARK: - Generate summary and save portfolio
+
+    /// Generate portfolio summary using Gemini API and save it
+    func generateSummaryAndSave(stocks: [StockModel]) async {
+        isLoading = true
+        errorMessage = nil
+
+        do {
+            let portfolioData = try JSONEncoder().encode(stocks)
+            let portfolioJsonString =
+                String(data: portfolioData, encoding: .utf8)
+                ?? "No portfolio data"
+
+            await GeminiRepo.analyzePortfolio(
+                portfolioData: portfolioJsonString
+            ) { result in
+
+                DispatchQueue.main.async {
+                    self.isLoading = false
+
+                    switch result {
+                    case .success(let analysis):
+                        print("AI Analysis Result: \(analysis)")
+                        self.currentAnalysis = PortfolioAnalysisModel(
+                            userId: SupabaseManager.shared.client.auth
+                                .currentUser?.id.uuidString ?? "",
+                            portfolioSummaryByAiModel: analysis,
+                            analysisDate: Date(),
+                            createdAt: Date(),
+                            updatedAt: Date(),
+                        )
+
+                        Task {
+                            await self.saveAnalysis(self.currentAnalysis!)
+                        }
+
+                    case .failure(let error):
+                        print(
+                            "Portfolio Analysis Error: \(error.localizedDescription)"
+                        )
+
+                        self.errorMessage =
+                            "Failed to analyze portfolio. Please try again."
+                    }
+                }
+
+            }
+
+        } catch {
+            isLoading = false
+            errorMessage =
+                "Error encoding portfolio data: \(error.localizedDescription)"
+            print("Error encoding portfolio data: \(error)")
+        }
+
+    }
+
+    // MARK: - Save Operations
+
+    /// Save a new portfolio analysis
+    func saveAnalysis(_ analysis: PortfolioAnalysisModel) async {
+        isLoading = true
+        errorMessage = nil
+
+        await PortfolioAnalysisRepo.savePortfolioAnalysis(
+            analysis,
+            currentAnalysis?.portfolioSummaryByAiModel
+        ) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success():
+                    // Refresh the analysis history after successful save
+                    Task {
+                        await self?.fetchAnalysisHistory()
+                    }
+                case .failure(let error):
+                    print("Save Analysis Error: \(error)")
+                    self?.errorMessage = error.localizedDescription
+                    self?.isLoading = false
+                }
+            }
+        }
+    }
+
+    /// Update an existing portfolio analysis
+    func updateAnalysis(_ analysis: PortfolioAnalysisModel) async {
+        isLoading = true
+        errorMessage = nil
+
+        await PortfolioAnalysisRepo.updatePortfolioAnalysis(analysis) {
+            [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success():
+                    // Refresh the analysis history after successful update
+                    Task {
+                        await self?.fetchAnalysisHistory()
+                    }
+                case .failure(let error):
+                    self?.errorMessage = error.localizedDescription
+                    self?.isLoading = false
+                }
+            }
+        }
+    }
+
+    // MARK: - Delete Operations
+
+    /// Delete a specific portfolio analysis
+    func deleteAnalysis(withId id: String) async {
+        isLoading = true
+        errorMessage = nil
+
+        await PortfolioAnalysisRepo.deletePortfolioAnalysis(withId: id) {
+            [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success():
+                    // Remove from local arrays and refresh
+                    self?.analysisHistory.removeAll { $0.id?.uuidString == id }
+                    if self?.currentAnalysis?.id?.uuidString == id {
+                        self?.currentAnalysis = self?.analysisHistory.first
+                    }
+                    self?.isLoading = false
+                case .failure(let error):
+                    self?.errorMessage = error.localizedDescription
+                    self?.isLoading = false
+                }
+            }
+        }
+    }
+
+    /// Delete all portfolio analyses for the current user
+    func deleteAllAnalyses() async {
+        isLoading = true
+        errorMessage = nil
+
+        await PortfolioAnalysisRepo.deleteAllPortfolioAnalyses {
+            [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success():
+                    self?.analysisHistory.removeAll()
+                    self?.currentAnalysis = nil
+                    self?.isLoading = false
+                case .failure(let error):
+                    self?.errorMessage = error.localizedDescription
+                    self?.isLoading = false
+                }
+            }
+        }
+    }
+
+    // MARK: - Utility Methods
+
+    /// Clear error message
+    func clearError() {
+        errorMessage = nil
+    }
+
+    /// Check if there's any analysis data
+    var hasAnalysis: Bool {
+        !analysisHistory.isEmpty
+    }
+
+    /// Get analysis count
+    var analysisCount: Int {
+        analysisHistory.count
+    }
+}

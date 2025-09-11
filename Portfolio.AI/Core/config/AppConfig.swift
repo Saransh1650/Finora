@@ -29,7 +29,7 @@ class AppConfig {
     }
     
     static var geminiModelId: String {
-        return "gemini-2.5-pro"
+        return "gemini-2.5-flash"
     }
     
     static var geminiBaseUrl: String {
