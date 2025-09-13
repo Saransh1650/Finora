@@ -102,8 +102,13 @@ class GeminiRepo {
         do {
             let jsonData = try JSONEncoder().encode(request)
             urlRequest.httpBody = jsonData
+            
+            let config = URLSessionConfiguration.default
+            config.timeoutIntervalForRequest = 300 // Timeout for requests (in seconds)
+            config.timeoutIntervalForResource = 300 // Timeout for resources (in seconds)
+            let session = URLSession(configuration: config)
 
-            let (data, response) = try await URLSession.shared.data(
+            let (data, response) = try await session.data(
                 for: urlRequest
             )
 
