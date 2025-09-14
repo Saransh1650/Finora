@@ -13,6 +13,10 @@ struct PortfolioPage: View {
     // MARK: - Portfolio List
     private var portfolioList: some View {
         ScrollView {
+            PortfolioSummaryCard(stocks: portfolioManager.stocks)
+                .padding(.horizontal, 16)
+                .padding(.top, 8)
+                .padding(.bottom, 4)
             LazyVStack(spacing: 12) {
                 ForEach(portfolioManager.stocks, id: \.id) { stock in
                     StockCard(stock: stock)

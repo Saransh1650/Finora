@@ -9,16 +9,14 @@ import SwiftUI
 
 struct AIDashboardView: View {
     let analysis: PortfolioAnalysisModel
-    @EnvironmentObject var stocks : PortfolioManager
 
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                // Portfolio Summary Card
-                if let summary = analysis.portfolioSummaryByAiModel?
-                    .portfolioSummary
-                {
-                    PortfolioSummaryCard(stocks: stocks.stocks)
+
+                // AI Overview Section
+                if let portfolioSummary = analysis.portfolioSummaryByAiModel?.portfolioSummary {
+                    AIOverviewCard(portfolioSummary: portfolioSummary)
                 }
 
                 // Stock Details Section
@@ -57,13 +55,10 @@ struct AIDashboardView: View {
                         rebalancingPlans: rebalancingPlan
                     )
                 }
-
-                // Bottom padding for navigation bar
-                Spacer(minLength: 100)
             }
             .padding(.horizontal)
         }
-       
+
     }
 }
 
@@ -95,7 +90,8 @@ struct AIDashboardView: View {
                         valuation: "Overvalued",
                         recommendation: "Reduce",
                         reason:
-                            "High concentration and recent price appreciation suggest a trim.", sector: "Technology"
+                            "High concentration and recent price appreciation suggest a trim.",
+                        sector: "Technology"
                     ),
                     PortfolioSummaryByAiModel.Stock(
                         name: "TSLA",
@@ -110,7 +106,8 @@ struct AIDashboardView: View {
                         valuation: "Fairly Valued",
                         recommendation: "Hold",
                         reason:
-                            "Strong growth potential. Current holding is reasonable.", sector: "Consumer Discretionary"
+                            "Strong growth potential. Current holding is reasonable.",
+                        sector: "Consumer Discretionary"
                     ),
                 ],
                 rebalancingPlan: [

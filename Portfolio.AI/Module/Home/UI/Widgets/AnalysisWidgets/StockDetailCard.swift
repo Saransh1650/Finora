@@ -86,17 +86,17 @@ struct StockDetailCard: View {
             }
 
             // Analysis section
-            VStack(alignment: .leading, spacing: 4) {
-                HStack(spacing: 4) {
+            VStack(alignment: .leading, spacing: 2) {
                     Text("Analysis:")
                         .font(.caption)
-                        .fontWeight(.semibold)
+                        .foregroundStyle(.secondary)
                     Text(stock.reason)
                         .font(.caption)
-                        .foregroundStyle(.secondary)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(AppColors.textPrimary)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-            }
+            
         }
         .padding(16)
         .background(
@@ -136,14 +136,16 @@ struct StockDetailCard: View {
             invested: 40000,
             currentValue: 42000,
             pnlPercent: 5.0,
-            fairPriceEstimate: PortfolioSummaryByAiModel.Stock.FairPriceEstimate(
-                minPrice: 160,
-                maxPrice: 175
-            ),
+            fairPriceEstimate: PortfolioSummaryByAiModel.Stock
+                .FairPriceEstimate(
+                    minPrice: 160,
+                    maxPrice: 175
+                ),
             valuation: "Overvalued",
             recommendation: "Reduce",
             reason:
-                "High concentration and recent price appreciation suggest a trim. The current price is above the fair value estimate.", sector: "Technology"
+                "High concentration and recent price appreciation suggest a trim. The current price is above the fair value estimate.",
+            sector: "Technology"
         ),
         totalPortfolioValue: 105230
     )

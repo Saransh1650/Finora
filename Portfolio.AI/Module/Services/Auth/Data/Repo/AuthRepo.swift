@@ -45,7 +45,7 @@ class AuthRepo {
         }
 
         guard let identityToken = credential.identityToken,
-              let data = String(data: identityToken, encoding: .utf8)
+              let _ = String(data: identityToken, encoding: .utf8)
         else {
             return (
                 nil,

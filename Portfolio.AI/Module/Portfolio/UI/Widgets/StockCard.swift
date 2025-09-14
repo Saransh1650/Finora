@@ -17,7 +17,7 @@ struct StockCard: View {
     }
     
     private var formattedInvestment: String {
-        return String(format: "$%.2f", stock.totalInvested)
+        return String(format: "%.2f", stock.totalInvested)
     }
     
     private var formattedShares: String {
@@ -29,7 +29,7 @@ struct StockCard: View {
     }
     
     private var formattedAvgPrice: String {
-        return String(format: "$%.2f", averagePrice)
+        return String(format: "%.2f", averagePrice)
     }
 
     var body: some View {

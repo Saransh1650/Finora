@@ -54,7 +54,6 @@ struct AddStockDialog: View {
                         placeholder: "0.00",
                         text: $totalInvestment,
                         keyboardType: .decimalPad,
-                        prefix: "$"
                     )
 
                     AppTextField(
@@ -76,7 +75,7 @@ struct AddStockDialog: View {
                                 .foregroundColor(AppColors.textSecondary)
                             Spacer()
                             Text(
-                                "$\(String(format: "%.2f", investment / shares))"
+                                "\(String(format: "%.2f", investment / shares))"
                             )
                             .font(.caption)
                             .fontWeight(.medium)

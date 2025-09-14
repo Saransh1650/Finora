@@ -54,36 +54,6 @@ struct ReadyToAnalyzeView: View {
     }
 }
 
-//// MARK: - Error Message View
-//struct ErrorMessageView: View {
-//    let message: String
-//    
-//    var body: some View {
-//        HStack(spacing: 12) {
-//            Image(systemName: "exclamationmark.triangle.fill")
-//                .font(.subheadline)
-//                .foregroundColor(.red)
-//            
-//            Text(message)
-//                .font(.caption)
-//                .foregroundColor(.red)
-//                .multilineTextAlignment(.leading)
-//            
-//            Spacer()
-//        }
-//        .padding(.horizontal, 16)
-//        .padding(.vertical, 12)
-//        .background(
-//            RoundedRectangle(cornerRadius: 12)
-//                .fill(Color.red.opacity(0.1))
-//                .overlay(
-//                    RoundedRectangle(cornerRadius: 12)
-//                        .stroke(Color.red.opacity(0.3), lineWidth: 1)
-//                )
-//        )
-//    }
-//}
-
 #Preview {
     ReadyToAnalyzeView()
         .environmentObject(PortfolioManager())

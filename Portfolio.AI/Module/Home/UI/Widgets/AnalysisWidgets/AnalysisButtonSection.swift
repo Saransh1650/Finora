@@ -98,27 +98,6 @@ struct AnalyzeButton: View {
     }
 }
 
-// MARK: - Error Message View
-struct ErrorMessageView: View {
-    let errorMessage: String
-    
-    var body: some View {
-        HStack(spacing: 12) {
-            Image(systemName: "exclamationmark.triangle.fill")
-                .foregroundStyle(.red)
-            
-            Text(errorMessage)
-                .font(.body)
-                .foregroundStyle(.red)
-        }
-        .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 12)
-                .fill(.red.opacity(0.1))
-                .stroke(.red.opacity(0.3), lineWidth: 1)
-        )
-    }
-}
 
 #Preview {
     AnalysisButtonSection()
