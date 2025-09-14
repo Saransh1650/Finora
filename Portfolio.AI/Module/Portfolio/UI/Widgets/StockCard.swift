@@ -9,7 +9,7 @@ import SwiftUI
 
 struct StockCard: View {
     let stock: StockModel
-    
+
     var body: some View {
         HStack(spacing: 12) {
             // Icon / symbol circle
@@ -21,36 +21,33 @@ struct StockCard: View {
                     .font(.headline)
                     .foregroundColor(.blue)
             }
-            
+
             // Main text
             VStack(alignment: .leading, spacing: 6) {
                 HStack(alignment: .firstTextBaseline) {
-                    Text(stock.name)
+                    Text(stock.symbol.uppercased())
                         .font(.headline)
                         .lineLimit(1)
-                    
+
                     Spacer()
-                    
-                    Text(stock.portfolioPercentageFormatted)
+
+                    Text(String(stock.totalInvestment))
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
-                
+
                 HStack {
-                    Text(stock.sector)
+                    Image(systemName: "briefcase.fill")
                         .font(.subheadline)
                         .foregroundColor(.secondary)
-                    
-                    Spacer()
-                    
-                    Text(stock.profitLossFormatted)
+
+                    Text(String(stock.noOfShares))
                         .font(.subheadline)
-                        .foregroundColor(stock.profitLossPercentage >= 0 ? .green : .red)
                 }
             }
         }
         .padding(.vertical, 8)
-        
+
         //        .overlay(
         //            // sector rank badge
         //            HStack {
@@ -67,13 +64,12 @@ struct StockCard: View {
         //            }
         //        )
     }
-    
+
     private var symbolShort: String {
         let s = stock.symbol.trimmingCharacters(in: .whitespacesAndNewlines)
         return String(s.prefix(3)).uppercased()
     }
 }
-
 
 #Preview {
     StockCard(stock: StockModel.sample1)

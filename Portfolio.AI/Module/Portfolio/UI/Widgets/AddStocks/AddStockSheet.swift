@@ -118,14 +118,9 @@ struct AddStockSheet: View {
             // Create the new stock
             let newStock = StockModel(
                 userId: userId.uuidString,
-                name: stockName,
                 symbol: stockSymbol.uppercased(),
-                portfolioPercentage: 0.0,
-                sector: sector,
-                profitLossPercentage: 0.0,
-                sectorRank: 1,
-                avgPrice: price,
-                lastTradingPrice: price
+                totalInvestment: price,
+                noOfShares: qty,
             )
             
             // Add to portfolio

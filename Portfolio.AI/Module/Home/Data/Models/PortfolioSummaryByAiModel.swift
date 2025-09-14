@@ -50,7 +50,8 @@ struct PortfolioSummaryByAiModel: Codable, JSONSchemaGeneratable {
                     ),
                     valuation: "sample_string",
                     recommendation: "sample_string",
-                    reason: "sample_string"
+                    reason: "sample_string",
+                    sector: "sample_string"
                 )
             ],
             rebalancingPlan: [
@@ -93,6 +94,7 @@ struct PortfolioSummaryByAiModel: Codable, JSONSchemaGeneratable {
         let valuation: String
         let recommendation: String
         let reason: String
+        let sector: String
         
         struct FairPriceEstimate: Codable {
             let minPrice: Double
@@ -113,6 +115,7 @@ struct PortfolioSummaryByAiModel: Codable, JSONSchemaGeneratable {
             case valuation
             case recommendation
             case reason
+            case sector
         }
     }
     

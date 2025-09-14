@@ -21,16 +21,9 @@ CREATE TABLE IF NOT EXISTS public.users (
 CREATE TABLE IF NOT EXISTS public.stocks (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-  name TEXT NOT NULL,
   symbol TEXT NOT NULL,
-  portfolio_percentage DECIMAL(5,2) DEFAULT 0,
-  sector TEXT,
-  profit_loss_percentage DECIMAL(8,2) DEFAULT 0,
-  sector_rank INTEGER DEFAULT 1,
-  avg_price DECIMAL(12,2) DEFAULT 0,
-  last_trading_price DECIMAL(12,2) DEFAULT 0,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+  total_invested NUMERIC(15, 2) DEFAULT 0,
+  quantity INTEGER DEFAULT 0,
 );
 
 -- Create portfolio_analysis table with updated structure

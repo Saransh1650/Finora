@@ -62,7 +62,7 @@ struct AIDashboardView: View {
             }
             .padding(.horizontal)
         }
-        .background(AppColors.pureBackground)
+       
     }
 }
 
@@ -94,7 +94,7 @@ struct AIDashboardView: View {
                         valuation: "Overvalued",
                         recommendation: "Reduce",
                         reason:
-                            "High concentration and recent price appreciation suggest a trim."
+                            "High concentration and recent price appreciation suggest a trim.", sector: "Technology"
                     ),
                     PortfolioSummaryByAiModel.Stock(
                         name: "TSLA",
@@ -109,7 +109,7 @@ struct AIDashboardView: View {
                         valuation: "Fairly Valued",
                         recommendation: "Hold",
                         reason:
-                            "Strong growth potential. Current holding is reasonable."
+                            "Strong growth potential. Current holding is reasonable.", sector: "Consumer Discretionary"
                     ),
                 ],
                 rebalancingPlan: [

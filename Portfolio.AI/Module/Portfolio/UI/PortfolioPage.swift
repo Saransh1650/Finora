@@ -85,9 +85,6 @@ struct PortfolioPage: View {
                 EmptyPortfolioView()
             } else {
                 VStack(spacing: 0) {
-                    PortfolioSummaryView()
-                        .padding(.top)
-
                     portfolioList
                 }
             }

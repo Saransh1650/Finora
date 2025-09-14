@@ -25,6 +25,9 @@ enum AppColors {
     // 3) Selected components, buttons, etc
     static let selected = Color("selected")
     
+    // 4) Border color for containers and cards
+    static let border = Color("divider").opacity(0.3)
+    
     // MARK: - System Colors
     static let textPrimary = Color(.label)
     static let textSecondary = Color(.secondaryLabel)

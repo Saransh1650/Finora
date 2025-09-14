@@ -143,7 +143,7 @@ struct StockDetailCard: View {
             valuation: "Overvalued",
             recommendation: "Reduce",
             reason:
-                "High concentration and recent price appreciation suggest a trim. The current price is above the fair value estimate."
+                "High concentration and recent price appreciation suggest a trim. The current price is above the fair value estimate.", sector: "Technology"
         ),
         totalPortfolioValue: 105230
     )

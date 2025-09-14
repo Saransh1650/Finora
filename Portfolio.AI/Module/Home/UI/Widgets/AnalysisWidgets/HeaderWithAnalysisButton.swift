@@ -14,7 +14,7 @@ struct HeaderWithAnalysisButton: View {
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
-                Text("Portfolio Analysis")
+                Text("Analysis")
                     .font(.title2)
                     .fontWeight(.bold)
                     .foregroundStyle(AppColors.textPrimary)
@@ -30,7 +30,7 @@ struct HeaderWithAnalysisButton: View {
 
             Spacer()
 
-            // New Analysis Button
+            //Analysis Button
             Button {
                 Task {
                     await portfolioAnalysisManager.generateSummaryAndSave(
@@ -87,12 +87,9 @@ struct HeaderWithAnalysisButton: View {
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(AppColors.pureBackground)
-                .shadow(
-                    color: AppColors.divider.opacity(0.1),
-                    radius: 8,
-                    x: 0,
-                    y: 2
-                )
+                .stroke(AppColors.border, lineWidth: 1)
+                .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
+               
         )
         .padding(.horizontal, 16)
         .padding(.top, 8)

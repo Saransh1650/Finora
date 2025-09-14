@@ -14,7 +14,7 @@ struct PortfolioSummaryCard: View {
         VStack(spacing: 16) {
             // Header
             HStack {
-                Text("Portfolio Summary")
+                Text("Summary")
                     .font(.title2)
                     .fontWeight(.bold)
                     .foregroundStyle(AppColors.textPrimary)
@@ -100,6 +100,7 @@ struct PortfolioSummaryCard: View {
         .background(
             RoundedRectangle(cornerRadius: 16)
                 .fill(AppColors.foreground)
+                .stroke(AppColors.border, lineWidth: 1)
                 .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
         )
     }
