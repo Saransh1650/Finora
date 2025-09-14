@@ -9,26 +9,21 @@ import SwiftUI
 
 struct AIDashboardView: View {
     let analysis: PortfolioAnalysisModel
-    
+
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
-                // Header
-                VStack(spacing: 8) {
-                    Text("AI Dashboard")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .foregroundStyle(AppColors.textPrimary)
-                }
-                .padding(.top)
-                
                 // Portfolio Summary Card
-                if let summary = analysis.portfolioSummaryByAiModel?.portfolioSummary {
+                if let summary = analysis.portfolioSummaryByAiModel?
+                    .portfolioSummary
+                {
                     PortfolioSummaryCard(summary: summary)
                 }
-                
+
                 // Stock Details Section
-                if let stocks = analysis.portfolioSummaryByAiModel?.stocks, !stocks.isEmpty {
+                if let stocks = analysis.portfolioSummaryByAiModel?.stocks,
+                    !stocks.isEmpty
+                {
                     VStack(spacing: 16) {
                         HStack {
                             Text("Stock Details")
@@ -38,26 +33,30 @@ struct AIDashboardView: View {
                             Spacer()
                         }
                         .padding(.horizontal)
-                        
+
                         ForEach(Array(stocks.enumerated()), id: \.offset) {
                             index,
                             stock in
                             StockDetailCard(
                                 stock: stock,
-                                totalPortfolioValue: analysis.portfolioSummaryByAiModel?.portfolioSummary?
+                                totalPortfolioValue: analysis
+                                    .portfolioSummaryByAiModel?
+                                    .portfolioSummary?
                                     .currentValue ?? 0
                             )
                         }
                     }
                 }
-                
+
                 // Rebalancing Plan Section
-                if let rebalancingPlan = analysis.portfolioSummaryByAiModel?.rebalancingPlan, !rebalancingPlan.isEmpty {
+                if let rebalancingPlan = analysis.portfolioSummaryByAiModel?
+                    .rebalancingPlan, !rebalancingPlan.isEmpty
+                {
                     RebalancingPlanCard(
                         rebalancingPlans: rebalancingPlan
                     )
                 }
-                
+
                 // Bottom padding for navigation bar
                 Spacer(minLength: 100)
             }
@@ -76,7 +75,8 @@ struct AIDashboardView: View {
                     totalInvested: 100000,
                     currentValue: 105230,
                     pnlPercent: 5.23,
-                    concentrationRisk: "High concentration in Technology sector",
+                    concentrationRisk:
+                        "High concentration in Technology sector",
                     diversificationAdvice:
                         "Your portfolio shows high concentration in the Technology sector. To mitigate risk and improve diversification, consider rebalancing towards Healthcare and Energy sectors."
                 ),
@@ -118,7 +118,8 @@ struct AIDashboardView: View {
                         stock: "AAPL",
                         amount: 10000,
                         rationale: "Reduce tech concentration.",
-                        fairEntryRange: PortfolioSummaryByAiModel.RebalancingPlan
+                        fairEntryRange: PortfolioSummaryByAiModel
+                            .RebalancingPlan
                             .FairEntryRange(
                                 minPrice: 160,
                                 maxPrice: 175

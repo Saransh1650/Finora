@@ -12,7 +12,7 @@ struct ContentView: View {
     var body: some View {
         Group {
             if authManager.loading {
-                ProgressView()
+                PortfolioLoadingAnimation(showText: false)
                     .scaleEffect(1.5)
             } else if authManager.isAuthenticated {
                 NavigationPage()

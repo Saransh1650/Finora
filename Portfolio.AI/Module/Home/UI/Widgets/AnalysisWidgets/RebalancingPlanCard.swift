@@ -46,7 +46,7 @@ struct RebalancingPlanCard: View {
         .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(.white.opacity(0.8))
+                .fill(AppColors.foreground)
                 .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
         )
     }

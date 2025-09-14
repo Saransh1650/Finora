@@ -14,6 +14,7 @@ class PortfolioAnalysisManager: ObservableObject {
     @Published var analysisHistory: [PortfolioAnalysisModel] = []
     @Published var portfolioSummaryByAiModel: PortfolioSummaryByAiModel?
     @Published var isLoading: Bool = false
+    @Published var fetchLoading: Bool = false
     @Published var errorMessage: String?
 
     init() {
@@ -45,7 +46,7 @@ class PortfolioAnalysisManager: ObservableObject {
 
     /// Fetch the latest portfolio analysis for the current user
     func fetchLatestAnalysis() async {
-        isLoading = true
+        fetchLoading = true
         errorMessage = nil
 
         let (analysis, error) =
@@ -57,7 +58,7 @@ class PortfolioAnalysisManager: ObservableObject {
             errorMessage = error.message
         }
 
-        isLoading = false
+        fetchLoading = false
     }
 
     // MARK: - Generate summary and save portfolio

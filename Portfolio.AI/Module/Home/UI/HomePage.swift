@@ -11,73 +11,39 @@ struct HomePage: View {
     @State private var isDrawerOpen = false
     @EnvironmentObject var portfolioManager: PortfolioManager
     @EnvironmentObject var portfolioAnalysisManager: PortfolioAnalysisManager
-    
+
     var body: some View {
         ZStack {
+            // Background gradient
+            LinearGradient(
+                colors: [AppColors.pureBackground, AppColors.background],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+            .ignoresSafeArea()
+
             VStack(spacing: 0) {
-                if let analysis = portfolioAnalysisManager.currentAnalysis ?? portfolioAnalysisManager.analysisHistory.first {
-                    AIDashboardView(analysis: analysis)
-                } else {
-                    ScrollView {
-                        VStack(spacing: 20) {
-                            if portfolioAnalysisManager.isLoading {
-                                VStack(spacing: 16) {
-                                    ProgressView()
-                                        .scaleEffect(1.2)
-                                    Text("Analyzing your portfolio...")
-                                        .font(.headline)
-                                        .foregroundStyle(AppColors.textPrimary)
-                                }
-                                .padding(40)
-                            } else {
-                                Button {
-                                    Task {
-                                        await portfolioAnalysisManager
-                                            .generateSummaryAndSave(
-                                                stocks: portfolioManager.stocks,
-                                            )
-                                    }
-                                } label: {
-                                    HStack {
-                                        Image(systemName: "brain.head.profile")
-                                            .font(.title2)
-                                        Text("Analyze Portfolio with AI")
-                                            .font(.headline)
-                                    }
-                                    .foregroundStyle(.white)
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.vertical, 16)
-                                    .background(AppColors.foreground)
-                                    .clipShape(
-                                        RoundedRectangle(cornerRadius: 12)
-                                    )
-                                }
-                                .disabled(portfolioAnalysisManager.isLoading)
-                                
-                                if let errorMessage = portfolioAnalysisManager
-                                    .errorMessage
-                                {
-                                    Text(errorMessage)
-                                        .font(.caption)
-                                        .foregroundStyle(.red)
-                                        .multilineTextAlignment(.center)
-                                        .padding(.top)
-                                }
-                            }
+                if portfolioAnalysisManager.fetchLoading {
+                    PortfolioLoadingAnimation(showText: true)
+                } else if let analysis = portfolioAnalysisManager
+                    .currentAnalysis
+                    ?? portfolioAnalysisManager.analysisHistory.first
+                {
+                    VStack(spacing: 0) {
+                        ScrollView {
+                            HeaderWithAnalysisButton()
+                            AIDashboardView(analysis: analysis)
                         }
-                        .padding()
                     }
-                    .background(AppColors.pureBackground)
-                    Spacer()
-                    Spacer()
+                } else {
+                    WelcomeAnalysisView()
                 }
             }
-            
+
             // Sidebar with overlay
-            if isDrawerOpen {
-                
+            if isDrawerOpen && !portfolioAnalysisManager.isLoading {
                 // Background overlay
-                AppColors.textPrimary.opacity(0.4)
+                AppColors.foreground.opacity(0.3)
                     .ignoresSafeArea()
                     .onTapGesture {
                         withAnimation(.easeInOut(duration: 0.3)) {
@@ -85,7 +51,7 @@ struct HomePage: View {
                         }
                     }
                     .zIndex(1)
-                
+
                 // Drawer content
                 HStack {
                     SideAppDrawer(isOpen: $isDrawerOpen)
@@ -95,23 +61,25 @@ struct HomePage: View {
                 .zIndex(2)
             }
         }
-        .background(AppColors.pureBackground)
-        .navigationTitle("Welcome")
+        .navigationTitle("Portfolio.AI")
         .navigationBarTitleDisplayMode(.large)
         .toolbarVisibility(
-            isDrawerOpen ? .hidden : .visible,
+            (isDrawerOpen || portfolioAnalysisManager.isLoading)
+                ? .hidden : .visible,
             for: .navigationBar
         )
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    withAnimation(.easeInOut(duration: 0.3)) {
-                        isDrawerOpen.toggle()
+            if !portfolioAnalysisManager.isLoading {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            isDrawerOpen.toggle()
+                        }
+                    } label: {
+                        Image(systemName: "person.circle.fill")
+                            .foregroundStyle(AppColors.selected)
+                            .font(.system(size: 24))
                     }
-                } label: {
-                    Image(systemName: "person.circle.fill")
-                        .foregroundStyle(AppColors.selected)
-                        .font(.system(size: 24))
                 }
             }
         }
