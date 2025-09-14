@@ -11,27 +11,31 @@ struct EmptyPortfolioView: View {
     @EnvironmentObject var portfolioManager: PortfolioManager
     
     var body: some View {
-        VStack(spacing: 20) {
-            Image(systemName: "chart.pie.fill")
-                .font(.system(size: 70))
-                .foregroundColor(Color.gray.opacity(0.5))
-            
-            Text("Your Portfolio is Empty")
-                .font(.title2)
-                .fontWeight(.semibold)
-                .foregroundColor(AppColors.foreground)
-            
-            Text("Start adding stocks to track your investments")
-                .font(.body)
-                .foregroundColor(AppColors.tertiary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 40)
+        VStack(spacing: 24) {
+            VStack(spacing: 16) {
+                Image(systemName: "chart.pie.fill")
+                    .font(.system(size: 80))
+                    .foregroundColor(AppColors.selected.opacity(0.3))
+                
+                VStack(spacing: 8) {
+                    Text("Your Portfolio is Empty")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                        .foregroundColor(AppColors.textPrimary)
+                    
+                    Text("Start building your investment portfolio by adding your first stock")
+                        .font(.body)
+                        .foregroundColor(AppColors.textSecondary)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 20)
+                }
+            }
             
             AddStockButton()
-                .padding(.top, 20)
         }
-        .padding()
+        .padding(32)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(AppColors.pureBackground)
     }
 }
 

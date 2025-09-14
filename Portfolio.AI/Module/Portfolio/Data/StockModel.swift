@@ -11,47 +11,47 @@ public struct StockModel: Identifiable, Codable, Hashable {
     public let id: UUID
     var userId: String
     var symbol: String
-    var totalInvestment: Double
-    var noOfShares: Double
-    
+    var totalInvested: Double
+    var quantity: Double
+
     enum CodingKeys: String, CodingKey {
         case id
         case userId = "user_id"
         case symbol
-        case totalInvestment = "total_investment"
-        case noOfShares = "no_of_shares"
+        case totalInvested = "total_invested"
+        case quantity
     }
-    
+
     public init(
         id: UUID = UUID(),
         userId: String,
         symbol: String,
-        totalInvestment: Double ,
-        noOfShares: Double
+        totalInvested: Double,
+        quantity: Double
     ) {
         self.id = id
         self.userId = userId
         self.symbol = symbol
-        self.totalInvestment = totalInvestment
-        self.noOfShares = noOfShares
+        self.totalInvested = totalInvested
+        self.quantity = quantity
     }
 }
 
 // MARK: - Sample Data
 #if DEBUG
-extension StockModel {
-    static let sample1 = StockModel(
-        userId: "debug-user-id",
-        symbol: "AAPL",
-        totalInvestment: 1500.00,
-        noOfShares: 10.0
-    )
-    static let sample2 = StockModel(
-        userId: "debug-user-id",
-        symbol: "TSLA",
-        totalInvestment: 2000.00,
-        noOfShares: 5.0
-    )
-    static let samples: [StockModel] = [sample1, sample2]
-}
+    extension StockModel {
+        static let sample1 = StockModel(
+            userId: "debug-user-id",
+            symbol: "AAPL",
+            totalInvested: 1500.00,
+            quantity: 10.0
+        )
+        static let sample2 = StockModel(
+            userId: "debug-user-id",
+            symbol: "TSLA",
+            totalInvested: 2000.00,
+            quantity: 5.0
+        )
+        static let samples: [StockModel] = [sample1, sample2]
+    }
 #endif

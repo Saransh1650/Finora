@@ -9,60 +9,89 @@ import SwiftUI
 
 struct StockCard: View {
     let stock: StockModel
+    
+    // Calculate additional metrics
+    private var averagePrice: Double {
+        guard stock.quantity > 0 else { return 0 }
+        return stock.totalInvested / stock.quantity
+    }
+    
+    private var formattedInvestment: String {
+        return String(format: "$%.2f", stock.totalInvested)
+    }
+    
+    private var formattedShares: String {
+        if stock.quantity.truncatingRemainder(dividingBy: 1) == 0 {
+            return String(format: "%.0f", stock.quantity)
+        } else {
+            return String(format: "%.2f", stock.quantity)
+        }
+    }
+    
+    private var formattedAvgPrice: String {
+        return String(format: "$%.2f", averagePrice)
+    }
 
     var body: some View {
-        HStack(spacing: 12) {
-            // Icon / symbol circle
-            ZStack {
-                Circle()
-                    .fill(Color.blue.opacity(0.12))
-                    .frame(width: 56, height: 56)
-                Text(symbolShort)
-                    .font(.headline)
-                    .foregroundColor(.blue)
-            }
-
-            // Main text
-            VStack(alignment: .leading, spacing: 6) {
-                HStack(alignment: .firstTextBaseline) {
-                    Text(stock.symbol.uppercased())
-                        .font(.headline)
-                        .lineLimit(1)
-
-                    Spacer()
-
-                    Text(String(stock.totalInvestment))
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
+        VStack(spacing: 0) {
+            HStack(spacing: 16) {
+                // Stock Symbol Icon
+                ZStack {
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(AppColors.selected.opacity(0.1))
+                        .frame(width: 50, height: 50)
+                    
+                    Text(symbolShort)
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundColor(AppColors.selected)
                 }
-
-                HStack {
-                    Image(systemName: "briefcase.fill")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-
-                    Text(String(stock.noOfShares))
-                        .font(.subheadline)
+                
+                // Stock Information
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack {
+                        Text(stock.symbol.uppercased())
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundColor(AppColors.textPrimary)
+                        
+                        Spacer()
+                        
+                        Text(formattedInvestment)
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundColor(AppColors.textPrimary)
+                    }
+                    
+                    HStack(spacing: 20) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Shares")
+                                .font(.caption)
+                                .foregroundColor(AppColors.textSecondary)
+                            Text(formattedShares)
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundColor(AppColors.textPrimary)
+                        }
+                        
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Avg Price")
+                                .font(.caption)
+                                .foregroundColor(AppColors.textSecondary)
+                            Text(formattedAvgPrice)
+                                .font(.system(size: 14, weight: .medium))
+                                .foregroundColor(AppColors.textPrimary)
+                        }
+                        
+                        Spacer()
+                    }
                 }
             }
+            .padding(16)
         }
-        .padding(.vertical, 8)
-
-        //        .overlay(
-        //            // sector rank badge
-        //            HStack {
-        //                Spacer()
-        //                VStack {
-        //                    Text("#\(stock.sectorRank)")
-        //                        .font(.caption2)
-        //                        .padding(.horizontal, 8)
-        //                        .padding(.vertical, 4)
-        //                        .background(Color(.systemGray5))
-        //                        .clipShape(Capsule())
-        //                    Spacer()
-        //                }
-        //            }
-        //        )
+        .background(AppColors.background)
+        .cornerRadius(16)
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(AppColors.border, lineWidth: 1)
+        )
+        .shadow(color: AppColors.textPrimary.opacity(0.05), radius: 8, x: 0, y: 2)
     }
 
     private var symbolShort: String {

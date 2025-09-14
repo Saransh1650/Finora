@@ -9,28 +9,43 @@ import SwiftUI
 
 struct AddStockButton: View {
     @EnvironmentObject var portfolioManager: PortfolioManager
-    @State private var showingAddSheet = false
+    @State private var showingAddDialog = false
     
     var body: some View {
         Button(action: {
-            showingAddSheet = true
+            showingAddDialog = true
         }) {
-            HStack {
+            HStack(spacing: 8) {
                 Image(systemName: "plus.circle.fill")
                     .font(.system(size: 16, weight: .semibold))
                 Text("Add Stock")
                     .font(.system(size: 16, weight: .semibold))
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 10)
-            .background(Color.blue)
-            .cornerRadius(20)
-            .shadow(color: Color.black.opacity(0.1), radius: 3, x: 0, y: 2)
+            .foregroundColor(.white)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 12)
+            .background(AppColors.selected)
+            .cornerRadius(25)
+            .shadow(color: AppColors.selected.opacity(0.3), radius: 8, x: 0, y: 4)
         }
-        .sheet(isPresented: $showingAddSheet) {
-            AddStockSheet()
+        .fullScreenCover(isPresented: $showingAddDialog) {
+            AddStockDialog()
+                .background(ClearBackgroundView())
         }
     }
+}
+
+// MARK: - Clear Background View for Dialog
+struct ClearBackgroundView: UIViewRepresentable {
+    func makeUIView(context: Context) -> UIView {
+        let view = UIView()
+        DispatchQueue.main.async {
+            view.superview?.superview?.backgroundColor = UIColor.clear
+        }
+        return view
+    }
+    
+    func updateUIView(_ uiView: UIView, context: Context) {}
 }
 
 #Preview {
