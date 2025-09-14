@@ -25,6 +25,9 @@ struct HomePage: View {
             VStack(spacing: 0) {
                 if portfolioAnalysisManager.fetchLoading {
                     PortfolioLoadingAnimation(showText: true)
+                } else if portfolioManager.stocks.count < 2 {
+                    // Show message when less than 2 stocks
+                    MinimumStocksRequiredView()
                 } else if let analysis = portfolioAnalysisManager
                     .currentAnalysis
                     ?? portfolioAnalysisManager.analysisHistory.first
@@ -36,7 +39,8 @@ struct HomePage: View {
                         }
                     }
                 } else {
-                    WelcomeAnalysisView()
+                    // Show analysis prompt when 2+ stocks but no analysis yet
+                    ReadyToAnalyzeView()
                 }
             }
 

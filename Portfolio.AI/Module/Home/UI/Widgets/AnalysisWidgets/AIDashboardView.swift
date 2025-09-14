@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AIDashboardView: View {
     let analysis: PortfolioAnalysisModel
+    @EnvironmentObject var stocks : PortfolioManager
 
     var body: some View {
         ScrollView {
@@ -17,7 +18,7 @@ struct AIDashboardView: View {
                 if let summary = analysis.portfolioSummaryByAiModel?
                     .portfolioSummary
                 {
-                    PortfolioSummaryCard(summary: summary)
+                    PortfolioSummaryCard(stocks: stocks.stocks)
                 }
 
                 // Stock Details Section
