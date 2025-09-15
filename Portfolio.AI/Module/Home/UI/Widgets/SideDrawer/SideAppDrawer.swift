@@ -28,28 +28,10 @@ struct SideAppDrawer: View {
                 // Menu Items
                 VStack(alignment: .leading, spacing: 0) {
                     DrawerMenuItem(
-                        icon: "house.fill",
-                        title: "Home",
-                        action: {
-                            withAnimation(.easeInOut(duration: 0.3)) {
-                                isOpen = false
-                            }
-                        }
-                    )
-
-                    DrawerMenuItem(
                         icon: "person.fill",
                         title: "Profile",
                         action: {
                             // Handle profile navigation
-                        }
-                    )
-
-                    DrawerMenuItem(
-                        icon: "gear",
-                        title: "Settings",
-                        action: {
-                            // Handle settings navigation
                         }
                     )
 
@@ -62,8 +44,8 @@ struct SideAppDrawer: View {
                     )
 
                     DrawerMenuItem(
-                        icon: "questionmark.circle",
-                        title: "Help & Support",
+                        icon: "document.on.clipboard",
+                        title: "Terms & Conditions",
                         action: {
                             // Handle help navigation
                         }

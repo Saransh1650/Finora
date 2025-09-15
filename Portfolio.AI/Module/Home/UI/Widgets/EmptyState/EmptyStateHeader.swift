@@ -167,7 +167,7 @@ struct SuccessStateHeader: View {
                     
                     Image(systemName: "checkmark")
                         .font(.system(size: 32, weight: .bold))
-                        .foregroundColor(.white)
+                        .foregroundColor(AppColors.pureBackground)
                 }
             }
             
@@ -177,12 +177,12 @@ struct SuccessStateHeader: View {
                 HStack(spacing: 8) {
                     Image(systemName: "star.fill")
                         .font(.caption)
-                        .foregroundColor(.white)
+                        .foregroundColor(AppColors.pureBackground)
                     
                     Text(badgeText)
                         .font(.caption)
                         .fontWeight(.semibold)
-                        .foregroundColor(.white)
+                        .foregroundColor(AppColors.pureBackground)
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)

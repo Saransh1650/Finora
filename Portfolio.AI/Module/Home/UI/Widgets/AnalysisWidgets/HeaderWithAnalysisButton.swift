@@ -48,6 +48,7 @@ struct HeaderWithAnalysisButton: View {
                     } else {
                         Image(systemName: "arrow.clockwise")
                             .font(.system(size: 14, weight: .semibold))
+                            .foregroundStyle(AppColors.pureBackground)
                     }
 
                     Text(
@@ -55,6 +56,7 @@ struct HeaderWithAnalysisButton: View {
                             ? "Analyzing..." : "Refresh"
                     )
                     .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(AppColors.pureBackground)
                 }
                 .padding(.horizontal, 16)
                 .padding(.vertical, 10)

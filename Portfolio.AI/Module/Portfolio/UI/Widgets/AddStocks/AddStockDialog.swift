@@ -122,6 +122,7 @@ struct AddStockDialog: View {
                             } else {
                                 Text("Add Stock")
                                     .fontWeight(.semibold)
+                                    .foregroundStyle(AppColors.pureBackground)
                             }
                         }
                     }
@@ -138,8 +139,9 @@ struct AddStockDialog: View {
             }
             .padding(24)
             .background(AppColors.background)
+            .border(AppColors.border, width: 1)
             .cornerRadius(16)
-            .shadow(color: .black.opacity(0.1), radius: 20, x: 0, y: 8)
+            .shadow(color: AppColors.textPrimary.opacity(0.1), radius: 20, x: 0, y: 8)
             .padding(.horizontal, 32)
         }
     }

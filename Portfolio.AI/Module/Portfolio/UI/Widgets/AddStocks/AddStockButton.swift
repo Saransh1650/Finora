@@ -18,8 +18,10 @@ struct AddStockButton: View {
             HStack(spacing: 8) {
                 Image(systemName: "plus.circle.fill")
                     .font(.system(size: 16, weight: .semibold))
+                    .foregroundStyle(AppColors.pureBackground)
                 Text("Add Stock")
                     .font(.system(size: 16, weight: .semibold))
+                    .foregroundStyle(AppColors.pureBackground)
             }
             .foregroundColor(.white)
             .padding(.horizontal, 20)

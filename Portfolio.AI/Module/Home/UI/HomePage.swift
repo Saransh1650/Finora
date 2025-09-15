@@ -92,4 +92,6 @@ struct HomePage: View {
 
 #Preview {
     HomePage()
+        .environmentObject(PortfolioManager())
+        .environmentObject(PortfolioAnalysisManager())
 }

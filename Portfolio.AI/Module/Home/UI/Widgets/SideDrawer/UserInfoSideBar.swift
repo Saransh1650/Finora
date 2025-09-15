@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct UserInfoSideBar: View {
+    var supabase = SupabaseManager.shared
     @Binding var isOpen: Bool
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -19,13 +20,9 @@ struct UserInfoSideBar: View {
             }
             
             VStack(alignment: .leading, spacing: 4) {
-                Text("John Doe")
+                Text(supabase.client.auth.currentUser?.email ?? "Guest User")
                     .font(.title2)
                     .fontWeight(.semibold)
-                    .foregroundColor(AppColors.textPrimary)
-                
-                Text("john.doe@email.com")
-                    .font(.subheadline)
                     .foregroundColor(AppColors.textPrimary)
             }
         }

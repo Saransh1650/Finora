@@ -25,9 +25,11 @@ struct AddStockActionButton: View {
             HStack(spacing: 12) {
                 Image(systemName: "plus.circle.fill")
                     .font(.system(size: 20, weight: .semibold))
+                    .foregroundStyle(AppColors.pureBackground)
                 
                 Text(buttonText)
                     .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(AppColors.pureBackground)
             }
             .foregroundColor(style.foregroundColor)
             .frame(maxWidth: .infinity)
@@ -64,13 +66,14 @@ struct StartAnalysisButton: View {
                 ZStack {
                     Image(systemName: "sparkles")
                         .font(.system(size: 20, weight: .semibold))
-                        .foregroundColor(.white)
+                        .foregroundColor(AppColors.pureBackground)
                         .scaleEffect(isPressed ? 1.2 : 1.0)
                         .animation(.spring(response: 0.3, dampingFraction: 0.6), value: isPressed)
                 }
                 
                 Text("Start AI Analysis")
                     .font(.system(size: 18, weight: .semibold))
+                    .foregroundColor(AppColors.pureBackground)
             }
             .foregroundColor(.white)
             .frame(maxWidth: .infinity)
