@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct HomePage: View {
-    @State private var isDrawerOpen = false
     @EnvironmentObject var portfolioManager: PortfolioManager
     @EnvironmentObject var portfolioAnalysisManager: PortfolioAnalysisManager
 
@@ -39,54 +38,12 @@ struct HomePage: View {
                         }
                     }
                 } else {
-                    // Show analysis prompt when 2+ stocks but no analysis yet
                     ReadyToAnalyzeView()
                 }
             }
-
-            // Sidebar with overlay
-            if isDrawerOpen && !portfolioAnalysisManager.isLoading {
-                // Background overlay
-                AppColors.foreground.opacity(0.3)
-                    .ignoresSafeArea()
-                    .onTapGesture {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            isDrawerOpen = false
-                        }
-                    }
-                    .zIndex(1)
-
-                // Drawer content
-                HStack {
-                    SideAppDrawer(isOpen: $isDrawerOpen)
-                    Spacer()
-                }
-                .transition(.move(edge: .leading))
-                .zIndex(2)
-            }
         }
-        .navigationTitle("Portfolio.AI")
+        .navigationTitle("Welcome")
         .navigationBarTitleDisplayMode(.large)
-        .toolbarVisibility(
-            (isDrawerOpen || portfolioAnalysisManager.isLoading)
-                ? .hidden : .visible,
-            for: .navigationBar
-        )
-        .toolbar {
-            if !portfolioAnalysisManager.isLoading {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            isDrawerOpen.toggle()
-                        }
-                    } label: {
-                        Image(systemName: "person.circle.fill")
-                            .foregroundStyle(AppColors.selected)
-                            .font(.system(size: 24))
-                    }
-                }
-            }
-        }
     }
 }
 

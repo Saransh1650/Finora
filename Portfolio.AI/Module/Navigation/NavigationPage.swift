@@ -28,6 +28,10 @@ struct NavigationPage: View {
                             PortfolioPage()
                                 .environmentObject(portfolioManager)
                         }
+                    case .settings:
+                        NavigationView {
+                            SettingsPage()
+                        }
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
