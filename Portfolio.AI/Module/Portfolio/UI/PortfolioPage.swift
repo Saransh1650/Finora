@@ -116,9 +116,9 @@ struct PortfolioPage: View {
                 }
                 .fullScreenCover(isPresented: $addStock) {
                     AddStockDialog()
+                        .background(ClearBackgroundView())
                 }
 
-                    
             }
         }
     }

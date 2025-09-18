@@ -37,18 +37,6 @@ struct AddStockButton: View {
     }
 }
 
-// MARK: - Clear Background View for Dialog
-struct ClearBackgroundView: UIViewRepresentable {
-    func makeUIView(context: Context) -> UIView {
-        let view = UIView()
-        DispatchQueue.main.async {
-            view.superview?.superview?.backgroundColor = UIColor.gray.withAlphaComponent(0.1)
-        }
-        return view
-    }
-    
-    func updateUIView(_ uiView: UIView, context: Context) {}
-}
 
 #Preview {
     AddStockButton()

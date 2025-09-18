@@ -60,7 +60,7 @@ struct PortfolioLoadingAnimation: View {
                         
                         Image(systemName: "chart.line.uptrend.xyaxis.circle.fill")
                             .font(.system(size: 40, weight: .medium))
-                            .foregroundStyle(.white)
+                            .foregroundStyle(AppColors.pureBackground)
                             .rotationEffect(.degrees(rotationAngle))
                     }
                 }

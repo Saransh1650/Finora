@@ -84,8 +84,6 @@ struct LoginPage: View {
                     .padding(.horizontal, 40)
                 }
 
-                Spacer()
-
                 // Terms and Privacy
                 VStack(spacing: 8) {
                     Text("By continuing, you agree to our")
@@ -110,7 +108,8 @@ struct LoginPage: View {
                         .foregroundColor(.blue)
                     }
                 }
-                .padding(.bottom, 40)
+                .padding(.top, 20)
+                .padding(.bottom, 20)
             }
 
             // Loading Overlay

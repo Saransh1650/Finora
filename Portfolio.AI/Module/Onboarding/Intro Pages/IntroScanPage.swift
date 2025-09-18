@@ -11,14 +11,14 @@ struct IntroScanPage: View {
     // add optional next action so a container can navigate
     var nextAction: (() -> Void)? = nil
     @State private var isAnimating = false
-    
+
     var body: some View {
         ZStack {
-            AppColors.background.ignoresSafeArea()
-            
+            AppColors.pureBackground.ignoresSafeArea()
+
             VStack(spacing: 30) {
                 Spacer()
-                
+
                 Image(systemName: "barcode.viewfinder")
                     .font(.system(size: 70))
                     .foregroundColor(AppColors.selected)
@@ -26,35 +26,48 @@ struct IntroScanPage: View {
                     .background(
                         Circle()
                             .fill(AppColors.background)
-                            .shadow(color: AppColors.divider.opacity(0.5), radius: 10)
+                            .shadow(
+                                color: AppColors.divider.opacity(0.5),
+                                radius: 10
+                            )
                     )
                     .overlay(
                         Circle()
-                            .stroke(AppColors.selected.opacity(0.2), lineWidth: 2)
+                            .stroke(
+                                AppColors.selected.opacity(0.2),
+                                lineWidth: 2
+                            )
                     )
                     .rotationEffect(Angle(degrees: isAnimating ? 5 : -5))
-                    .animation(.easeInOut(duration: 3).repeatForever(autoreverses: true), value: isAnimating)
+                    .animation(
+                        .easeInOut(duration: 3).repeatForever(
+                            autoreverses: true
+                        ),
+                        value: isAnimating
+                    )
                     .onAppear {
                         isAnimating = true
                     }
-                
+
                 // Content
                 VStack(alignment: .center, spacing: 16) {
                     Text("Scan Your Portfolio")
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(AppColors.textPrimary)
-                    
-                    Text("Upload screenshots of your portfolio from different platforms to get started.")
-                        .font(.body)
-                        .multilineTextAlignment(.center)
-                        .foregroundColor(AppColors.textSecondary)
-                        .padding(.horizontal, 20)
+
+                    Text(
+                        "Upload screenshots of your portfolio from different platforms to get started."
+                    )
+                    .font(.body)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(AppColors.textSecondary)
+                    .padding(.horizontal, 20)
                 }
                 .padding(.horizontal)
-                
+
                 Spacer()
-                
+
                 // Bottom Next button
                 if let next = nextAction {
                     Button(action: { next() }) {

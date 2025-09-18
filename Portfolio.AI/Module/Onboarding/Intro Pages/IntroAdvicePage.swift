@@ -6,7 +6,7 @@ struct IntroAdvicePage: View {
 
     var body: some View {
         ZStack {
-            AppColors.background.ignoresSafeArea()
+            AppColors.pureBackground.ignoresSafeArea()
 
             VStack(spacing: 30) {
                 Spacer()
