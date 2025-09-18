@@ -40,7 +40,7 @@ struct LoginPage: View {
                         .overlay(
                             Image(systemName: "chart.line.uptrend.xyaxis")
                                 .font(.system(size: 36, weight: .bold))
-                                .foregroundColor(.white)
+                                .foregroundColor(AppColors.textPrimary)
                         )
                     // App Name
                     Text("Finora")
@@ -177,4 +177,5 @@ struct LoginPage: View {
 
 #Preview {
     LoginPage()
+        .environmentObject(AuthManager())
 }

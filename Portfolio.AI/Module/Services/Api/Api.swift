@@ -22,7 +22,7 @@ class Api {
         var finalHeaders = headers ?? [:]
         let finalQueryParams = queryParameters ?? [:]
         
-        let hostValue = host ?? AppConfig.defaultHost
+        let hostValue = host ?? ""
         let accessToken: String? = LocalStorage.getString(LocalStorageKeys.accessToken)
         
         if doesRequireAuth, finalHeaders["Authorization"] == nil, let token = accessToken {
