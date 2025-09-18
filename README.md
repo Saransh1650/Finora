@@ -32,6 +32,11 @@ Portfolio.AI is a modern iOS app for smart investment management, built with Swi
 ## Portfolio Analysis
 <img src="https://github.com/user-attachments/assets/daeb7d20-706e-4d48-868f-4e72105909c9"  width="270" style="padding-right: 200px;"/>
 
+## Theme
+<img src="https://github.com/user-attachments/assets/fa82e9ce-9169-4c72-a7a2-71857100565f"  width="270" style="padding-right: 200px;"/>
+
+
+
 
 ## 🛠️ Project Structure
 
