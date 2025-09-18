@@ -15,25 +15,27 @@ Portfolio.AI is a modern iOS app for smart investment management, built with Swi
 - **Custom Theming** and Dark Mode support
 
 ---
+## 🏠 Onboarding & Home States
 
-## Onboarding and Login
-<img src="https://github.com/user-attachments/assets/d411ef8d-6a62-4589-ae34-fd49b024380e"  width="270" style="padding-right: 200px;"/>
+| Onboarding and Login | Home & Portfolio Empty States |
+|----------------------|-------------------------------|
+| <img src="https://github.com/user-attachments/assets/d411ef8d-6a62-4589-ae34-fd49b024380e" width="270"/> | <img src="https://github.com/user-attachments/assets/0abc2f45-9108-49c2-8052-e092f221c056" width="270"/> |
 
-## Home Screen and Portfolio Screen Empty States
-<img src="https://github.com/user-attachments/assets/0abc2f45-9108-49c2-8052-e092f221c056"  width="270" style="padding-right: 200px;"/>
+---
 
+## 💼 Portfolio & Analysis
 
-## Portfolio Ready State
-<img src="https://github.com/user-attachments/assets/d68cd380-721f-4255-a1a9-5d64cd5c52ca"  width="270" style="padding-right: 200px;"/>
+| Portfolio Ready | Analysis State |
+|-----------------|----------------|
+| <img src="https://github.com/user-attachments/assets/d68cd380-721f-4255-a1a9-5d64cd5c52ca" width="270"/> | <img src="https://github.com/user-attachments/assets/6bb78748-eafe-44d2-b34e-da2d07e7f62e" width="270"/> |
 
-## Analysis State
-<img src="https://github.com/user-attachments/assets/6bb78748-eafe-44d2-b34e-da2d07e7f62e"  width="270" style="padding-right: 200px;"/>
+---
 
-## Portfolio Analysis
-<img src="https://github.com/user-attachments/assets/daeb7d20-706e-4d48-868f-4e72105909c9"  width="270" style="padding-right: 200px;"/>
+## ⚖️ Deep Dive
 
-## Theme
-<img src="https://github.com/user-attachments/assets/fa82e9ce-9169-4c72-a7a2-71857100565f"  width="270" style="padding-right: 200px;"/>
+| Portfolio Analysis | Theme |
+|--------------------|-------|
+| <img src="https://github.com/user-attachments/assets/daeb7d20-706e-4d48-868f-4e72105909c9" width="270"/> | <img src="https://github.com/user-attachments/assets/fa82e9ce-9169-4c72-a7a2-71857100565f" width="270"/> |
 
 
 
