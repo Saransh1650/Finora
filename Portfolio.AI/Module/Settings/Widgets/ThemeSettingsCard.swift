@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ThemeSettingsCard: View {
-    @ObservedObject var settingsManager: SettingsManager
+    @EnvironmentObject var themeManager : ThemeManager
     
     var body: some View {
         VStack(spacing: 16) {
@@ -17,11 +17,18 @@ struct ThemeSettingsCard: View {
                 title: "Dark Mode",
                 subtitle: "Switch between light and dark themes",
                 trailing: {
-                    Toggle("", isOn: $settingsManager.isDarkMode)
+                    Toggle("", isOn: Binding(
+                        get: { themeManager.isDarkMode },
+                        set: { isOn in
+                            themeManager.setTheme(isOn ? .dark : .light)
+                        }
+                    ))
                         .labelsHidden()
-                        .tint(AppColors.background)
+                        .tint(AppColors.pureBackground)
+                    
+                }) {
+                    
                 }
-            )
             
             SettingsRow(
                 icon: "textformat.size",

@@ -17,7 +17,7 @@ struct SettingsPage: View {
                 SettingsHeader()
 
                 SettingsSection(title: "Appearance", icon: "paintbrush.fill") {
-                    ThemeSettingsCard(settingsManager: settingsManager)
+                    ThemeSettingsCard()
                 }
 
                 SettingsSection(title: "Subscription", icon: "crown.fill") {
@@ -33,6 +33,10 @@ struct SettingsPage: View {
 
                 SettingsSection(title: "About", icon: "info.circle.fill") {
                     ShareInformationCard(showingShareSheet: $showingShareSheet)
+                }
+                
+                SettingsSection(title: "Account", icon: "person.crop.circle.fill") {
+                    AccountSectionCard()
                 }
 
                 AppVersionFooter()

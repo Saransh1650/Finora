@@ -25,17 +25,31 @@ struct LoginPage: View {
                 // App Logo and Branding
                 VStack(spacing: 20) {
                     // App Icon/Logo placeholder
-                    Image(systemName: "checkmark.seal.fill")
-                        .font(.system(size: 80))
-                        .foregroundColor(.blue)
+                    RoundedRectangle(cornerRadius: 20)
+                        .fill(
+                            LinearGradient(
+                                colors: [
+                                    AppColors.background,
+                                    AppColors.pureBackground.opacity(0.8),
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .frame(width: 80, height: 80)
+                        .overlay(
+                            Image(systemName: "chart.line.uptrend.xyaxis")
+                                .font(.system(size: 36, weight: .bold))
+                                .foregroundColor(.white)
+                        )
                     // App Name
-                    Text("FitCheck.AI")
+                    Text("Finora")
                         .font(.largeTitle)
                         .fontWeight(.bold)
-                        .foregroundColor(AppColors.foreground)
+                        .foregroundColor(AppColors.textPrimary)
 
                     // Tagline
-                    Text("Your AI-powered fitness companion")
+                    Text("Your AI-powered Finance Companion")
                         .font(.headline)
                         .foregroundColor(AppColors.tertiary)
                         .multilineTextAlignment(.center)
@@ -48,12 +62,8 @@ struct LoginPage: View {
                 VStack(spacing: 24) {
                     // Welcome Text
                     VStack(spacing: 8) {
-                        Text("Welcome Back!")
-                            .font(.title2)
-                            .fontWeight(.semibold)
-                            .foregroundColor(AppColors.foreground)
 
-                        Text("Sign in to continue your fitness journey")
+                        Text("Sign in to continue your finance journey")
                             .font(.body)
                             .foregroundColor(AppColors.tertiary)
                             .multilineTextAlignment(.center)
@@ -61,32 +71,15 @@ struct LoginPage: View {
 
                     // Login Buttons
                     VStack(spacing: 16) {
-                        Button(action: {
-                            Task {
-                                await handleGoogleSignIn()
-                            }
-                        }) {
-                            HStack(spacing: 12) {
-                                Image(systemName: "globe")
-                                    .font(.system(size: 18, weight: .medium))
-
-                                Text("Continue with Google")
-                                    .font(.system(size: 16, weight: .medium))
-                            }
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 50)
-                            .background(
-                                LinearGradient(
-                                    colors: [Color.red, Color.orange],
-                                    startPoint: .leading,
-                                    endPoint: .trailing
-                                )
-                            )
-                            .cornerRadius(25)
-                        }
-                        .disabled(authManager.loading)
-                        .opacity(authManager.loading ? 0.6 : 1.0)
+                        AppButton(
+                            title: "Sign In with Google",
+                            action: {
+                                Task {
+                                    await handleGoogleSignIn()
+                                }
+                            },
+                            image: "Google"
+                        )
                     }
                     .padding(.horizontal, 40)
                 }

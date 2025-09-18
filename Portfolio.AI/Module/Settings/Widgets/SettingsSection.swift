@@ -17,7 +17,7 @@ struct SettingsSection<Content: View>: View {
             HStack(spacing: 8) {
                 Image(systemName: icon)
                     .font(.subheadline)
-                    .foregroundColor(AppColors.background)
+                    .foregroundColor(AppColors.textPrimary)
                     .frame(width: 20)
 
                 Text(title)
