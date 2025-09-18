@@ -18,10 +18,7 @@ class PortfolioAnalysisManager: ObservableObject {
     @Published var errorMessage: String?
 
     init() {
-        Task {
-            print("Fetcing latest analysis")
-            await fetchLatestAnalysis()
-        }
+        fetchLatestAnalysis()
     }
 
     // MARK: - Fetch Operations
@@ -45,17 +42,28 @@ class PortfolioAnalysisManager: ObservableObject {
     }
 
     /// Fetch the latest portfolio analysis for the current user
-    func fetchLatestAnalysis() async {
+    func fetchLatestAnalysis() {
+        print("Fetching latest analysis")
         fetchLoading = true
         errorMessage = nil
 
-        let (analysis, error) =
-            await PortfolioAnalysisRepo.fetchLatestPortfolioAnalysis()
+        Task {
+            do {
+                let (analysis, error) =
+                    await PortfolioAnalysisRepo.fetchLatestPortfolioAnalysis()
 
-        if let analysis = analysis {
-            currentAnalysis = analysis
-        } else if let error = error {
-            errorMessage = error.message
+                if let analysis = analysis {
+                    print(
+                        "fetched current analysis from db: \(analysis.userId)"
+                    )
+                    currentAnalysis = analysis
+                } else if let error = error {
+                    print(
+                        "Error fetching latest analysis: \(String(describing: error.message))"
+                    )
+                    errorMessage = error.message
+                }
+            }
         }
 
         fetchLoading = false

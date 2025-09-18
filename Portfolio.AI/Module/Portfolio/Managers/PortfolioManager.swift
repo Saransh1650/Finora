@@ -13,12 +13,14 @@ import SwiftUI
 @MainActor
 class PortfolioManager: ObservableObject {
     @Published var stocks: [StockModel] = []
+    @Published var isLoading: Bool = false
 
     init() {
         loadStocks()
     }
 
     private func loadStocks() {
+        isLoading = true
         print("Loading stocks...")
 
         Task {
@@ -33,6 +35,7 @@ class PortfolioManager: ObservableObject {
                 }
             }
         }
+        isLoading = false
     }
 
     func addStock(_ newStocks: [StockModel]) async {

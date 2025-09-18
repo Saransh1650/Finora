@@ -10,7 +10,7 @@ import Foundation
 class AppConfig {
     static var supabaseInitUrl: String {
         let url = ProcessInfo.processInfo.environment["SUPABASE_INIT_URL"]!
-        return "http://\(String(describing: url))"
+        return "https://\(String(describing: url))"
     }
 
     static var anonKey: String {

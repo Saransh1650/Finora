@@ -29,7 +29,6 @@ struct HomePage: View {
                     MinimumStocksRequiredView()
                 } else if let analysis = portfolioAnalysisManager
                     .currentAnalysis
-                    ?? portfolioAnalysisManager.analysisHistory.first
                 {
                     VStack(spacing: 0) {
                         ScrollView {

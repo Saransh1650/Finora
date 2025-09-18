@@ -23,11 +23,11 @@ struct SettingsHeader: View {
                 .overlay(
                     Image(systemName: "chart.line.uptrend.xyaxis")
                         .font(.system(size: 36, weight: .bold))
-                        .foregroundColor(.white)
+                        .foregroundColor(AppColors.textPrimary)
                 )
             
             VStack(spacing: 4) {
-                Text("Portfolio.AI")
+                Text("Finora")
                     .font(.title2)
                     .fontWeight(.bold)
                     .foregroundColor(AppColors.textPrimary)
