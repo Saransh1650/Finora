@@ -38,7 +38,7 @@ struct BenefitRow: View {
                             endRadius: 24
                         )
                     )
-                    .frame(width: 48, height: 48)
+                    .frame(width: 48, height: 48) 
                 
                 Image(systemName: icon)
                     .font(.system(size: 20, weight: .medium))
