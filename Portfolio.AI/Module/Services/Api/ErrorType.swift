@@ -27,6 +27,16 @@ enum ErrorType {
     case googleIdTokenNotFound
     case AppleIDTokenNotFound
     case fetchError
+    case insertError
+    case updateError
+    case deleteError
+    case authError
+    case validationError
+    case fileUploadError
+    case fileSizeError
+    case fileTypeError
+    case sessionError
+    case networkError
 
     var message: String {
         switch self {
@@ -49,6 +59,16 @@ enum ErrorType {
         case .googleIdTokenNotFound: return "Google ID token not found."
         case .AppleIDTokenNotFound: return "Apple ID token not found."
         case .fetchError: return "Failed to fetch data."
+        case .insertError: return "Failed to insert data."
+        case .updateError: return "Failed to update data."
+        case .deleteError: return "Failed to delete data."
+        case .authError: return "Authentication error."
+        case .validationError: return "Validation error."
+        case .fileUploadError: return "Failed to upload file."
+        case .fileSizeError: return "File size exceeds limit."
+        case .fileTypeError: return "File type not supported."
+        case .sessionError: return "Session error."
+        case .networkError: return "Network error."
         }
     }
 }
