@@ -11,6 +11,7 @@ enum TabItem: String, CaseIterable {
     case home = "home"
     case portfolio = "portfolio"
     case settings = "settings"
+    case chat = "chat"
     
     var title: String {
         switch self {
@@ -20,6 +21,8 @@ enum TabItem: String, CaseIterable {
                 return "Portfolio"
             case .settings:
                 return "Settings"
+            case .chat:
+                return "Chat"
         }
     }
     
@@ -31,6 +34,8 @@ enum TabItem: String, CaseIterable {
                 return "chart.pie"
             case .settings:
                 return "gearshape"
+            case .chat:
+                return "message"
         }
     }
     
@@ -42,6 +47,8 @@ enum TabItem: String, CaseIterable {
                 return "chart.pie.fill"
             case .settings:
                 return "gearshape.fill"
+            case .chat:
+                return "message.fill"
         }
     }
 }
