@@ -7,6 +7,16 @@
 
 import Foundation
 
+// Note: Import needed ChatMessage model - this may need to be adjusted based on your project structure
+// Assuming ChatMessage is accessible from this context
+
+// MARK: - Chat Response Model
+struct ChatResponseModel {
+    let content: String
+    let tokensUsed: Int
+    let finishReason: String?
+}
+
 class GeminiRepo {
     static let baseUrl = AppConfig.geminiBaseUrl
     static let apiKey = AppConfig.geminiApiKey
@@ -34,6 +44,68 @@ class GeminiRepo {
         )
 
         await sendGeminiRequest(request: request, completion: completion)
+    }
+
+    static func getChatResponse(
+        userMessage: String,
+        conversationHistory: [ChatMessage]? = nil,
+        completion: @escaping (Result<ChatResponseModel, Error>) -> Void
+    ) async {
+        let prompt = createChatPrompt(userMessage: userMessage, conversationHistory: conversationHistory)
+
+        let request = GeminiRequest(
+            contents: [
+                GeminiContent(
+                    role: "user",
+                    parts: [Part(text: prompt)]
+                )
+            ],
+            generationConfig: GenerationConfig(
+                thinkingConfig: ThinkingConfig(thinkingBudget: -1)
+            ),
+            tools: [
+                Tool(googleSearch: GoogleSearch())
+            ]
+        )
+
+        await sendChatRequest(request: request, completion: completion)
+    }
+
+    static func createChatPrompt(userMessage: String, conversationHistory: [ChatMessage]? = nil) -> String {
+        var prompt = """
+            You are Portfolio AI, an intelligent financial assistant specializing in investment portfolio management and analysis. 
+            You have access to real-time market data and can help users with:
+            
+            1. Portfolio analysis and optimization
+            2. Investment research and recommendations
+            3. Risk assessment and management
+            4. Market trends and insights
+            5. Financial planning and strategy
+            
+            Guidelines:
+            - Provide accurate, data-driven insights
+            - Be concise but comprehensive in your responses
+            - Use real-time market data when available
+            - Always consider risk factors in recommendations
+            - Maintain a professional but friendly tone
+            - If asked about specific stocks, provide current market data
+            
+            """
+        
+        // Add conversation history if available
+        if let history = conversationHistory, !history.isEmpty {
+            prompt += "\nConversation History:\n"
+            let recentHistory = Array(history.suffix(5)) // Include last 5 messages for context
+            for message in recentHistory {
+                let role = message.role == .user ? "User" : "Assistant"
+                prompt += "\(role): \(message.content)\n"
+            }
+            prompt += "\n"
+        }
+        
+        prompt += "User's current question: \(userMessage)\n\nPlease provide a helpful response:"
+        
+        return prompt
     }
 
     static func createPortfolioAnalysisPrompt(portfolioData: String) -> String {
@@ -144,6 +216,78 @@ class GeminiRepo {
 
         } catch {
             print("AIRepo Error: \(error)")
+            completion(.failure(error))
+        }
+    }
+
+    static func sendChatRequest(
+        request: GeminiRequest,
+        completion: @escaping (Result<ChatResponseModel, Error>) -> Void
+    ) async {
+        guard !apiKey.isEmpty else {
+            completion(.failure(AIRepoError.missingApiKey))
+            return
+        }
+
+        let urlString =
+            "\(baseUrl)/models/\(modelId):generateContent?key=\(apiKey)"
+        guard let url = URL(string: urlString) else {
+            completion(.failure(AIRepoError.invalidURL))
+            return
+        }
+
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        urlRequest.setValue(
+            "application/json",
+            forHTTPHeaderField: "Content-Type"
+        )
+
+        do {
+            let jsonData = try JSONEncoder().encode(request)
+            urlRequest.httpBody = jsonData
+            
+            let config = URLSessionConfiguration.default
+            config.timeoutIntervalForRequest = 120 // Shorter timeout for chat
+            config.timeoutIntervalForResource = 120
+            let session = URLSession(configuration: config)
+
+            let (data, response) = try await session.data(for: urlRequest)
+
+            if let httpResponse = response as? HTTPURLResponse {
+                print("Chat HTTP Status Code: \(httpResponse.statusCode)")
+            }
+
+            // Print the raw response for debugging
+            if let responseString = String(data: data, encoding: .utf8) {
+                print("Raw Chat Response: \(responseString)")
+            }
+
+            let geminiResponse = try JSONDecoder().decode(
+                GeminiResponse.self,
+                from: data
+            )
+
+            guard let candidate = geminiResponse.candidates?.first,
+                let content = candidate.content,
+                let part = content.parts.first
+            else {
+                completion(.failure(AIRepoError.invalidResponse))
+                return
+            }
+
+            let responseText = part.text
+            print("Chat Response Text: \(responseText)")
+
+            let chatResponse = ChatResponseModel(
+                content: responseText,
+                tokensUsed: geminiResponse.usageMetadata?.totalTokenCount ?? 0,
+                finishReason: candidate.finishReason
+            )
+            completion(.success(chatResponse))
+
+        } catch {
+            print("Chat AIRepo Error: \(error)")
             completion(.failure(error))
         }
     }
