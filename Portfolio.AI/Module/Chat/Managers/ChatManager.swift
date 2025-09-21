@@ -8,6 +8,9 @@
 import Foundation
 import SwiftUI
 
+// Note: Import GeminiRepo from Home module - assuming it's accessible
+// You may need to adjust this import based on your project structure
+
 @MainActor
 class ChatManager: ObservableObject {
     // MARK: - Published Properties
@@ -284,42 +287,47 @@ class ChatManager: ObservableObject {
         await generateAIResponse(for: content)
     }
     
-    /// Generate AI response (placeholder implementation)
+    /// Generate AI response using Gemini API
     private func generateAIResponse(for userMessage: String) async {
-        // Simulate AI processing time
-        try? await Task.sleep(nanoseconds: 1_500_000_000) // 1.5 seconds
+        // Get recent messages for context (last 5 messages)
+        let recentMessages = Array(messages.suffix(5))
         
-        // Generate a placeholder response
-        let response = generatePlaceholderResponse(for: userMessage)
-        
-        await sendMessage(
-            content: response,
-            role: .assistant,
-            metadata: MessageMetadata(
-                temperature: 0.7,
-                maxTokens: 2048
-            )
-        )
-    }
-    
-    /// Generate placeholder AI response based on user input
-    private func generatePlaceholderResponse(for userMessage: String) -> String {
-        let lowercased = userMessage.lowercased()
-        
-        if lowercased.contains("portfolio") || lowercased.contains("performance") {
-            return "Based on your portfolio data, I can see several interesting trends. Your current allocation shows strong diversification across sectors. Would you like me to dive deeper into any specific aspect of your portfolio performance?"
-        } else if lowercased.contains("risk") {
-            return "Risk analysis is crucial for portfolio management. Your current portfolio shows a moderate risk profile with a Sharpe ratio of 1.2. The main risk factors I've identified are concentration in tech stocks and potential correlation during market downturns."
-        } else if lowercased.contains("diversif") {
-            return "Diversification is key to reducing portfolio risk. I notice you could benefit from increasing exposure to international markets and adding some defensive sectors like utilities or consumer staples. Would you like specific recommendations?"
-        } else if lowercased.contains("market") || lowercased.contains("trend") {
-            return "Current market trends show increased volatility in growth stocks while value stocks have been more stable. Your portfolio positioning aligns well with the current market environment. I'm monitoring several key indicators that could affect your holdings."
-        } else {
-            return "I understand you're asking about \"\(userMessage)\". As your Portfolio AI assistant, I'm here to help you make informed investment decisions. Could you provide more context about what specific aspect you'd like me to analyze?"
+        await GeminiRepo.getChatResponse(
+            userMessage: userMessage,
+            conversationHistory: recentMessages
+        ) { [weak self] result in
+            Task { @MainActor in
+                guard let self = self else { return }
+                
+                switch result {
+                case .success(let chatResponse):
+                    await self.sendMessage(
+                        content: chatResponse.content,
+                        role: .assistant,
+                        metadata: MessageMetadata(
+                            temperature: 0.7,
+                            maxTokens: chatResponse.tokensUsed
+                        )
+                    )
+                    
+                case .failure(let error):
+                    // Fallback to a generic error response
+                    let errorResponse = "I apologize, but I'm experiencing some technical difficulties at the moment. Please try again in a few moments. Error: \(error.localizedDescription)"
+                    
+                    await self.sendMessage(
+                        content: errorResponse,
+                        role: .assistant,
+                        metadata: MessageMetadata(
+                            temperature: 0.7,
+                            maxTokens: 100
+                        )
+                    )
+                }
+            }
         }
     }
     
-    /// Update a message
+    // MARK: - Message Management
     func updateMessage(
         _ messageId: UUID,
         content: String? = nil,
