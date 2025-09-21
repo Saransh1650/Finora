@@ -234,6 +234,13 @@ class ChatManager: ObservableObject {
         }
     }
     
+    /// Load more messages (pagination)
+    func loadMoreMessages() {
+        if !isLoadingMessages && hasMoreMessages {
+            loadMessages()
+        }
+    }
+    
     /// Send a message
     func sendMessage(
         content: String,
@@ -261,8 +268,55 @@ class ChatManager: ObservableObject {
             }
             isSendingMessage = false
         }
-        
+        print("Sent message: \(String(describing: message?.metadata))")
         return message
+    }
+    
+    /// Convenience method to send user message and get AI response
+    func sendMessage(content: String) async {
+        // Send user message
+        let userMessage = await sendMessage(content: content, role: .user)
+        
+        guard userMessage != nil else { return }
+        
+        // TODO: Implement AI response generation
+        // For now, simulate an AI response after a short delay
+        await generateAIResponse(for: content)
+    }
+    
+    /// Generate AI response (placeholder implementation)
+    private func generateAIResponse(for userMessage: String) async {
+        // Simulate AI processing time
+        try? await Task.sleep(nanoseconds: 1_500_000_000) // 1.5 seconds
+        
+        // Generate a placeholder response
+        let response = generatePlaceholderResponse(for: userMessage)
+        
+        await sendMessage(
+            content: response,
+            role: .assistant,
+            metadata: MessageMetadata(
+                temperature: 0.7,
+                maxTokens: 2048
+            )
+        )
+    }
+    
+    /// Generate placeholder AI response based on user input
+    private func generatePlaceholderResponse(for userMessage: String) -> String {
+        let lowercased = userMessage.lowercased()
+        
+        if lowercased.contains("portfolio") || lowercased.contains("performance") {
+            return "Based on your portfolio data, I can see several interesting trends. Your current allocation shows strong diversification across sectors. Would you like me to dive deeper into any specific aspect of your portfolio performance?"
+        } else if lowercased.contains("risk") {
+            return "Risk analysis is crucial for portfolio management. Your current portfolio shows a moderate risk profile with a Sharpe ratio of 1.2. The main risk factors I've identified are concentration in tech stocks and potential correlation during market downturns."
+        } else if lowercased.contains("diversif") {
+            return "Diversification is key to reducing portfolio risk. I notice you could benefit from increasing exposure to international markets and adding some defensive sectors like utilities or consumer staples. Would you like specific recommendations?"
+        } else if lowercased.contains("market") || lowercased.contains("trend") {
+            return "Current market trends show increased volatility in growth stocks while value stocks have been more stable. Your portfolio positioning aligns well with the current market environment. I'm monitoring several key indicators that could affect your holdings."
+        } else {
+            return "I understand you're asking about \"\(userMessage)\". As your Portfolio AI assistant, I'm here to help you make informed investment decisions. Could you provide more context about what specific aspect you'd like me to analyze?"
+        }
     }
     
     /// Update a message

@@ -8,6 +8,52 @@
 import Foundation
 import Supabase
 
+// Simplified conversation model for database queries (avoiding JSONB complexity)
+private struct SimplifiedConversation: Codable {
+    let id: UUID
+    let userId: String
+    let title: String
+    let contextType: String  // Changed to String to avoid enum decoding issues
+    let sessionId: String
+    let sessionType: String  // Changed to String to avoid enum decoding issues
+    let isActive: Bool
+    let createdAt: Date
+    let updatedAt: Date
+    
+    enum CodingKeys: String, CodingKey {
+        case id
+        case userId = "user_id"
+        case title
+        case contextType = "context_type"
+        case sessionId = "session_id"
+        case sessionType = "session_type"
+        case isActive = "is_active"
+        case createdAt = "created_at"
+        case updatedAt = "updated_at"
+    }
+}
+
+// AnyJSON helper for handling dynamic JSON responses (kept for other methods)
+extension AnyJSON {
+    var stringValue: String? {
+        switch self {
+        case .string(let value):
+            return value
+        default:
+            return nil
+        }
+    }
+    
+    var boolValue: Bool? {
+        switch self {
+        case .bool(let value):
+            return value
+        default:
+            return nil
+        }
+    }
+}
+
 
 class ChatRepo {
     static private let supabase = SupabaseManager.shared.client
@@ -18,7 +64,7 @@ class ChatRepo {
     
     // MARK: - Conversation Management
     
-    /// Fetch all conversations for the current user
+    /// Fetch all conversations for the current user (simplified approach)
     static func fetchConversations(
         pagination: PaginationRequest = PaginationRequest()
     ) async -> (PaginatedResponse<ConversationSummary>?, Failure?) {
@@ -26,26 +72,135 @@ class ChatRepo {
             return (nil, Failure(message: "User not authenticated", errorType: .fetchError))
         }
         
+        print("🟢 ChatRepo Debug: Starting fetchConversations for userId: \(userId)")
+        
         do {
             let offset = (pagination.page - 1) * pagination.limit
             
             // Get total count first
             let countResponse: Int = try await supabase
-                .from("conversation_summaries")
+                .from("chat_conversations")
                 .select("*", head: true, count: .exact)
                 .eq("user_id", value: userId)
+                .eq("is_active", value: true)
                 .execute()
                 .count ?? 0
             
-            // Get paginated data
-            let response: [ConversationSummary] = try await supabase
-                .from("conversation_summaries")
-                .select()
+            print("🟢 ChatRepo Debug: Found \(countResponse) total conversations")
+            
+            // Try the most basic query first - just get raw data
+            let rawResponse: [[String: AnyJSON]] = try await supabase
+                .from("chat_conversations")
+                .select("""
+                    id,
+                    user_id,
+                    title,
+                    context_type,
+                    session_id,
+                    session_type,
+                    is_active,
+                    created_at,
+                    updated_at
+                """)
                 .eq("user_id", value: userId)
+                .eq("is_active", value: true)
                 .order("updated_at", ascending: false)
                 .range(from: offset, to: offset + pagination.limit - 1)
                 .execute()
                 .value
+            
+            print("🟢 ChatRepo Debug: Raw response count: \(rawResponse.count)")
+            if let firstItem = rawResponse.first {
+                print("🟢 ChatRepo Debug: First item keys: \(firstItem.keys)")
+                print("🟢 ChatRepo Debug: First item: \(firstItem)")
+            }
+            
+            // Convert manually with lots of error checking
+            let conversations: [ConversationSummary] = rawResponse.compactMap { row in
+                do {
+                    guard let idString = row["id"]?.stringValue,
+                          let id = UUID(uuidString: idString) else {
+                        print("🔴 ChatRepo Debug: Failed to parse ID from: \(row["id"] ?? "nil")")
+                        return nil
+                    }
+                    
+                    guard let userIdString = row["user_id"]?.stringValue else {
+                        print("🔴 ChatRepo Debug: Failed to parse user_id")
+                        return nil
+                    }
+                    
+                    guard let title = row["title"]?.stringValue else {
+                        print("🔴 ChatRepo Debug: Failed to parse title")
+                        return nil
+                    }
+                    
+                    let contextTypeString = row["context_type"]?.stringValue ?? "general"
+                    let contextType = ContextType(rawValue: contextTypeString) ?? .general
+                    
+                    let sessionId = row["session_id"]?.stringValue ?? UUID().uuidString
+                    
+                    let sessionTypeString = row["session_type"]?.stringValue ?? "chat"
+                    let sessionType = SessionType(rawValue: sessionTypeString) ?? .chat
+                    
+                    let isActive = row["is_active"]?.boolValue ?? true
+                    
+                    // Handle dates with multiple formats
+                    let createdAt: Date
+                    let updatedAt: Date
+                    
+                    if let createdAtString = row["created_at"]?.stringValue {
+                        let iso8601Formatter = ISO8601DateFormatter()
+                        iso8601Formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+                        
+                        if let date = iso8601Formatter.date(from: createdAtString) {
+                            createdAt = date
+                        } else {
+                            // Try without fractional seconds
+                            iso8601Formatter.formatOptions = [.withInternetDateTime]
+                            createdAt = iso8601Formatter.date(from: createdAtString) ?? Date()
+                        }
+                    } else {
+                        createdAt = Date()
+                    }
+                    
+                    if let updatedAtString = row["updated_at"]?.stringValue {
+                        let iso8601Formatter = ISO8601DateFormatter()
+                        iso8601Formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+                        
+                        if let date = iso8601Formatter.date(from: updatedAtString) {
+                            updatedAt = date
+                        } else {
+                            // Try without fractional seconds
+                            iso8601Formatter.formatOptions = [.withInternetDateTime]
+                            updatedAt = iso8601Formatter.date(from: updatedAtString) ?? Date()
+                        }
+                    } else {
+                        updatedAt = Date()
+                    }
+                    
+                    return ConversationSummary(
+                        id: id,
+                        userId: userIdString,
+                        title: title,
+                        contextType: contextType,
+                        portfolioContext: PortfolioContext(enabled: true, portfolioSummary: nil),
+                        sessionContext: SessionContext(),
+                        sessionId: sessionId,
+                        sessionType: sessionType,
+                        isActive: isActive,
+                        createdAt: createdAt,
+                        updatedAt: updatedAt,
+                        messageCount: 0,
+                        lastMessageAt: nil,
+                        lastMessagePreview: ""
+                    )
+                } catch {
+                    print("🔴 ChatRepo Debug: Error processing row: \(error)")
+                    return nil
+                }
+            }
+            
+            print("🟢 ChatRepo Debug: Successfully converted \(conversations.count) conversations")
             
             let totalPages = Int(ceil(Double(countResponse) / Double(pagination.limit)))
             let paginationInfo = PaginationInfo(
@@ -55,10 +210,14 @@ class ChatRepo {
                 itemsPerPage: pagination.limit
             )
             
-            let paginatedResponse = PaginatedResponse(data: response, pagination: paginationInfo)
+            let paginatedResponse = PaginatedResponse(data: conversations, pagination: paginationInfo)
             return (paginatedResponse, nil)
             
         } catch {
+            print("🔴 ChatRepo Debug: Detailed error: \(error)")
+            if let decodingError = error as? DecodingError {
+                print("🔴 ChatRepo Debug: Decoding error details: \(decodingError)")
+            }
             return (nil, Failure(message: "Error fetching conversations: \(error.localizedDescription)", errorType: .fetchError))
         }
     }
@@ -69,18 +228,106 @@ class ChatRepo {
             return (nil, Failure(message: "User not authenticated", errorType: .fetchError))
         }
         
+        print("🟢 ChatRepo Debug: Fetching conversation with ID: \(id)")
+        
         do {
-            let response: [ChatConversation] = try await supabase
+            // Use the same raw JSON approach to avoid decoding issues
+            let rawResponse: [[String: AnyJSON]] = try await supabase
                 .from("chat_conversations")
-                .select()
+                .select("""
+                    id,
+                    user_id,
+                    title,
+                    context_type,
+                    session_id,
+                    session_type,
+                    is_active,
+                    created_at,
+                    updated_at
+                """)
                 .eq("id", value: id.uuidString)
                 .eq("user_id", value: userId)
                 .execute()
                 .value
             
-            return (response.first, nil)
+            print("🟢 ChatRepo Debug: Raw conversation response count: \(rawResponse.count)")
+            
+            guard let conversationData = rawResponse.first else {
+                print("🔴 ChatRepo Debug: No conversation found with ID: \(id)")
+                return (nil, Failure(message: "Conversation not found", errorType: .fetchError))
+            }
+            
+            print("🟢 ChatRepo Debug: Found conversation data: \(conversationData)")
+            
+            // Manually construct ChatConversation
+            guard let idString = conversationData["id"]?.stringValue,
+                  let conversationId = UUID(uuidString: idString),
+                  let userIdString = conversationData["user_id"]?.stringValue,
+                  let title = conversationData["title"]?.stringValue else {
+                print("🔴 ChatRepo Debug: Failed to parse basic conversation fields")
+                return (nil, Failure(message: "Invalid conversation data", errorType: .fetchError))
+            }
+            
+            let contextTypeString = conversationData["context_type"]?.stringValue ?? "general"
+            let contextType = ContextType(rawValue: contextTypeString) ?? .general
+            
+            let sessionId = conversationData["session_id"]?.stringValue ?? UUID().uuidString
+            
+            let sessionTypeString = conversationData["session_type"]?.stringValue ?? "chat"
+            let sessionType = SessionType(rawValue: sessionTypeString) ?? .chat
+            
+            let isActive = conversationData["is_active"]?.boolValue ?? true
+            
+            // Handle dates
+            let createdAt: Date
+            let updatedAt: Date
+            
+            if let createdAtString = conversationData["created_at"]?.stringValue {
+                let iso8601Formatter = ISO8601DateFormatter()
+                iso8601Formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+                
+                if let date = iso8601Formatter.date(from: createdAtString) {
+                    createdAt = date
+                } else {
+                    iso8601Formatter.formatOptions = [.withInternetDateTime]
+                    createdAt = iso8601Formatter.date(from: createdAtString) ?? Date()
+                }
+            } else {
+                createdAt = Date()
+            }
+            
+            if let updatedAtString = conversationData["updated_at"]?.stringValue {
+                let iso8601Formatter = ISO8601DateFormatter()
+                iso8601Formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+                
+                if let date = iso8601Formatter.date(from: updatedAtString) {
+                    updatedAt = date
+                } else {
+                    iso8601Formatter.formatOptions = [.withInternetDateTime]
+                    updatedAt = iso8601Formatter.date(from: updatedAtString) ?? Date()
+                }
+            } else {
+                updatedAt = Date()
+            }
+            
+            let conversation = ChatConversation(
+                id: conversationId,
+                userId: userIdString,
+                title: title,
+                contextType: contextType,
+                portfolioContext: PortfolioContext(),
+                sessionContext: SessionContext(),
+                sessionType: sessionType,
+                isActive: isActive,
+                createdAt: createdAt,
+                updatedAt: updatedAt
+            )
+            
+            print("🟢 ChatRepo Debug: Successfully created ChatConversation object")
+            return (conversation, nil)
             
         } catch {
+            print("🔴 ChatRepo Debug: Error fetching conversation: \(error)")
             return (nil, Failure(message: "Error fetching conversation: \(error.localizedDescription)", errorType: .fetchError))
         }
     }

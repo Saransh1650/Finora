@@ -11,6 +11,7 @@ struct NavigationPage: View {
     @State private var selectedTab: TabItem = .home
     @StateObject var portfolioManager = PortfolioManager()
     @StateObject var portfolioAnalysisManager = PortfolioAnalysisManager()
+    @StateObject var chatManager = ChatManager()
     
     var body: some View {
         VStack(spacing: 0) {
@@ -27,6 +28,11 @@ struct NavigationPage: View {
                         NavigationView {
                             PortfolioPage()
                                 .environmentObject(portfolioManager)
+                        }
+                    case .chat:
+                        NavigationView {
+                            ChatPage()
+                                .environmentObject(chatManager)
                         }
                     case .settings:
                         NavigationView {
