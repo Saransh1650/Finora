@@ -1,6 +1,6 @@
-# Portfolio.AI
+# Finora
 
-Portfolio.AI is a modern iOS app for smart investment management, built with SwiftUI. It leverages Supabase for backend services and integrates Google Gemini for AI-powered insights.
+Finora is a modern iOS app for smart investment management, built with SwiftUI. It leverages Supabase for backend services and integrates Google Gemini for AI-powered insights.
 
 ---
 
