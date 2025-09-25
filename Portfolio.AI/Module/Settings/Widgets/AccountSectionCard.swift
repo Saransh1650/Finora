@@ -13,7 +13,7 @@ struct AccountSectionCard: View {
     var body: some View {
         VStack(spacing: 16) {
             SettingsRow(
-                icon: "iphone.and.arrow.right.outward",
+                icon: "rectangle.portrait.and.arrow.forward.fill",
                 title: "Log Out",
                 subtitle: "Lout out of the current account",
                 trailing: {

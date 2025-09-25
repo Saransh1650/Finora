@@ -25,38 +25,6 @@ enum SessionType: String, Codable, CaseIterable {
 
 // MARK: - Support Models
 
-struct PortfolioContext: Codable {
-    let enabled: Bool
-    let portfolioSummary: PortfolioSummary?
-    let lastAnalysis: LastAnalysisInfo?
-    
-    enum CodingKeys: String, CodingKey {
-        case enabled
-        case portfolioSummary = "portfolio_summary"
-        case lastAnalysis = "last_analysis"
-    }
-    
-    init(enabled: Bool = true, portfolioSummary: PortfolioSummary? = nil, lastAnalysis: LastAnalysisInfo? = nil) {
-        self.enabled = enabled
-        self.portfolioSummary = portfolioSummary
-        self.lastAnalysis = lastAnalysis
-    }
-}
-
-struct PortfolioSummary: Codable {
-    let totalStocks: Int
-    let totalInvested: Double
-    let topStocks: [String]
-    let lastUpdated: Date?
-    
-    enum CodingKeys: String, CodingKey {
-        case totalStocks = "total_stocks"
-        case totalInvested = "total_invested"
-        case topStocks = "top_stocks"
-        case lastUpdated = "last_updated"
-    }
-}
-
 struct LastAnalysisInfo: Codable {
     let id: UUID
     let analysisDate: Date
@@ -145,7 +113,6 @@ struct ChatConversation: Codable, Identifiable {
     let userId: String
     let title: String
     let contextType: ContextType
-    let portfolioContext: PortfolioContext
     let sessionContext: SessionContext
     let sessionId: String
     let sessionType: SessionType
@@ -158,7 +125,6 @@ struct ChatConversation: Codable, Identifiable {
         case userId = "user_id"
         case title
         case contextType = "context_type"
-        case portfolioContext = "portfolio_context"
         case sessionContext = "session_context"
         case sessionId = "session_id"
         case sessionType = "session_type"
@@ -172,7 +138,6 @@ struct ChatConversation: Codable, Identifiable {
         userId: String,
         title: String = "New Conversation",
         contextType: ContextType = .general,
-        portfolioContext: PortfolioContext = PortfolioContext(),
         sessionContext: SessionContext = SessionContext(),
         sessionId: String = UUID().uuidString,
         sessionType: SessionType = .chat,
@@ -184,7 +149,6 @@ struct ChatConversation: Codable, Identifiable {
         self.userId = userId
         self.title = title
         self.contextType = contextType
-        self.portfolioContext = portfolioContext
         self.sessionContext = sessionContext
         self.sessionId = sessionId
         self.sessionType = sessionType
@@ -197,14 +161,6 @@ struct ChatConversation: Codable, Identifiable {
 // MARK: - Convenience Extensions
 
 extension ChatConversation {
-    var isPortfolioEnabled: Bool {
-        portfolioContext.enabled
-    }
-    
-    var hasPortfolioData: Bool {
-        portfolioContext.portfolioSummary != nil
-    }
-    
     var currentTopic: String? {
         sessionContext.currentTopic
     }
@@ -215,7 +171,6 @@ extension ChatConversation {
             userId: self.userId,
             title: self.title,
             contextType: self.contextType,
-            portfolioContext: self.portfolioContext,
             sessionContext: newContext,
             sessionId: self.sessionId,
             sessionType: self.sessionType,

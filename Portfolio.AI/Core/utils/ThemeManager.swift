@@ -90,7 +90,6 @@ class ThemeManager: ObservableObject {
         if let theme = currentTheme {
             let themeValue = theme == .light ? 0 : 1
             UserDefaults.standard.set(themeValue, forKey: themeKey)
-            print("Saved theme: \(themeValue)")
         } else {
             UserDefaults.standard.removeObject(forKey: themeKey)
         }
