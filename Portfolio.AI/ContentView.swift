@@ -36,6 +36,7 @@ struct ContentView: View {
                 await authManager.checkAuthStatus()
             }
         }
+    
     }
 }
 

@@ -75,14 +75,6 @@ BEGIN
                  WHERE table_name = 'chat_conversations' AND column_name = 'session_type' AND table_schema = 'public') THEN
     ALTER TABLE public.chat_conversations ADD COLUMN session_type TEXT DEFAULT 'chat' CHECK (session_type IN ('chat', 'analysis', 'planning', 'research'));
   END IF;
-  
-  -- Update portfolio_context default for existing records where it's NULL
-  UPDATE public.chat_conversations 
-  SET portfolio_context = '{"enabled": true}'::jsonb 
-  WHERE portfolio_context IS NULL;
-  
-  -- Set default for portfolio_context column
-  ALTER TABLE public.chat_conversations ALTER COLUMN portfolio_context SET DEFAULT '{"enabled": true}'::jsonb;
 END $$;
 
 -- Create portfolio_analysis table
@@ -105,7 +97,6 @@ CREATE TABLE IF NOT EXISTS public.chat_conversations (
   user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   title TEXT NOT NULL DEFAULT 'New Conversation',
   context_type TEXT DEFAULT 'general' CHECK (context_type IN ('general', 'portfolio', 'stock_analysis', 'market_insights')),
-  portfolio_context JSONB DEFAULT '{"enabled": true}'::jsonb,
   session_context JSONB DEFAULT '{}'::jsonb,
   session_id TEXT DEFAULT gen_random_uuid()::text,
   session_type TEXT DEFAULT 'chat' CHECK (session_type IN ('chat', 'analysis', 'planning', 'research')),
@@ -377,57 +368,26 @@ CREATE TRIGGER chat_message_generate_title_trigger
 -- SESSION MANAGEMENT FUNCTIONS
 -- =============================================================================
 
+-- Drop the old function signature if it exists (with portfolio context parameter)
+DROP FUNCTION IF EXISTS public.create_new_chat_session(UUID, TEXT, TEXT, TEXT, BOOLEAN, JSONB);
+
 -- Function to create a new chat session with proper defaults
 CREATE OR REPLACE FUNCTION public.create_new_chat_session(
   p_user_id UUID,
   p_title TEXT DEFAULT 'New Conversation',
   p_context_type TEXT DEFAULT 'general',
   p_session_type TEXT DEFAULT 'chat',
-  p_include_portfolio_context BOOLEAN DEFAULT true,
   p_initial_session_context JSONB DEFAULT '{}'::jsonb
 )
 RETURNS UUID AS $$
 DECLARE
   v_conversation_id UUID;
-  v_portfolio_context JSONB;
 BEGIN
-  -- Get user's portfolio context if requested
-  IF p_include_portfolio_context THEN
-    SELECT jsonb_build_object(
-      'enabled', true,
-      'portfolio_summary', jsonb_build_object(
-        'total_stocks', COALESCE(ps.total_stocks, 0),
-        'total_invested', COALESCE(ps.total_invested, 0),
-        'top_stocks', COALESCE(ps.top_stocks, ARRAY[]::text[]),
-        'last_updated', ps.last_updated
-      ),
-      'last_analysis', (
-        SELECT jsonb_build_object(
-          'id', pa.id,
-          'analysis_date', pa.analysis_date,
-          'summary', pa.portfolio_summary_by_ai_model
-        )
-        FROM public.portfolio_analysis pa
-        WHERE pa.user_id = p_user_id
-        ORDER BY pa.analysis_date DESC
-        LIMIT 1
-      )
-    ) INTO v_portfolio_context
-    FROM public.portfolio_summary ps
-    WHERE ps.user_id = p_user_id;
-    
-    -- Set default if no portfolio found
-    v_portfolio_context := COALESCE(v_portfolio_context, '{"enabled": true}'::jsonb);
-  ELSE
-    v_portfolio_context := '{"enabled": false}'::jsonb;
-  END IF;
-
   -- Create the conversation
   INSERT INTO public.chat_conversations (
     user_id,
     title,
     context_type,
-    portfolio_context,
     session_context,
     session_type,
     is_active
@@ -435,7 +395,6 @@ BEGIN
     p_user_id,
     p_title,
     p_context_type,
-    v_portfolio_context,
     p_initial_session_context,
     p_session_type,
     true
@@ -477,7 +436,6 @@ SELECT
   cc.user_id,
   cc.title,
   cc.context_type,
-  cc.portfolio_context,
   cc.session_context,
   cc.session_id,
   cc.session_type,
@@ -495,7 +453,7 @@ SELECT
   ) as last_message_preview
 FROM public.chat_conversations cc
 LEFT JOIN public.chat_messages cm ON cc.id = cm.conversation_id
-GROUP BY cc.id, cc.user_id, cc.title, cc.context_type, cc.portfolio_context, cc.session_context, cc.session_id, cc.session_type, cc.is_active, cc.created_at, cc.updated_at
+GROUP BY cc.id, cc.user_id, cc.title, cc.context_type, cc.session_context, cc.session_id, cc.session_type, cc.is_active, cc.created_at, cc.updated_at
 ORDER BY cc.updated_at DESC;
 
 -- Portfolio summary view
@@ -526,7 +484,7 @@ GRANT ALL ON public.chat_messages TO authenticated;
 GRANT ALL ON public.chat_attachments TO authenticated;
 
 -- Functions
-GRANT EXECUTE ON FUNCTION public.create_new_chat_session(UUID, TEXT, TEXT, TEXT, BOOLEAN, JSONB) TO authenticated;
+GRANT EXECUTE ON FUNCTION public.create_new_chat_session(UUID, TEXT, TEXT, TEXT, JSONB) TO authenticated;
 GRANT EXECUTE ON FUNCTION public.update_session_context(UUID, JSONB) TO authenticated;
 
 -- Views

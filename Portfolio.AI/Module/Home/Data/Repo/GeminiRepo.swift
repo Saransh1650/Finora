@@ -49,9 +49,14 @@ class GeminiRepo {
     static func getChatResponse(
         userMessage: String,
         conversationHistory: [ChatMessage]? = nil,
+        portfolioContext: String? = nil,
         completion: @escaping (Result<ChatResponseModel, Error>) -> Void
     ) async {
-        let prompt = createChatPrompt(userMessage: userMessage, conversationHistory: conversationHistory)
+        let prompt = createChatPrompt(
+            userMessage: userMessage, 
+            conversationHistory: conversationHistory,
+            portfolioContext: portfolioContext
+        )
 
         let request = GeminiRequest(
             contents: [
@@ -71,7 +76,11 @@ class GeminiRepo {
         await sendChatRequest(request: request, completion: completion)
     }
 
-    static func createChatPrompt(userMessage: String, conversationHistory: [ChatMessage]? = nil) -> String {
+    static func createChatPrompt(
+        userMessage: String, 
+        conversationHistory: [ChatMessage]? = nil,
+        portfolioContext: String? = nil
+    ) -> String {
         var prompt = """
             You are Portfolio AI, an intelligent financial assistant specializing in investment portfolio management and analysis. 
             You have access to real-time market data and can help users with:
@@ -92,9 +101,22 @@ class GeminiRepo {
             
             """
         
+        // Add portfolio context if available and enabled
+            prompt += "\n--- USER'S PORTFOLIO CONTEXT ---\n"
+            
+            if let summary = portfolioContext {
+                prompt += """
+                Portfolio Summary:
+                \(summary)
+                """
+            }
+            
+            prompt += "\n--- END PORTFOLIO CONTEXT ---\n\n"
+        
+        
         // Add conversation history if available
         if let history = conversationHistory, !history.isEmpty {
-            prompt += "\nConversation History:\n"
+            prompt += "Conversation History:\n"
             let recentHistory = Array(history.suffix(5)) // Include last 5 messages for context
             for message in recentHistory {
                 let role = message.role == .user ? "User" : "Assistant"
@@ -104,7 +126,7 @@ class GeminiRepo {
         }
         
         prompt += "User's current question: \(userMessage)\n\nPlease provide a helpful response:"
-        
+        print("prompt: \(prompt)")
         return prompt
     }
 

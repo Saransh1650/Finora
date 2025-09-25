@@ -33,6 +33,7 @@ struct NavigationPage: View {
                         NavigationView {
                             ChatPage()
                                 .environmentObject(chatManager)
+                                .environmentObject(portfolioManager)
                         }
                     case .settings:
                         NavigationView {

@@ -86,22 +86,12 @@ class ChatRepo {
                 .execute()
                 .count ?? 0
             
-            print("🟢 ChatRepo Debug: Found \(countResponse) total conversations")
+            print("🟢 ChatRepo Debug: Total active conversations count: \(countResponse)")
             
             // Try the most basic query first - just get raw data
             let rawResponse: [[String: AnyJSON]] = try await supabase
                 .from("chat_conversations")
-                .select("""
-                    id,
-                    user_id,
-                    title,
-                    context_type,
-                    session_id,
-                    session_type,
-                    is_active,
-                    created_at,
-                    updated_at
-                """)
+                .select("id,user_id,title,context_type,session_id,session_type,is_active,created_at,updated_at")
                 .eq("user_id", value: userId)
                 .eq("is_active", value: true)
                 .order("updated_at", ascending: false)
@@ -183,7 +173,6 @@ class ChatRepo {
                         userId: userIdString,
                         title: title,
                         contextType: contextType,
-                        portfolioContext: PortfolioContext(enabled: true, portfolioSummary: nil),
                         sessionContext: SessionContext(),
                         sessionId: sessionId,
                         sessionType: sessionType,
@@ -234,19 +223,10 @@ class ChatRepo {
             // Use the same raw JSON approach to avoid decoding issues
             let rawResponse: [[String: AnyJSON]] = try await supabase
                 .from("chat_conversations")
-                .select("""
-                    id,
-                    user_id,
-                    title,
-                    context_type,
-                    session_id,
-                    session_type,
-                    is_active,
-                    created_at,
-                    updated_at
-                """)
+                .select("id,user_id,title,context_type,session_id,session_type,is_active,created_at,updated_at")
                 .eq("id", value: id.uuidString)
                 .eq("user_id", value: userId)
+                .limit(1)
                 .execute()
                 .value
             
@@ -315,7 +295,6 @@ class ChatRepo {
                 userId: userIdString,
                 title: title,
                 contextType: contextType,
-                portfolioContext: PortfolioContext(),
                 sessionContext: SessionContext(),
                 sessionType: sessionType,
                 isActive: isActive,
@@ -350,7 +329,6 @@ class ChatRepo {
                 "p_title": request.title ?? "New Conversation",
                 "p_context_type": request.contextType?.rawValue ?? "general",
                 "p_session_type": request.sessionType?.rawValue ?? "chat",
-                "p_include_portfolio_context": String(request.includePortfolioContext ?? true),
                 "p_initial_session_context": initialSessionContextString
             ]
             
