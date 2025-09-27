@@ -11,44 +11,37 @@ enum TabItem: String, CaseIterable {
     case home = "home"
     case portfolio = "portfolio"
     case settings = "settings"
-    case chat = "chat"
-    
+
     var title: String {
         switch self {
-            case .home:
-                return "Home"
-            case .portfolio:
-                return "Portfolio"
-            case .settings:
-                return "Settings"
-            case .chat:
-                return "Chat"
+        case .home:
+            return "Home"
+        case .portfolio:
+            return "Portfolio"
+        case .settings:
+            return "Settings"
         }
     }
-    
+
     var icon: String {
         switch self {
-            case .home:
-                return "house"
-            case .portfolio:
-                return "chart.pie"
-            case .settings:
-                return "gearshape"
-            case .chat:
-                return "message"
+        case .home:
+            return "house"
+        case .portfolio:
+            return "chart.pie"
+        case .settings:
+            return "gearshape"
         }
     }
-    
+
     var selectedIcon: String {
         switch self {
-            case .home:
-                return "house.fill"
-            case .portfolio:
-                return "chart.pie.fill"
-            case .settings:
-                return "gearshape.fill"
-            case .chat:
-                return "message.fill"
+        case .home:
+            return "house.fill"
+        case .portfolio:
+            return "chart.pie.fill"
+        case .settings:
+            return "gearshape.fill"
         }
     }
 }

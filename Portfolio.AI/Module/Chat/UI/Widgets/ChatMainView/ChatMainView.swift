@@ -26,8 +26,6 @@ struct ChatMainView: View {
             }
         }
         .background(AppColors.pureBackground)
-        .navigationTitle("FinAI")
-        .navigationBarTitleDisplayMode(.large)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button(action: {
