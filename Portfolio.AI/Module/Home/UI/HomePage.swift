@@ -10,6 +10,8 @@ import SwiftUI
 struct HomePage: View {
     @EnvironmentObject var portfolioManager: PortfolioManager
     @EnvironmentObject var portfolioAnalysisManager: PortfolioAnalysisManager
+    @EnvironmentObject var chatManager: ChatManager
+    @State private var showChat = false
 
     var body: some View {
         ZStack {
@@ -41,6 +43,29 @@ struct HomePage: View {
                 }
             }
         }
+        .overlay(alignment: .bottomTrailing) {
+            // Chat FAB
+            Button {
+                showChat = true
+            } label: {
+                Image(systemName: "message.circle.fill")
+                    .font(.system(size: 24))
+                    .foregroundColor(.white)
+                    .frame(width: 56, height: 56)
+                    .background(Color.blue)
+                    .clipShape(Circle())
+                    .shadow(color: .black.opacity(0.2), radius: 8, x: 0, y: 4)
+            }
+            .padding(.trailing, 20)
+            .padding(.bottom, 20)
+        }
+        .sheet(isPresented: $showChat) {
+            NavigationStack {
+                ChatPage()
+                    .environmentObject(chatManager)
+                    .environmentObject(portfolioManager)
+            }
+        }
         .navigationTitle("Welcome")
         .navigationBarTitleDisplayMode(.large)
     }
@@ -50,4 +75,5 @@ struct HomePage: View {
     HomePage()
         .environmentObject(PortfolioManager())
         .environmentObject(PortfolioAnalysisManager())
+        .environmentObject(ChatManager())
 }
