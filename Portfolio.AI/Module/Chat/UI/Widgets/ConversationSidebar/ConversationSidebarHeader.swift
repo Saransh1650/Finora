@@ -12,9 +12,9 @@ struct ConversationSidebarHeader: View {
     var body: some View {
         HStack {
             Text("Conversations")
-                .font(.title2)
+                .font(.title)
                 .fontWeight(.semibold)
-                .foregroundColor(AppColors.foreground)
+                .foregroundColor(AppColors.textPrimary)
             
             Spacer()
             
