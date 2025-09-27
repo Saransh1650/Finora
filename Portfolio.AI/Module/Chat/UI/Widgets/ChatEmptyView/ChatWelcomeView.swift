@@ -11,6 +11,7 @@ struct ChatWelcomeView: View {
     @EnvironmentObject var chatManager: ChatManager
     @EnvironmentObject var portfolioManager: PortfolioManager
     @State private var message: String = ""
+    @FocusState var isInputActive: Bool
 
     private let suggestedQuestions = [
         "Analyze my current portfolio performance",
@@ -77,7 +78,7 @@ struct ChatWelcomeView: View {
             }
 
             Spacer()
-            ChatTextfield()
+            ChatTextfield(isInputFocused: _isInputActive)
         }
         .background(AppColors.pureBackground)
     }

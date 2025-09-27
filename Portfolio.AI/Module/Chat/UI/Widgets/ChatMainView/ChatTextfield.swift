@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct ChatTextfield: View {
-    @State var message: String = ""
-    @FocusState private var isInputFocused: Bool
+    @State private var message: String = ""
+    @FocusState var isInputFocused: Bool
     @EnvironmentObject private var chatManager: ChatManager
     @EnvironmentObject private var portfolioManager: PortfolioManager
 

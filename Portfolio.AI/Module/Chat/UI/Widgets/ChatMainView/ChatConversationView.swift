@@ -25,7 +25,7 @@ struct ChatConversationView: View {
 
             ChatPageMessageArea()
 
-            ChatTextfield()
+            ChatTextfield(isInputFocused: _isInputFocused)
         }
         .background(AppColors.pureBackground)
         .onAppear {
