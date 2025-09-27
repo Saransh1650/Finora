@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ChatTextfield: View {
-    @Binding var message: String
+    @State var message: String = ""
     @FocusState private var isInputFocused: Bool
     @EnvironmentObject private var chatManager: ChatManager
     @EnvironmentObject private var portfolioManager: PortfolioManager
@@ -19,7 +19,7 @@ struct ChatTextfield: View {
             HStack(spacing: 12) {
                 // Text input
                 TextField(
-                    "Message Portfolio AI...",
+                    "Message Finora...",
                     text: $message,
                     axis: .vertical
                 )
@@ -44,21 +44,27 @@ struct ChatTextfield: View {
                         await sendMessage()
                     }
                 } label: {
-                    Image(
-                        systemName: chatManager.isSendingMessage
-                            ? "stop.fill" : "arrow.up"
-                    )
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(.white)
-                    .frame(width: 32, height: 32)
-                    .background(
-                        Circle()
-                            .fill(
-                                canSend
-                                    ? AppColors.selected
-                                    : AppColors.textSecondary
+                    if chatManager.isSendingMessage {
+                        ProgressView()
+                            .progressViewStyle(
+                                CircularProgressViewStyle(tint: .white)
                             )
-                    )
+                            .frame(width: 14, height: 14)
+                    } else {
+                        Image(systemName: "arrow.up")
+
+                            .font(.system(size: 14, weight: .medium))
+                            .foregroundColor(.white)
+                            .frame(width: 32, height: 32)
+                            .background(
+                                Circle()
+                                    .fill(
+                                        canSend
+                                            ? Color.blue
+                                            : AppColors.textSecondary
+                                    )
+                            )
+                    }
                 }
                 .buttonStyle(PlainButtonStyle())
                 .disabled(!canSend && !chatManager.isSendingMessage)
@@ -89,10 +95,24 @@ struct ChatTextfield: View {
         message = ""
 
         Task {
-            await chatManager.sendMessage(
-                content: messageToSend,
-                portfolioContext: "\(portfolioManager.stocks)"
-            )
+            if chatManager.currentConversation == nil {
+                if await chatManager.createConversation(
+                    title: messageToSend,
+                    includePortfolioContext: true
+                )
+                    != nil
+                {
+                    await chatManager.sendMessage(
+                        content: messageToSend,
+                        portfolioContext: "\(portfolioManager.stocks)"
+                    )
+                }
+            } else {
+                await chatManager.sendMessage(
+                    content: messageToSend,
+                    portfolioContext: "\(portfolioManager.stocks)"
+                )
+            }
         }
     }
 }

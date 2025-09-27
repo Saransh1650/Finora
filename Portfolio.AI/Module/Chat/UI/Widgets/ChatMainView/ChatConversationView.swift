@@ -13,8 +13,6 @@ struct ChatConversationView: View {
     @EnvironmentObject var portfolioManager: PortfolioManager
     @FocusState private var isInputFocused: Bool
 
-    @State private var message = ""
-
     var body: some View {
         VStack(spacing: 0) {
 
@@ -27,7 +25,7 @@ struct ChatConversationView: View {
 
             ChatPageMessageArea()
 
-            ChatTextfield(message: $message)
+            ChatTextfield()
         }
         .background(AppColors.pureBackground)
         .onAppear {

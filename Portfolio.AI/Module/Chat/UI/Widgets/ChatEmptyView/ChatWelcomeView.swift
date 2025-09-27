@@ -77,6 +77,7 @@ struct ChatWelcomeView: View {
             }
 
             Spacer()
+            ChatTextfield()
         }
         .background(AppColors.pureBackground)
     }
