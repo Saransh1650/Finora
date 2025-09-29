@@ -18,15 +18,15 @@ struct SettingsPage: View {
                     SettingsHeader()
 
                     SettingsSection(
-                        title: "Appearance",
-                        icon: "paintbrush.fill"
+                        title: "Personalization",
+                        icon: "person.fill"
                     ) {
                         ThemeSettingsCard()
                     }
 
-                    SettingsSection(title: "Subscription", icon: "crown.fill") {
-                        SubscriptionCard()
-                    }
+//                    SettingsSection(title: "Subscription", icon: "crown.fill") {
+//                        SubscriptionCard()
+//                    }
 
                     SettingsSection(
                         title: "Support & Feedback",
