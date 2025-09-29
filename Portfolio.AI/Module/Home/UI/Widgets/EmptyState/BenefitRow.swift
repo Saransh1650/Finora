@@ -60,11 +60,6 @@ struct BenefitRow: View {
             }
             
             Spacer()
-            
-            // Subtle arrow indicator
-            Image(systemName: "chevron.right")
-                .font(.caption)
-                .foregroundColor(AppColors.textSecondary.opacity(0.5))
         }
         .padding(.vertical, 12)
         .padding(.horizontal, 16)
