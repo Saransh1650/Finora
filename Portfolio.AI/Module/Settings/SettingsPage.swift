@@ -12,46 +12,56 @@ struct SettingsPage: View {
     @State private var showingShareSheet = false
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 24) {
-                SettingsHeader()
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: 24) {
+                    SettingsHeader()
 
-                SettingsSection(title: "Appearance", icon: "paintbrush.fill") {
-                    ThemeSettingsCard()
-                }
+                    SettingsSection(
+                        title: "Appearance",
+                        icon: "paintbrush.fill"
+                    ) {
+                        ThemeSettingsCard()
+                    }
 
-                SettingsSection(title: "Subscription", icon: "crown.fill") {
-                    SubscriptionCard()
-                }
+                    SettingsSection(title: "Subscription", icon: "crown.fill") {
+                        SubscriptionCard()
+                    }
 
-                SettingsSection(
-                    title: "Support & Feedback",
-                    icon: "questionmark.circle.fill"
-                ) {
-                    SupportFeedbackCard()
-                }
+                    SettingsSection(
+                        title: "Support & Feedback",
+                        icon: "questionmark.circle.fill"
+                    ) {
+                        SupportFeedbackCard()
+                    }
 
-                SettingsSection(title: "About", icon: "info.circle.fill") {
-                    ShareInformationCard(showingShareSheet: $showingShareSheet)
-                }
-                
-                SettingsSection(title: "Account", icon: "person.crop.circle.fill") {
-                    AccountSectionCard()
-                }
+                    SettingsSection(title: "About", icon: "info.circle.fill") {
+                        ShareInformationCard(
+                            showingShareSheet: $showingShareSheet
+                        )
+                    }
 
-                AppVersionFooter()
+                    SettingsSection(
+                        title: "Account",
+                        icon: "person.crop.circle.fill"
+                    ) {
+                        AccountSectionCard()
+                    }
+
+                    AppVersionFooter()
+                }
+                .padding(.horizontal, 20)
+                .padding(.vertical, 16)
             }
-            .padding(.horizontal, 20)
-            .padding(.vertical, 16)
-        }
-        .background(AppColors.pureBackground)
-        .navigationTitle("Settings")
-        .navigationBarTitleDisplayMode(.large)
-        .sheet(isPresented: $showingShareSheet) {
-            ShareSheet(activityItems: [
-                "Check out Portfolio.AI - The smartest way to manage your investments!",
-                URL(string: "https://portfolio-ai.app")!,
-            ])
+            .background(AppColors.pureBackground)
+            .navigationTitle("Settings")
+            .navigationBarTitleDisplayMode(.large)
+            .sheet(isPresented: $showingShareSheet) {
+                ShareSheet(activityItems: [
+                    "Check out Portfolio.AI - The smartest way to manage your investments!",
+                    URL(string: "https://portfolio-ai.app")!,
+                ])
+            }
         }
     }
 }

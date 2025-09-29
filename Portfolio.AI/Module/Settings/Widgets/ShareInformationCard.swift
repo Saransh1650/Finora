@@ -9,7 +9,9 @@ import SwiftUI
 
 struct ShareInformationCard: View {
     @Binding var showingShareSheet: Bool
-    
+    @State var showPrivacyPolicyPage: Bool = false
+    @State var showTermsOfServicePage: Bool = false
+
     var body: some View {
         VStack(spacing: 16) {
             SettingsRow(
@@ -25,7 +27,7 @@ struct ShareInformationCard: View {
                     showingShareSheet = true
                 }
             )
-            
+
             SettingsRow(
                 icon: "doc.text.fill",
                 title: "Privacy Policy",
@@ -36,10 +38,10 @@ struct ShareInformationCard: View {
                         .foregroundColor(AppColors.textSecondary)
                 },
                 action: {
-                    // Open privacy policy
+                    showPrivacyPolicyPage = true
                 }
             )
-            
+
             SettingsRow(
                 icon: "doc.fill",
                 title: "Terms of Service",
@@ -50,12 +52,16 @@ struct ShareInformationCard: View {
                         .foregroundColor(AppColors.textSecondary)
                 },
                 action: {
-                    // Open terms of service
+                    showTermsOfServicePage = true
                 }
             )
         }
         .settingsCardStyle()
+        .navigationDestination(isPresented: $showPrivacyPolicyPage) {
+            PrivacyPolicyPage()
+        }
+        .navigationDestination(isPresented: $showTermsOfServicePage) {
+            TermsOfServicePage()
+        }
     }
 }
-
-
