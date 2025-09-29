@@ -27,6 +27,9 @@ struct ChatConversationView: View {
 
             ChatTextfield(isInputFocused: _isInputFocused)
         }
+        .onTapGesture {
+            isInputFocused = false
+        }
         .background(AppColors.pureBackground)
         .onAppear {
             chatManager.loadMessages(refresh: true)

@@ -67,7 +67,6 @@ struct SettingsRow<TrailingContent: View>: View {
             .contentShape(Rectangle())
         }
         .buttonStyle(PlainButtonStyle())
-        .disabled(action == nil)
     }
 }
 

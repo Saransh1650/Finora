@@ -9,9 +9,14 @@ import SwiftUI
 
 struct ThemeSettingsCard: View {
     @EnvironmentObject var themeManager : ThemeManager
-    
+    var user = SupabaseManager.shared.client
     var body: some View {
         VStack(spacing: 16) {
+            SettingsRow(
+                icon: "at",
+                title: user.auth.currentUser!.email!,
+                subtitle: "Your email address",
+            )
             SettingsRow(
                 icon: "moon.fill",
                 title: "Dark Mode",
@@ -29,20 +34,6 @@ struct ThemeSettingsCard: View {
                 }) {
                     
                 }
-            
-            SettingsRow(
-                icon: "textformat.size",
-                title: "Text Size",
-                subtitle: "Adjust app text size",
-                trailing: {
-                    Image(systemName: "chevron.right")
-                        .font(.caption)
-                        .foregroundColor(AppColors.textSecondary)
-                },
-                action: {
-                    // Handle text size adjustment
-                }
-            )
         }
         .settingsCardStyle()
     }

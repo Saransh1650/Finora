@@ -24,7 +24,7 @@ struct ChatTextfield: View {
                     axis: .vertical
                 )
                 .focused($isInputFocused)
-                .textFieldStyle(PlainTextFieldStyle())
+                .textFieldStyle(.automatic)
                 .font(.system(size: 14))
                 .foregroundColor(AppColors.textPrimary)
                 .padding(.horizontal, 16)

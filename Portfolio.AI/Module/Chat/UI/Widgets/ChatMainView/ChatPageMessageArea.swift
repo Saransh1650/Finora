@@ -62,6 +62,9 @@ struct ChatPageMessageArea: View {
                 }
             )
         }
+        .onTapGesture {
+            isInputFocused = false
+        }
     }
 }
 

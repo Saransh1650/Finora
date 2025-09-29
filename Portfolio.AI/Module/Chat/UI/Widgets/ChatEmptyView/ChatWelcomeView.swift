@@ -81,6 +81,9 @@ struct ChatWelcomeView: View {
             ChatTextfield(isInputFocused: _isInputActive)
         }
         .background(AppColors.pureBackground)
+        .onTapGesture {
+            isInputActive = false
+        }
     }
 
     private func startConversationWith(
