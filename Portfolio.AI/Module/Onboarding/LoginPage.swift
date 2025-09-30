@@ -12,126 +12,138 @@ struct LoginPage: View {
     @EnvironmentObject var authManager: AuthManager
     @State private var showingAlert = false
     @State private var navigateToHome = false
+    @State var showTermsAndCondition = false
+    @State var showPrivacyPolicy = false
 
     var body: some View {
 
-        ZStack {
-            AppColors.pureBackground
-                .ignoresSafeArea()
+        NavigationStack {
+            ZStack {
+                AppColors.pureBackground
+                    .ignoresSafeArea()
 
-            VStack(spacing: 0) {
-                Spacer()
+                VStack(spacing: 0) {
+                    Spacer()
 
-                // App Logo and Branding
-                VStack(spacing: 20) {
-                    // App Icon/Logo placeholder
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(
-                            LinearGradient(
-                                colors: [
-                                    AppColors.background,
-                                    AppColors.pureBackground.opacity(0.8),
-                                ],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
+                    // App Logo and Branding
+                    VStack(spacing: 20) {
+                        // App Icon/Logo placeholder
+                        RoundedRectangle(cornerRadius: 20)
+                            .fill(
+                                LinearGradient(
+                                    colors: [
+                                        AppColors.background,
+                                        AppColors.pureBackground.opacity(0.8),
+                                    ],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
                             )
-                        )
-                        .frame(width: 80, height: 80)
-                        .overlay(
-                            Image(systemName: "chart.line.uptrend.xyaxis")
-                                .font(.system(size: 36, weight: .bold))
-                                .foregroundColor(AppColors.textPrimary)
-                        )
-                    // App Name
-                    Text("Finora")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .foregroundColor(AppColors.textPrimary)
+                            .frame(width: 80, height: 80)
+                            .overlay(
+                                Image(systemName: "chart.line.uptrend.xyaxis")
+                                    .font(.system(size: 36, weight: .bold))
+                                    .foregroundColor(AppColors.textPrimary)
+                            )
+                        // App Name
+                        Text("Finora")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .foregroundColor(AppColors.textPrimary)
 
-                    // Tagline
-                    Text("Your AI-powered Finance Companion")
-                        .font(.headline)
-                        .foregroundColor(AppColors.tertiary)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, 40)
-                }
-
-                Spacer()
-
-                // Login Section
-                VStack(spacing: 24) {
-                    // Welcome Text
-                    VStack(spacing: 8) {
-
-                        Text("Sign in to continue your finance journey")
-                            .font(.body)
+                        // Tagline
+                        Text("Your AI-powered Finance Companion")
+                            .font(.headline)
                             .foregroundColor(AppColors.tertiary)
                             .multilineTextAlignment(.center)
+                            .padding(.horizontal, 40)
                     }
 
-                    // Login Buttons
-                    VStack(spacing: 16) {
-                        AppButton(
-                            title: "Sign In with Google",
-                            action: {
-                                Task {
-                                    await handleGoogleSignIn()
-                                }
-                            },
-                            image: "Google"
-                        )
-                    }
-                    .padding(.horizontal, 40)
-                }
+                    Spacer()
 
-                // Terms and Privacy
-                VStack(spacing: 8) {
-                    Text("By continuing, you agree to our")
-                        .font(.caption)
-                        .foregroundColor(AppColors.tertiary)
+                    // Login Section
+                    VStack(spacing: 24) {
+                        // Welcome Text
+                        VStack(spacing: 8) {
 
-                    HStack(spacing: 4) {
-                        Button("Terms of Service") {
-                            // Handle terms action
+                            Text("Sign in to continue your finance journey")
+                                .font(.body)
+                                .foregroundColor(AppColors.tertiary)
+                                .multilineTextAlignment(.center)
                         }
-                        .font(.caption)
-                        .foregroundColor(.blue)
 
-                        Text("and")
+                        // Login Buttons
+                        VStack(spacing: 16) {
+                            AppButton(
+                                title: "Sign In with Google",
+                                action: {
+                                    Task {
+                                        await handleGoogleSignIn()
+                                    }
+                                },
+                                image: "Google"
+                            )
+                        }
+                        .padding(.horizontal, 40)
+                    }
+
+                    // Terms and Privacy
+                    VStack(spacing: 8) {
+                        Text("By continuing, you agree to our")
                             .font(.caption)
                             .foregroundColor(AppColors.tertiary)
 
-                        Button("Privacy Policy") {
-                            // Handle privacy action
+                        HStack(spacing: 4) {
+                            Button("Terms of Service") {
+                                showTermsAndCondition = true
+                            }
+                            .font(.caption)
+                            .foregroundColor(.blue)
+
+                            Text("and")
+                                .font(.caption)
+                                .foregroundColor(AppColors.tertiary)
+
+                            Button("Privacy Policy") {
+                                showPrivacyPolicy = true
+                            }
+                            .font(.caption)
+                            .foregroundColor(.blue)
                         }
-                        .font(.caption)
-                        .foregroundColor(.blue)
                     }
+                    .padding(.top, 20)
+                    .padding(.bottom, 20)
                 }
-                .padding(.top, 20)
-                .padding(.bottom, 20)
-            }
 
-            // Loading Overlay
-            if authManager.loading {
-                Color.black.opacity(0.3)
-                    .ignoresSafeArea()
+                // Loading Overlay
+                if authManager.loading {
+                    Color.black.opacity(0.3)
+                        .ignoresSafeArea()
 
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                    .scaleEffect(1.2)
+                    ProgressView()
+                        .progressViewStyle(
+                            CircularProgressViewStyle(tint: .white)
+                        )
+                        .scaleEffect(1.2)
+                }
             }
-        }
-        .alert("Authentication Error", isPresented: $showingAlert) {
-            Button("OK") {
-                authManager.clearError()
+            .alert("Authentication Error", isPresented: $showingAlert) {
+                Button("OK") {
+                    authManager.clearError()
+                }
+            } message: {
+                Text(authManager.errorMessage ?? "An unknown error occurred")
             }
-        } message: {
-            Text(authManager.errorMessage ?? "An unknown error occurred")
-        }
-        .onChange(of: authManager.errorMessage) { _, errorMessage in
-            if errorMessage != nil {
-                showingAlert = true
+            .onChange(of: authManager.errorMessage) { _, errorMessage in
+                if errorMessage != nil {
+                    showingAlert = true
+                }
+            }
+            .navigationDestination(isPresented: $showTermsAndCondition) {
+                TermsOfServicePage()
+            }
+            .navigationDestination(isPresented: $showPrivacyPolicy) {
+                PrivacyPolicyPage()
             }
         }
     }

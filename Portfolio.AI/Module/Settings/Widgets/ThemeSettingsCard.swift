@@ -15,7 +15,7 @@ struct ThemeSettingsCard: View {
             SettingsRow(
                 icon: "at",
                 title: user.auth.currentUser!.email!,
-                subtitle: "Your email address",
+                subtitle: "Your logged in account",
             )
             SettingsRow(
                 icon: "moon.fill",

@@ -1,6 +1,6 @@
 //
 //  PrivacyPolicyPage.swift
-//  Portfolio.AI
+//  Finora
 //
 //  Created by Saransh Singhal on 27/9/25.
 //
@@ -28,7 +28,7 @@ struct PrivacyPolicyPage: View {
                 PolicySection(
                     title: "Introduction",
                     content:
-                        "Welcome to Portfolio.AI (\"we,\" \"our,\" or \"the App\"). This Privacy Policy explains how we collect, use, and protect your information when you use our portfolio analysis application. By using Portfolio.AI, you agree to the collection and use of information in accordance with this policy."
+                        "Welcome to Finora (\"we,\" \"our,\" or \"the App\"). This Privacy Policy explains how we collect, use, and protect your information when you use our portfolio analysis application. By using Finora, you agree to the collection and use of information in accordance with this policy."
                 )
 
                 // Disclaimer Section - Most Important
@@ -37,7 +37,7 @@ struct PrivacyPolicyPage: View {
                     content: """
                         **USER RESPONSIBILITY AND LIABILITY DISCLAIMER**
 
-                        Portfolio.AI is provided for informational purposes only. By using this application, you acknowledge and agree that:
+                        Finora is provided for informational purposes only. By using this application, you acknowledge and agree that:
 
                         • **YOU ARE SOLELY RESPONSIBLE** for all investment decisions and actions taken based on information provided by this app
                         • **NO LIABILITY FOR LOSSES OR GAINS**: We do not accept any liability for financial losses, gains, or any other consequences resulting from your use of this application
@@ -109,7 +109,7 @@ struct PrivacyPolicyPage: View {
 
                         • **Market Risk**: All investments carry inherent risks, and past performance does not guarantee future results
                         • **Volatility**: Portfolio values can fluctuate significantly and may result in substantial losses
-                        • **No Guarantees**: Portfolio.AI provides analysis tools but cannot guarantee investment outcomes
+                        • **No Guarantees**: Finora provides analysis tools but cannot guarantee investment outcomes
                         • **Individual Responsibility**: Each user must evaluate their own financial situation and risk tolerance
                         • **Professional Advice**: Consider consulting with licensed financial advisors for personalized investment guidance
                         """,
@@ -135,7 +135,7 @@ struct PrivacyPolicyPage: View {
                 PolicySection(
                     title: "Third-Party Services",
                     content: """
-                        Portfolio.AI may integrate with third-party services for:
+                        Finora may integrate with third-party services for:
                         • Stock market data providers
                         • Analytics and crash reporting services
                         • Authentication services
@@ -163,9 +163,7 @@ struct PrivacyPolicyPage: View {
                     content: """
                         If you have any questions about this Privacy Policy, please contact us:
 
-                        **Email:** privacy@portfolioai.com
-                        **Support:** support@portfolioai.com
-                        **Address:** [Your Company Address]
+                        **Email:** singhalsaransh40@gmail.com
 
                         We will respond to your inquiries within 30 days.
                         """
@@ -179,7 +177,7 @@ struct PrivacyPolicyPage: View {
                         .foregroundColor(.red)
 
                     Text(
-                        "BY USING PORTFOLIO.AI, YOU ACKNOWLEDGE THAT YOU HAVE READ, UNDERSTOOD, AND AGREE TO BE BOUND BY THIS PRIVACY POLICY AND ALL DISCLAIMERS CONTAINED HEREIN. YOU UNDERSTAND THAT INVESTMENT INVOLVES RISK AND THAT YOU ARE SOLELY RESPONSIBLE FOR YOUR INVESTMENT DECISIONS."
+                        "BY USING FINORA, YOU ACKNOWLEDGE THAT YOU HAVE READ, UNDERSTOOD, AND AGREE TO BE BOUND BY THIS PRIVACY POLICY AND ALL DISCLAIMERS CONTAINED HEREIN. YOU UNDERSTAND THAT INVESTMENT INVOLVES RISK AND THAT YOU ARE SOLELY RESPONSIBLE FOR YOUR INVESTMENT DECISIONS."
                     )
                     .font(.caption)
                     .fontWeight(.semibold)
