@@ -1,6 +1,6 @@
 //
 //  TermsOfServicePage.swift
-//  Portfolio.AI
+//  Finora
 //
 //  Created by Saransh Singhal on 27/9/25.
 //
@@ -28,9 +28,9 @@ struct TermsOfServicePage: View {
                 TermsSection(
                     title: "Acceptance of Terms",
                     content: """
-                        By downloading, installing, or using Portfolio.AI ("the App"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, do not use the App.
+                        By downloading, installing, or using Finora ("the App"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, do not use the App.
 
-                        These Terms constitute a legally binding agreement between you and Portfolio.AI.
+                        These Terms constitute a legally binding agreement between you and Finora.
                         """
                 )
 
@@ -40,7 +40,7 @@ struct TermsOfServicePage: View {
                     content: """
                         **READ THIS SECTION CAREFULLY - IT LIMITS OUR LIABILITY**
 
-                        • **NO LIABILITY FOR FINANCIAL LOSSES**: Portfolio.AI and its developers SHALL NOT be liable for any financial losses, investment losses, or any damages arising from your use of this application
+                        • **NO LIABILITY FOR FINANCIAL LOSSES**: Finora and its developers SHALL NOT be liable for any financial losses, investment losses, or any damages arising from your use of this application
 
                         • **USER SOLE RESPONSIBILITY**: You are SOLELY responsible for all investment decisions and actions taken. The App provides tools and information only - final decisions are entirely yours
 
@@ -57,7 +57,7 @@ struct TermsOfServicePage: View {
                 TermsSection(
                     title: "License to Use",
                     content: """
-                        Portfolio.AI grants you a limited, non-exclusive, non-transferable license to use the App for personal, non-commercial purposes only.
+                        Finora grants you a limited, non-exclusive, non-transferable license to use the App for personal, non-commercial purposes only.
 
                         You may NOT:
                         • Copy, modify, or distribute the App
@@ -71,7 +71,7 @@ struct TermsOfServicePage: View {
                 TermsSection(
                     title: "User Obligations",
                     content: """
-                        By using Portfolio.AI, you agree to:
+                        By using Finora, you agree to:
                         • Provide accurate information when requested
                         • Use the App in compliance with all applicable laws
                         • Not attempt to harm or disrupt the App's functionality
@@ -114,7 +114,7 @@ struct TermsOfServicePage: View {
                 TermsSection(
                     title: "Intellectual Property",
                     content: """
-                        Portfolio.AI and all related content, features, and functionality are owned by the developers and are protected by copyright, trademark, and other intellectual property laws.
+                        Finora and all related content, features, and functionality are owned by the developers and are protected by copyright, trademark, and other intellectual property laws.
 
                         You retain ownership of your personal data and portfolio information.
                         """
@@ -138,7 +138,7 @@ struct TermsOfServicePage: View {
                 TermsSection(
                     title: "Prohibited Uses",
                     content: """
-                        You may NOT use Portfolio.AI to:
+                        You may NOT use Finora to:
                         • Provide financial advice to others without proper licensing
                         • Make automated trading decisions without human oversight
                         • Violate any applicable laws or regulations
@@ -153,7 +153,7 @@ struct TermsOfServicePage: View {
                     content: """
                         **IMPORTANT LEGAL PROTECTION:**
 
-                        TO THE FULLEST EXTENT PERMITTED BY LAW, PORTFOLIO.AI SHALL NOT BE LIABLE FOR:
+                        TO THE FULLEST EXTENT PERMITTED BY LAW, Finora SHALL NOT BE LIABLE FOR:
                         • Any indirect, incidental, special, or consequential damages
                         • Loss of profits, data, or business opportunities
                         • Financial losses from investment decisions
@@ -194,8 +194,7 @@ struct TermsOfServicePage: View {
                     content: """
                         For questions about these Terms of Service:
 
-                        **Email:** legal@portfolioai.com
-                        **Support:** support@portfolioai.com
+                        **Email:** singhalsaransh40@gmail.com
 
                         We will respond to your inquiries within 30 days.
                         """
@@ -209,7 +208,7 @@ struct TermsOfServicePage: View {
                         .foregroundColor(.red)
 
                     Text(
-                        "BY USING PORTFOLIO.AI, YOU ACKNOWLEDGE THAT YOU HAVE READ, UNDERSTOOD, AND AGREE TO BE BOUND BY THESE TERMS OF SERVICE. YOU UNDERSTAND THAT YOU ARE SOLELY RESPONSIBLE FOR YOUR INVESTMENT DECISIONS AND THAT THE APP DEVELOPERS ARE NOT LIABLE FOR ANY FINANCIAL LOSSES OR GAINS."
+                        "BY USING FINORA, YOU ACKNOWLEDGE THAT YOU HAVE READ, UNDERSTOOD, AND AGREE TO BE BOUND BY THESE TERMS OF SERVICE. YOU UNDERSTAND THAT YOU ARE SOLELY RESPONSIBLE FOR YOUR INVESTMENT DECISIONS AND THAT THE APP DEVELOPERS ARE NOT LIABLE FOR ANY FINANCIAL LOSSES OR GAINS."
                     )
                     .font(.caption)
                     .fontWeight(.semibold)
