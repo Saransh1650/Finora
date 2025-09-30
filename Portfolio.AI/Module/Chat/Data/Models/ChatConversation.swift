@@ -180,3 +180,20 @@ extension ChatConversation {
         )
     }
 }
+
+extension ChatConversation{
+    func with(id: UUID? = nil, userId: String? = nil, title: String? = nil, contextType: ContextType? = nil, sessionContext: SessionContext? = nil, sessionId: String? = nil, sessionType: SessionType? = nil, isActive: Bool? = nil, createdAt: Date? = nil, updatedAt: Date? = nil) -> ChatConversation {
+        return ChatConversation(
+            id: id ?? self.id,
+            userId: userId ?? self.userId,
+            title: title ?? self.title,
+            contextType: contextType ?? self.contextType,
+            sessionContext: sessionContext ?? self.sessionContext,
+            sessionId: sessionId ?? self.sessionId,
+            sessionType: sessionType ?? self.sessionType,
+            isActive: isActive ?? self.isActive,
+            createdAt: createdAt ?? self.createdAt,
+            updatedAt: updatedAt ?? self.updatedAt
+        )
+    }
+}

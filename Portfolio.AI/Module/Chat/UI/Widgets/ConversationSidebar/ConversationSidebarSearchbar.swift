@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ConversationSidebarSearchbar: View {
     @Binding var searchText: String
+    @EnvironmentObject var chatManager: ChatManager
     var body: some View {
         HStack {
             Image(systemName: "magnifyingglass")

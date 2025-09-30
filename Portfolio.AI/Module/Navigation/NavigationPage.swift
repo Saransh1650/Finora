@@ -33,6 +33,9 @@ struct NavigationPage: View {
                 case .settings:
                     NavigationView {
                         SettingsPage()
+                            .environmentObject(portfolioManager)
+                            .environmentObject(portfolioAnalysisManager)
+                            .environmentObject(chatManager)
                     }
                 }
             }

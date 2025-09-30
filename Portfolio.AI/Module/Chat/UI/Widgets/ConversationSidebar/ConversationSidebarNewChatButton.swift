@@ -11,9 +11,7 @@ struct ConversationSidebarNewChatButton: View {
     @EnvironmentObject var chatManager: ChatManager
     var body: some View {
         Button {
-            Task {
-                await chatManager.createConversation()
-            }
+            chatManager.currentConversation = nil
         } label: {
             HStack {
                 Image(systemName: "plus")
@@ -32,5 +30,3 @@ struct ConversationSidebarNewChatButton: View {
         .disabled(chatManager.isCreatingConversation)
     }
 }
-
-

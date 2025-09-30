@@ -790,4 +790,29 @@ class ChatRepo {
         }
     }
 
+    static func deleteAllChat() async -> Failure? {
+        guard let userId = currentUserId else {
+            return Failure(
+                message: "User not authenticated",
+                errorType: .authError
+            )
+        }
+
+        do {
+            try await supabase
+                .from("chat_conversations")
+                .delete()
+                .eq("user_id", value: userId)
+                .execute()
+            return nil
+        } catch {
+            return Failure(
+                message:
+                    "Error deleting all chat: \(error.localizedDescription)",
+                errorType: .deleteError
+            )
+        }
+
+    }
+
 }
