@@ -74,6 +74,19 @@ class PortfolioManager: ObservableObject {
 
     }
 
+    func deleteAllStocks() async {
+        stocks.removeAll()
+        await PortfolioRepo.deleteAllStocks { result in
+            switch result {
+            case .success():
+                print("All stocks removed successfully from Supabase.")
+            case .failure(let error):
+                print("Failed to remove all stocks from Supabase: \(error)")
+
+            }
+        }
+    }
+
     func updateStock(_ stock: StockModel) async {
         if let index = stocks.firstIndex(where: { $0.id == stock.id }) {
             stocks[index] = stock

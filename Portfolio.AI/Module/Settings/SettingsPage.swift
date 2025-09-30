@@ -24,9 +24,9 @@ struct SettingsPage: View {
                         ThemeSettingsCard()
                     }
 
-//                    SettingsSection(title: "Subscription", icon: "crown.fill") {
-//                        SubscriptionCard()
-//                    }
+                    //                    SettingsSection(title: "Subscription", icon: "crown.fill") {
+                    //                        SubscriptionCard()
+                    //                    }
 
                     SettingsSection(
                         title: "Support & Feedback",

@@ -27,7 +27,7 @@ struct ConversationSidebarView: View {
 
             ConversationSidebarHeader(isPresented: $isPresented)
 
-            ConversationSidebarSearchbar(searchText: $searchText)
+//            ConversationSidebarSearchbar(searchText: $searchText)
 
             ConversationSidebarNewChatButton()
 

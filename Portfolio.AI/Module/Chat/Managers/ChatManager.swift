@@ -16,7 +16,7 @@ class ChatManager: ObservableObject {
     // MARK: - Published Properties
 
     @Published var conversations: [ConversationSummary] = []
-    @Published var currentConversation: ChatConversation?
+    @Published var currentConversation: ChatConversation? = nil
     @Published var messages: [ChatMessage] = []
 
     // MARK: - Loading States
@@ -288,6 +288,12 @@ class ChatManager: ObservableObject {
 
         guard userMessage != nil else { return }
 
+       if let conversation = currentConversation,
+           conversation.title == "New Conversation"
+       {
+           updateConversationTitle(conversation.id, title: content)
+       }
+
         await generateAIResponse(
             for: content,
             portfolioContext: portfolioContext
@@ -486,6 +492,13 @@ class ChatManager: ObservableObject {
             )
             conversations[index] = updated
         }
+    }
+
+    func deleteChat() async -> Failure? {
+        conversations.removeAll()
+        currentConversation = nil
+        messages.removeAll()
+        return await ChatRepo.deleteAllChat()
     }
 
     private func handleError(_ error: Failure) {

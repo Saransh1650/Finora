@@ -30,15 +30,10 @@ struct ChatMainView: View {
             ToolbarItem(placement: .topBarLeading) {
                 Button(action: {
                     withAnimation(.easeInOut(duration: 0.3)) {
-                        isSidebarPresented = true
+                        isSidebarPresented.toggle()
                     }
                 }) {
                     Image(systemName: "line.3.horizontal")
-                        .font(.system(size: 18, weight: .medium))
-                        .foregroundColor(AppColors.textPrimary)
-                        .padding(12)
-                        .background(AppColors.background)
-                        .clipShape(Circle())
                 }
             }
         }

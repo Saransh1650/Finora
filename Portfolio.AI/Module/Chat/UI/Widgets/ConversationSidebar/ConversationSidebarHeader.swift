@@ -15,21 +15,7 @@ struct ConversationSidebarHeader: View {
                 .font(.title)
                 .fontWeight(.semibold)
                 .foregroundColor(AppColors.textPrimary)
-            
             Spacer()
-            
-            Button(action: {
-                withAnimation(.easeInOut(duration: 0.3)) {
-                    isPresented = false
-                }
-            }) {
-                Image(systemName: "xmark")
-                    .font(.system(size: 16, weight: .medium))
-                    .foregroundColor(AppColors.foreground)
-                    .padding(8)
-                    .background(AppColors.tertiary)
-                    .clipShape(Circle())
-            }
         }
         .padding(.horizontal, AppSpacing.large)
         .padding(.top, AppSpacing.medium)
