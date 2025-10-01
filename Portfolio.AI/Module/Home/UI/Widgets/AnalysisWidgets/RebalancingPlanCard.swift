@@ -29,27 +29,11 @@ struct RebalancingPlanCard: View {
                     RebalancingPlanItem(plan: plan)
                 }
             }
-
-            Button(
-                action: {
-                }) {
-                    Text("Ask more with AI-Chat")
-                        .font(.headline)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(AppColors.pureBackground)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 16)
-                        .background(AppColors.selected.opacity(0.5))
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                }
-            Text("Coming Soon")
-                .font(.caption)
-                .foregroundStyle(.secondary)
         }
         .padding(16)
         .background(
             RoundedRectangle(cornerRadius: 16)
-                .fill(AppColors.foreground)
+                .fill(AppColors.background)
                 .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
         )
     }

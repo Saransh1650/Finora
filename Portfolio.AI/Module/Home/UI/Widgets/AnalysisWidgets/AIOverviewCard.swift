@@ -48,7 +48,7 @@ struct AIOverviewCard: View {
         )
         .overlay(
             RoundedRectangle(cornerRadius: 16)
-                .stroke(AppColors.border.opacity(0.5), lineWidth: 1)
+                .stroke(AppColors.border, lineWidth: 1)
         )
     }
 }
