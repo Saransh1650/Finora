@@ -34,6 +34,7 @@ struct ChatMainView: View {
                     }
                 }) {
                     Image(systemName: "line.3.horizontal")
+                        .foregroundStyle(AppColors.textPrimary)
                 }
             }
         }

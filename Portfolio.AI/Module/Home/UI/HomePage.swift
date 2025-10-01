@@ -15,14 +15,9 @@ struct HomePage: View {
 
     var body: some View {
         ZStack {
-            // Background gradient
-            LinearGradient(
-                colors: [AppColors.pureBackground, AppColors.background],
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .ignoresSafeArea()
-
+            AppColors.pureBackground
+                .ignoresSafeArea()
+            
             VStack(spacing: 0) {
                 if portfolioAnalysisManager.fetchLoading {
                     PortfolioLoadingAnimation(showText: true)
@@ -36,6 +31,11 @@ struct HomePage: View {
                         ScrollView {
                             HeaderWithAnalysisButton()
                             AIDashboardView(analysis: analysis)
+                            Text("Have More Doubts ? Ask Finora AI")
+                                .font(.headline)
+                                .foregroundColor(AppColors.textPrimary)
+                                .padding(.top, 10)
+                                .padding(.bottom, 20)
                         }
                     }
                 } else {
