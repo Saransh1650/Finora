@@ -98,6 +98,8 @@ class GeminiRepo {
             - Always consider risk factors in recommendations
             - Maintain a professional but friendly tone
             - If asked about specific stocks, provide current market data
+            - Keep it like a chat messaging between you and user, and answer in short like humans talk 
+            - Ask questions if needed
             
             """
         
