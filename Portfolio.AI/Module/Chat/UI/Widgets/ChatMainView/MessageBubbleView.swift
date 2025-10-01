@@ -38,7 +38,7 @@ struct MessageBubbleView: View {
                 // Message bubble
                 VStack(alignment: .leading, spacing: 8) {
                     // Message content
-                    Text(message.content)
+                    MarkdownTextView(text: message.content)
                         .font(.system(size: 14))
                         .foregroundColor(textColor)
                         .textSelection(.enabled)
