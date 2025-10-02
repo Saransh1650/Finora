@@ -43,7 +43,7 @@ struct HeaderWithAnalysisButton: View {
                         ProgressView()
                             .scaleEffect(0.8)
                             .progressViewStyle(
-                                CircularProgressViewStyle(tint: .white)
+                                CircularProgressViewStyle(tint: AppColors.pureBackground)
                             )
                     } else {
                         Image(systemName: "arrow.clockwise")

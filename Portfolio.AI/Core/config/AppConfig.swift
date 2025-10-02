@@ -21,8 +21,12 @@ class AppConfig {
         return ProcessInfo.processInfo.environment["GEMINI_API_KEY"]!
     }
 
-    static var geminiModelId: String {
+    static var geminiModeFlash: String {
         return "gemini-2.5-flash"
+    }
+    
+    static var geminiModelPro: String{
+        return "gemini-2.5-pro"
     }
 
     static var geminiBaseUrl: String {

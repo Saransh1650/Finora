@@ -33,7 +33,7 @@ class PortfolioAnalysisManager: ObservableObject {
 
         if let analyses = analyses {
             analysisHistory = analyses
-            currentAnalysis = analyses.first  // Latest analysis
+            currentAnalysis = analyses.last  // Latest analysis
         } else if let error = error {
             errorMessage = error.message
         }

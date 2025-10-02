@@ -20,7 +20,8 @@ struct ChatResponseModel {
 class GeminiRepo {
     static let baseUrl = AppConfig.geminiBaseUrl
     static let apiKey = AppConfig.geminiApiKey
-    static let modelId = AppConfig.geminiModelId
+    static let geminiPro = AppConfig.geminiModelPro
+    static let geminiFlash = AppConfig.geminiModeFlash
 
     static func analyzePortfolio(
         portfolioData: String,
@@ -182,7 +183,7 @@ class GeminiRepo {
         }
 
         let urlString =
-            "\(baseUrl)/models/\(modelId):generateContent?key=\(apiKey)"
+            "\(baseUrl)/models/\(geminiPro):generateContent?key=\(apiKey)"
         guard let url = URL(string: urlString) else {
             completion(.failure(AIRepoError.invalidURL))
             return
@@ -254,7 +255,7 @@ class GeminiRepo {
         }
 
         let urlString =
-            "\(baseUrl)/models/\(modelId):generateContent?key=\(apiKey)"
+            "\(baseUrl)/models/\(geminiFlash):generateContent?key=\(apiKey)"
         guard let url = URL(string: urlString) else {
             completion(.failure(AIRepoError.invalidURL))
             return
