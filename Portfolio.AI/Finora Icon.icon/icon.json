@@ -1,0 +1,39 @@
+{
+  "fill" : {
+    "automatic-gradient" : "extended-gray:0.00000,1.00000"
+  },
+  "groups" : [
+    {
+      "blend-mode" : "normal",
+      "layers" : [
+        {
+          "image-name" : "chart.line.uptrend.xyaxis@10x.png",
+          "name" : "chart.line.uptrend.xyaxis@10x",
+          "position" : {
+            "scale" : 2.5,
+            "translation-in-points" : [
+              20,
+              0
+            ]
+          }
+        }
+      ],
+      "lighting" : "combined",
+      "name" : "Group",
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
+}

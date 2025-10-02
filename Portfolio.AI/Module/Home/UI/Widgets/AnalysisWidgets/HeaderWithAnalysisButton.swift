@@ -6,10 +6,13 @@
 //
 
 import SwiftUI
+import Toasts
 
 struct HeaderWithAnalysisButton: View {
     @EnvironmentObject var portfolioManager: PortfolioManager
     @EnvironmentObject var portfolioAnalysisManager: PortfolioAnalysisManager
+    @State private var showDailyLimitToast = false
+    @Environment(\.presentToast) var presentToast
 
     var body: some View {
         HStack {
@@ -25,6 +28,7 @@ struct HeaderWithAnalysisButton: View {
                 {
                     Text("Last updated: \(date, style: .relative)")
                         .font(.caption)
+                        .foregroundColor(AppColors.textSecondary)
                 }
             }
 
@@ -33,9 +37,19 @@ struct HeaderWithAnalysisButton: View {
             //Analysis Button
             Button {
                 Task {
-                    await portfolioAnalysisManager.generateSummaryAndSave(
-                        stocks: portfolioManager.stocks
-                    )
+                    if portfolioAnalysisManager.canAnalyzeToday {
+                        await portfolioAnalysisManager.generateSummaryAndSave(
+                            stocks: portfolioManager.stocks
+                        )
+                    } else {
+                        let toast = ToastValue(
+                            icon: Image(systemName: "exclamationmark.triangle"),
+                            message:
+                                "1 analysis/day. Come back tomorrow.",
+                        )
+                        presentToast(toast)
+
+                    }
                 }
             } label: {
                 HStack(spacing: 8) {
@@ -43,7 +57,9 @@ struct HeaderWithAnalysisButton: View {
                         ProgressView()
                             .scaleEffect(0.8)
                             .progressViewStyle(
-                                CircularProgressViewStyle(tint: AppColors.pureBackground)
+                                CircularProgressViewStyle(
+                                    tint: AppColors.pureBackground
+                                )
                             )
                     } else {
                         Image(systemName: "arrow.clockwise")
@@ -91,7 +107,7 @@ struct HeaderWithAnalysisButton: View {
                 .fill(AppColors.pureBackground)
                 .stroke(AppColors.border, lineWidth: 1)
                 .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
-               
+
         )
         .padding(.horizontal, 16)
         .padding(.top, 8)
