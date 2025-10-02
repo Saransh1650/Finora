@@ -12,6 +12,7 @@ struct NavigationPage: View {
     @StateObject var portfolioManager = PortfolioManager()
     @StateObject var portfolioAnalysisManager = PortfolioAnalysisManager()
     @StateObject var chatManager = ChatManager()
+    @StateObject var appUpdateManager = AppUpdateManager()
 
     var body: some View {
         VStack(spacing: 0) {
@@ -44,6 +45,27 @@ struct NavigationPage: View {
             CustomNavBar(selectedTab: $selectedTab)
         }
         .ignoresSafeArea(.keyboard)
+        .onAppear {
+            // Check for updates when app launches
+            appUpdateManager.checkForUpdatesAutomatically()
+        }
+        .overlay {
+            // Show update dialog when needed
+            if appUpdateManager.showUpdateDialog,
+               let updateResult = appUpdateManager.updateResult {
+                ForceUpdateDialog(
+                    updateResult: updateResult,
+                    onUpdatePressed: {
+                        appUpdateManager.handleUpdatePressed()
+                    },
+                    onLaterPressed: updateResult.isForceUpdate ? nil : {
+                        appUpdateManager.handleLaterPressed()
+                    }
+                )
+                .transition(.opacity.combined(with: .scale))
+                .animation(.easeInOut(duration: 0.3), value: appUpdateManager.showUpdateDialog)
+            }
+        }
     }
 }
 

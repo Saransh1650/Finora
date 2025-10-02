@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SettingsPage: View {
     @StateObject private var settingsManager = SettingsManager()
+    @StateObject private var appUpdateManager = AppUpdateManager()
     @State private var showingShareSheet = false
 
     var body: some View {
@@ -42,6 +43,13 @@ struct SettingsPage: View {
                     }
 
                     SettingsSection(
+                        title: "App Updates",
+                        icon: "arrow.down.circle.fill"
+                    ) {
+                        AppUpdateCard(appUpdateManager: appUpdateManager)
+                    }
+
+                    SettingsSection(
                         title: "Account",
                         icon: "person.crop.circle.fill"
                     ) {
@@ -61,6 +69,23 @@ struct SettingsPage: View {
                     "Check out Portfolio.AI - The smartest way to manage your investments!",
                     URL(string: "https://portfolio-ai.app")!,
                 ])
+            }
+            .overlay {
+                // Show update dialog when needed
+                if appUpdateManager.showUpdateDialog,
+                   let updateResult = appUpdateManager.updateResult {
+                    ForceUpdateDialog(
+                        updateResult: updateResult,
+                        onUpdatePressed: {
+                            appUpdateManager.handleUpdatePressed()
+                        },
+                        onLaterPressed: updateResult.isForceUpdate ? nil : {
+                            appUpdateManager.handleLaterPressed()
+                        }
+                    )
+                    .transition(.opacity.combined(with: .scale))
+                    .animation(.easeInOut(duration: 0.3), value: appUpdateManager.showUpdateDialog)
+                }
             }
         }
     }
