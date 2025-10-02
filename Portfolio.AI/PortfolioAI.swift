@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+import Toasts
 
 @main
 struct PortfolioAI: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .installToast(position: .bottom)
         }
     }
 }

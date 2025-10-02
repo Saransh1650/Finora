@@ -16,9 +16,11 @@ class PortfolioAnalysisManager: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var fetchLoading: Bool = false
     @Published var errorMessage: String?
+    @Published var canAnalyzeToday: Bool = true
 
     init() {
         fetchLatestAnalysis()
+        checkDailyAnalysisLimit()
     }
 
     // MARK: - Fetch Operations
@@ -57,6 +59,7 @@ class PortfolioAnalysisManager: ObservableObject {
                         "fetched current analysis from db: \(analysis.userId)"
                     )
                     currentAnalysis = analysis
+                    checkDailyAnalysisLimit()
                 } else if let error = error {
                     print(
                         "Error fetching latest analysis: \(String(describing: error.message))"
@@ -73,6 +76,12 @@ class PortfolioAnalysisManager: ObservableObject {
 
     /// Generate portfolio summary using Gemini API and save it
     func generateSummaryAndSave(stocks: [StockModel]) async {
+        // Check daily limit first
+        guard canAnalyzeToday else {
+            errorMessage = "You can only perform one analysis per day. Next analysis available \(timeUntilNextAnalysis ?? "tomorrow")."
+            return
+        }
+        
         isLoading = true
         errorMessage = nil
 
@@ -103,6 +112,8 @@ class PortfolioAnalysisManager: ObservableObject {
 
                         Task {
                             await self.saveAnalysis(self.currentAnalysis!)
+                            // Update daily limit after successful analysis
+                            self.checkDailyAnalysisLimit()
                         }
 
                     case .failure(let error):
@@ -220,6 +231,41 @@ class PortfolioAnalysisManager: ObservableObject {
                 }
             }
         }
+    }
+
+    // MARK: - Daily Limit Checking
+    
+    /// Check if user can perform analysis today (max 1 per day)
+    private func checkDailyAnalysisLimit() {
+        guard let lastAnalysis = currentAnalysis,
+              let lastAnalysisDate = lastAnalysis.analysisDate else {
+            canAnalyzeToday = true
+            return
+        }
+        
+        let calendar = Calendar.current
+        canAnalyzeToday = !calendar.isDateInToday(lastAnalysisDate)
+    }
+    
+    /// Get time until next analysis is allowed
+    var timeUntilNextAnalysis: String? {
+        guard !canAnalyzeToday,
+              let lastAnalysis = currentAnalysis,
+              let lastAnalysisDate = lastAnalysis.analysisDate else {
+            return nil
+        }
+        
+        let calendar = Calendar.current
+        if let tomorrow = calendar.date(byAdding: .day, value: 1, to: lastAnalysisDate),
+           let startOfTomorrow = calendar.dateInterval(of: .day, for: tomorrow)?.start {
+            let timeRemaining = startOfTomorrow.timeIntervalSinceNow
+            if timeRemaining > 0 {
+                let hours = Int(timeRemaining) / 3600
+                let minutes = Int(timeRemaining / 3600) / 60
+                return "\(hours)h"
+            }
+        }
+        return nil
     }
 
     // MARK: - Utility Methods
