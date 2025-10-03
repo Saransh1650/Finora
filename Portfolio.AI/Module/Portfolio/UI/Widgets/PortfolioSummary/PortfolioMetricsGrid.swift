@@ -93,6 +93,7 @@ struct PortfolioMetricsGrid: View {
     }
 }
 
+#if DEBUG
 #Preview {
     VStack(spacing: 30) {
         // Without analysis data
@@ -113,3 +114,4 @@ struct PortfolioMetricsGrid: View {
     .padding()
     .background(AppColors.pureBackground)
 }
+#endif

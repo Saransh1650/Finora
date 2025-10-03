@@ -81,9 +81,3 @@ struct StockPreviewRow: View {
         )
     }
 }
-
-#Preview {
-    StockListPreview(stocks: StockModel.samples)
-        .padding()
-        .background(AppColors.pureBackground)
-}

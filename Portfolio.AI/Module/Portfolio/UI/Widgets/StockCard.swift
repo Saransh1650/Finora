@@ -99,7 +99,8 @@ struct StockCard: View {
         return String(s.prefix(3)).uppercased()
     }
 }
-
+#if DEBUG
 #Preview {
     StockCard(stock: StockModel.sample1)
 }
+#endif
