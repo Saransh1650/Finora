@@ -88,42 +88,6 @@ class AuthRepo {
         }
     }
 
-    static func signInWithGoogle(presentingController: UIViewController) async
-        -> (User?, Failure?)
-    {
-        do {
-            let result = try await GIDSignIn.sharedInstance.signIn(withPresenting: presentingController)
-
-            guard let idToken = result.user.idToken?.tokenString else {
-                return (
-                    nil,
-                    Failure(
-                        message: ErrorType.unAuthorized.message,
-                        errorType: ErrorType.unAuthorized
-                    )
-                )
-            }
-            let accessToken = result.user.accessToken.tokenString
-            let session = try await supabase.auth.signInWithIdToken(
-                credentials: OpenIDConnectCredentials(
-                    provider: .google,
-                    idToken: idToken,
-                    accessToken: accessToken
-                )
-            )
-
-            return (session.user, nil)
-        } catch {
-            return (
-                nil,
-                Failure(
-                    message: ErrorType.unKnownError.message,
-                    errorType: ErrorType.unKnownError
-                )
-            )
-        }
-    }
-
     // MARK: - Session Management
     static func signOut() async -> Failure? {
         do {

@@ -55,25 +55,6 @@ class AuthManager: ObservableObject {
         return failure
     }
 
-    func signInWithGoogle(presentingController: UIViewController) async
-        -> Failure?
-    {
-        loading = true
-        let (user, failure) = await AuthRepo.signInWithGoogle(presentingController: presentingController)
-
-        if failure == nil {
-            currentUser = user
-            isAuthenticated = true
-            errorMessage = nil
-            print("Google Sign In successful for user: \(user?.email ?? "")")
-        } else {
-            errorMessage = failure?.message
-            print("Google Sign In failed: \(failure?.message ?? "")")
-        }
-        loading = false
-        return failure
-    }
-
     func signOut() async -> Failure? {
         loading = true
         let failure = await AuthRepo.signOut()

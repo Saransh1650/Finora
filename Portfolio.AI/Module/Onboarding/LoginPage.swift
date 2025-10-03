@@ -7,6 +7,7 @@
 
 import AuthenticationServices
 import SwiftUI
+import Toasts
 
 struct LoginPage: View {
     @EnvironmentObject var authManager: AuthManager
@@ -14,6 +15,7 @@ struct LoginPage: View {
     @State private var navigateToHome = false
     @State var showTermsAndCondition = false
     @State var showPrivacyPolicy = false
+    @Environment(\.presentToast) var presentToast
 
     var body: some View {
 
@@ -72,17 +74,34 @@ struct LoginPage: View {
                                 .multilineTextAlignment(.center)
                         }
 
-                        // Login Buttons
+                        // Login Button
                         VStack(spacing: 16) {
-                            AppButton(
-                                title: "Sign In with Google",
-                                action: {
+                            SignInWithAppleButton { request in
+                                request.requestedScopes = [.fullName, .email]
+                            } onCompletion: { result in
+                                switch result {
+                                case .success(let authorization):
                                     Task {
-                                        await handleGoogleSignIn()
+                                       let error = await authManager.signInWithApple(
+                                            authorization: authorization
+                                        )
+                                        if error != nil {
+                                            let toast = ToastValue(
+                                                message: error?.message ?? "Apple Sign In failed"
+                                            )
+                                            presentToast(toast)
+                                        
+                                        }
                                     }
-                                },
-                                image: "Google"
-                            )
+                                case .failure(_):
+                                    let toast = ToastValue(
+                                        message: "Apple Sign In failed"
+                                    )
+                                    presentToast(toast)
+                                }
+                            }
+                            .frame(height: 56)
+                            .cornerRadius(16)
                         }
                         .padding(.horizontal, 40)
                     }
@@ -145,44 +164,6 @@ struct LoginPage: View {
             .navigationDestination(isPresented: $showPrivacyPolicy) {
                 PrivacyPolicyPage()
             }
-        }
-    }
-
-    // MARK: - Authentication Methods
-
-    private func handleAppleSignIn(result: Result<ASAuthorization, Error>) async
-    {
-        switch result {
-        case .success(let authorization):
-            let failure = await authManager.signInWithApple(
-                authorization: authorization
-            )
-            if failure == nil {
-                // Navigate to main app or handle success
-                print("Apple Sign In successful!")
-            }
-
-        case .failure(let error):
-            print("Apple Sign In failed: \(error.localizedDescription)")
-        // Error will be handled by the AuthManager
-        }
-    }
-
-    private func handleGoogleSignIn() async {
-        if let windowScene = UIApplication.shared.connectedScenes.first
-            as? UIWindowScene,
-            let rootViewController = windowScene.windows.first?
-                .rootViewController
-        {
-            let failure = await authManager.signInWithGoogle(
-                presentingController: rootViewController
-            )
-            if failure == nil {
-                navigateToHome = true
-            }
-        } else {
-            navigateToHome = false
-            showingAlert = true
         }
     }
 }
