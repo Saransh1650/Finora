@@ -512,7 +512,7 @@ class ChatRepo {
         conversationId: UUID,
         pagination: PaginationRequest = PaginationRequest()
     ) async -> (PaginatedResponse<ChatMessage>?, Failure?) {
-        guard let userId = currentUserId else {
+        guard let _ = currentUserId else {
             return (
                 nil,
                 Failure(

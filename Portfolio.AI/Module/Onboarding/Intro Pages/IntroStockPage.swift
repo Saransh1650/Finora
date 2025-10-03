@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct IntroScanPage: View {
+struct IntroStockPage: View {
     // add optional next action so a container can navigate
     var nextAction: (() -> Void)? = nil
     @State private var isAnimating = false
@@ -19,10 +19,10 @@ struct IntroScanPage: View {
             VStack(spacing: 30) {
                 Spacer()
 
-                Image(systemName: "barcode.viewfinder")
-                    .font(.system(size: 70))
-                    .foregroundColor(AppColors.selected)
+                Image(systemName: "chart.line.uptrend.xyaxis")
                     .padding()
+                    .font(.system(size: 50))
+                    .foregroundColor(AppColors.selected)
                     .background(
                         Circle()
                             .fill(AppColors.background)
@@ -51,13 +51,13 @@ struct IntroScanPage: View {
 
                 // Content
                 VStack(alignment: .center, spacing: 16) {
-                    Text("Scan Your Portfolio")
+                    Text("Track Your Stocks")
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(AppColors.textPrimary)
 
                     Text(
-                        "Upload screenshots of your portfolio from different platforms to get started."
+                        "Easily add and manage your stocks in one place. Monitor performance and stay updated."
                     )
                     .font(.body)
                     .multilineTextAlignment(.center)
@@ -88,5 +88,5 @@ struct IntroScanPage: View {
 }
 
 #Preview {
-    IntroScanPage()
+    IntroStockPage()
 }
