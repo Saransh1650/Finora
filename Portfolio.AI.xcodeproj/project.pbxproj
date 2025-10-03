@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		636106712E6A07D5005C6547 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 636106702E6A07D5005C6547 /* GoogleSignIn */; };
-		636106732E6A07D5005C6547 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 636106722E6A07D5005C6547 /* GoogleSignInSwift */; };
+		63863AFD2E8ED418001F2388 /* Toasts in Frameworks */ = {isa = PBXBuildFile; productRef = 63863AFC2E8ED418001F2388 /* Toasts */; };
 		63AB6C2A2E658CFE00B7EFDC /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = 63AB6C292E658CFE00B7EFDC /* Auth */; };
 		63AB6C2C2E658CFE00B7EFDC /* Functions in Frameworks */ = {isa = PBXBuildFile; productRef = 63AB6C2B2E658CFE00B7EFDC /* Functions */; };
 		63AB6C2E2E658CFE00B7EFDC /* PostgREST in Frameworks */ = {isa = PBXBuildFile; productRef = 63AB6C2D2E658CFE00B7EFDC /* PostgREST */; };
@@ -18,7 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		63CAE4002E6319CC00F111CD /* Portfolio.AI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Portfolio.AI.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		63CAE4002E6319CC00F111CD /* Finora.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Finora.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -37,11 +36,10 @@
 				63AB6C2E2E658CFE00B7EFDC /* PostgREST in Frameworks */,
 				63AB6C2C2E658CFE00B7EFDC /* Functions in Frameworks */,
 				63AB6C342E658CFE00B7EFDC /* Supabase in Frameworks */,
-				636106732E6A07D5005C6547 /* GoogleSignInSwift in Frameworks */,
 				63AB6C2A2E658CFE00B7EFDC /* Auth in Frameworks */,
 				63AB6C322E658CFE00B7EFDC /* Storage in Frameworks */,
 				63AB6C302E658CFE00B7EFDC /* Realtime in Frameworks */,
-				636106712E6A07D5005C6547 /* GoogleSignIn in Frameworks */,
+				63863AFD2E8ED418001F2388 /* Toasts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,7 +57,7 @@
 		63CAE4012E6319CC00F111CD /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				63CAE4002E6319CC00F111CD /* Portfolio.AI.app */,
+				63CAE4002E6319CC00F111CD /* Finora.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -90,11 +88,10 @@
 				63AB6C2F2E658CFE00B7EFDC /* Realtime */,
 				63AB6C312E658CFE00B7EFDC /* Storage */,
 				63AB6C332E658CFE00B7EFDC /* Supabase */,
-				636106702E6A07D5005C6547 /* GoogleSignIn */,
-				636106722E6A07D5005C6547 /* GoogleSignInSwift */,
+				63863AFC2E8ED418001F2388 /* Toasts */,
 			);
 			productName = FitCheck.AI;
-			productReference = 63CAE4002E6319CC00F111CD /* Portfolio.AI.app */;
+			productReference = 63CAE4002E6319CC00F111CD /* Finora.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -105,7 +102,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1640;
-				LastUpgradeCheck = 1640;
+				LastUpgradeCheck = 2600;
 				TargetAttributes = {
 					63CAE3FF2E6319CC00F111CD = {
 						CreatedOnToolsVersion = 16.4;
@@ -123,7 +120,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				63AB6C282E658C3C00B7EFDC /* XCRemoteSwiftPackageReference "supabase-swift" */,
-				6361066F2E6A07D5005C6547 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				63863AFB2E8ED418001F2388 /* XCRemoteSwiftPackageReference "swiftui-toasts" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 63CAE4012E6319CC00F111CD /* Products */;
@@ -218,6 +215,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -225,8 +223,6 @@
 		};
 		63CAE4202E6319CE00F111CD /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReferenceAnchor = 63CAE4022E6319CC00F111CD /* Portfolio.AI */;
-			baseConfigurationReferenceRelativePath = Dev.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -278,6 +274,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -288,26 +285,37 @@
 			baseConfigurationReferenceAnchor = 63CAE4022E6319CC00F111CD /* Portfolio.AI */;
 			baseConfigurationReferenceRelativePath = Dev.xcconfig;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "Finora Icon";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Portfolio.AI/Portfolio.AI.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LLX8488H9A;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Portfolio-AI-Info.plist";
+				INFOPLIST_KEY_NSFallDetectionUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = saransh.portfolio.ai;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Finora;
+				REGISTER_APP_GROUPS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -316,29 +324,38 @@
 		};
 		63CAE4232E6319CE00F111CD /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReferenceAnchor = 63CAE4022E6319CC00F111CD /* Portfolio.AI */;
-			baseConfigurationReferenceRelativePath = Dev.xcconfig;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "Finora Icon";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Portfolio.AI/Portfolio.AI.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = LLX8488H9A;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Portfolio-AI-Info.plist";
+				INFOPLIST_KEY_NSFallDetectionUsageDescription = "";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = saransh.portfolio.ai;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Finora;
+				REGISTER_APP_GROUPS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -369,12 +386,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		6361066F2E6A07D5005C6547 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+		63863AFB2E8ED418001F2388 /* XCRemoteSwiftPackageReference "swiftui-toasts" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			repositoryURL = "https://github.com/sunghyun-k/swiftui-toasts";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 9.0.0;
+				minimumVersion = 1.1.1;
 			};
 		};
 		63AB6C282E658C3C00B7EFDC /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
@@ -388,15 +405,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		636106702E6A07D5005C6547 /* GoogleSignIn */ = {
+		63863AFC2E8ED418001F2388 /* Toasts */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 6361066F2E6A07D5005C6547 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
-			productName = GoogleSignIn;
-		};
-		636106722E6A07D5005C6547 /* GoogleSignInSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6361066F2E6A07D5005C6547 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
-			productName = GoogleSignInSwift;
+			package = 63863AFB2E8ED418001F2388 /* XCRemoteSwiftPackageReference "swiftui-toasts" */;
+			productName = Toasts;
 		};
 		63AB6C292E658CFE00B7EFDC /* Auth */ = {
 			isa = XCSwiftPackageProductDependency;
