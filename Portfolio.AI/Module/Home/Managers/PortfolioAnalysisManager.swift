@@ -261,7 +261,6 @@ class PortfolioAnalysisManager: ObservableObject {
             let timeRemaining = startOfTomorrow.timeIntervalSinceNow
             if timeRemaining > 0 {
                 let hours = Int(timeRemaining) / 3600
-                let minutes = Int(timeRemaining / 3600) / 60
                 return "\(hours)h"
             }
         }

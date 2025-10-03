@@ -20,10 +20,10 @@ struct IntroAnalysePage: View {
                 Spacer()
 
                 // Icon with animation
-                Image(systemName: "brain.head.profile")
-                    .font(.system(size: 80))
-                    .foregroundColor(AppColors.selected)
+                Image(systemName: "waveform.path.ecg")
                     .padding()
+                    .font(.system(size: 50))
+                    .foregroundColor(AppColors.selected)
                     .background(
                         Circle()
                             .fill(AppColors.background)
@@ -52,13 +52,13 @@ struct IntroAnalysePage: View {
 
                 // Content
                 VStack(alignment: .center, spacing: 16) {
-                    Text("Let AI Analyse It")
+                    Text("Analyze Your Portfolio")
                         .font(.title)
                         .fontWeight(.bold)
                         .foregroundColor(AppColors.textPrimary)
 
                     Text(
-                        "Our AI will automatically analyse your uploaded portfolio and extract key insights."
+                        "Let AI review your investments and highlight key strengths, risks, and opportunities—helping you make smarter decisions."
                     )
                     .font(.body)
                     .multilineTextAlignment(.center)

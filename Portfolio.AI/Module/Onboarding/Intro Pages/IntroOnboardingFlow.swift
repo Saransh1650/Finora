@@ -10,7 +10,7 @@ struct IntroOnboardingFlow: View {
             ZStack {
                 switch page {
                 case 0:
-                    IntroScanPage(nextAction: {
+                    IntroStockPage(nextAction: {
                         withAnimation(.easeInOut) { page = 1 }
                     })
                 case 1:
@@ -18,13 +18,13 @@ struct IntroOnboardingFlow: View {
                         withAnimation(.easeInOut) { page = 2 }
                     })
                 case 2:
-                    IntroAdvicePage(nextAction: {
+                    IntroChatPage(nextAction: {
                         withAnimation(.easeInOut) {
                             onFinish?()
                         }
                     })
                 default:
-                    IntroScanPage(nextAction: {
+                    IntroStockPage(nextAction: {
                         withAnimation(.easeInOut) { page = 1 }
                     })
                 }
