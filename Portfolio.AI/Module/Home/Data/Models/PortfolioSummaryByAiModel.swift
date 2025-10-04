@@ -42,8 +42,6 @@ struct PortfolioSummaryByAiModel: Codable, JSONSchemaGeneratable {
                 Stock(
                     name: "sample_string",
                     invested: 0.0,
-                    currentValue: 0.0,
-                    pnlPercent: 0.0,
                     fairPriceEstimate: Stock.FairPriceEstimate(
                         minPrice: 0.0,
                         maxPrice: 0.0
@@ -88,8 +86,6 @@ struct PortfolioSummaryByAiModel: Codable, JSONSchemaGeneratable {
     struct Stock: Codable {
         let name: String
         let invested: Double
-        let currentValue: Double
-        let pnlPercent: Double
         let fairPriceEstimate: FairPriceEstimate
         let valuation: String
         let recommendation: String
@@ -109,8 +105,6 @@ struct PortfolioSummaryByAiModel: Codable, JSONSchemaGeneratable {
         enum CodingKeys: String, CodingKey {
             case name
             case invested
-            case currentValue = "current_value"
-            case pnlPercent = "pnl_percent"
             case fairPriceEstimate = "fair_price_estimate"
             case valuation
             case recommendation

@@ -38,34 +38,15 @@ struct StockDetailCard: View {
                 HStack(spacing: 16) {
                     // Allocation
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Allocation:")
+                        Text("Sector:")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                         HStack(spacing: 4) {
-                            Text(formatCurrency(stock.currentValue))
+                            Text(stock.sector)
                                 .font(.caption)
                                 .fontWeight(.semibold)
-                            Text(
-                                "(\(String(format: "%.1f", getAllocationPercentage()))%)"
-                            )
-                            .font(.caption)
-                            .fontWeight(.semibold)
                         }
                         .foregroundStyle(AppColors.textPrimary)
-                    }
-                    .frame(maxWidth: .infinity, alignment: .leading)
-
-                    // P&L
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("P&L:")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        Text(
-                            "\(stock.pnlPercent >= 0 ? "+" : "")\(String(format: "%.2f", stock.pnlPercent))%"
-                        )
-                        .font(.caption)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(stock.pnlPercent >= 0 ? .green : .red)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
@@ -110,10 +91,6 @@ struct StockDetailCard: View {
         return "₹\(String(format: "%.0f", amount))"
     }
 
-    private func getAllocationPercentage() -> Double {
-        guard totalPortfolioValue > 0 else { return 0 }
-        return (stock.currentValue / totalPortfolioValue) * 100
-    }
 
     private func getValuationColor() -> Color {
         switch stock.valuation.lowercased() {
@@ -134,8 +111,6 @@ struct StockDetailCard: View {
         stock: PortfolioSummaryByAiModel.Stock(
             name: "AAPL",
             invested: 40000,
-            currentValue: 42000,
-            pnlPercent: 5.0,
             fairPriceEstimate: PortfolioSummaryByAiModel.Stock
                 .FairPriceEstimate(
                     minPrice: 160,

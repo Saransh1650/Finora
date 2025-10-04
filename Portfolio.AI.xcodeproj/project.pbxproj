@@ -14,7 +14,6 @@
 		63AB6C302E658CFE00B7EFDC /* Realtime in Frameworks */ = {isa = PBXBuildFile; productRef = 63AB6C2F2E658CFE00B7EFDC /* Realtime */; };
 		63AB6C322E658CFE00B7EFDC /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = 63AB6C312E658CFE00B7EFDC /* Storage */; };
 		63AB6C342E658CFE00B7EFDC /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 63AB6C332E658CFE00B7EFDC /* Supabase */; };
-		63EA7B562E9112C9005934F6 /* Portfolio-AI-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 63EA7B552E9112C9005934F6 /* Portfolio-AI-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -140,7 +139,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63EA7B562E9112C9005934F6 /* Portfolio-AI-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -293,7 +291,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Portfolio.AI/Portfolio.AI.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = LLX8488H9A;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -334,7 +332,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = Portfolio.AI/Portfolio.AI.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = LLX8488H9A;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
