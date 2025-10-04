@@ -14,10 +14,12 @@
 		63AB6C302E658CFE00B7EFDC /* Realtime in Frameworks */ = {isa = PBXBuildFile; productRef = 63AB6C2F2E658CFE00B7EFDC /* Realtime */; };
 		63AB6C322E658CFE00B7EFDC /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = 63AB6C312E658CFE00B7EFDC /* Storage */; };
 		63AB6C342E658CFE00B7EFDC /* Supabase in Frameworks */ = {isa = PBXBuildFile; productRef = 63AB6C332E658CFE00B7EFDC /* Supabase */; };
+		63EA7B562E9112C9005934F6 /* Portfolio-AI-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 63EA7B552E9112C9005934F6 /* Portfolio-AI-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		63CAE4002E6319CC00F111CD /* Finora.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Finora.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		63EA7B552E9112C9005934F6 /* Portfolio-AI-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Portfolio-AI-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -51,6 +53,7 @@
 			children = (
 				63CAE4022E6319CC00F111CD /* Portfolio.AI */,
 				63CAE4012E6319CC00F111CD /* Products */,
+				63EA7B552E9112C9005934F6 /* Portfolio-AI-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -137,6 +140,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63EA7B562E9112C9005934F6 /* Portfolio-AI-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -156,7 +160,7 @@
 		63CAE41F2E6319CE00F111CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = 63CAE4022E6319CC00F111CD /* Portfolio.AI */;
-			baseConfigurationReferenceRelativePath = Dev.xcconfig;
+			baseConfigurationReferenceRelativePath = release.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -222,6 +226,8 @@
 		};
 		63CAE4202E6319CE00F111CD /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 63CAE4022E6319CC00F111CD /* Portfolio.AI */;
+			baseConfigurationReferenceRelativePath = release.xcconfig;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -281,7 +287,7 @@
 		63CAE4222E6319CE00F111CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReferenceAnchor = 63CAE4022E6319CC00F111CD /* Portfolio.AI */;
-			baseConfigurationReferenceRelativePath = Dev.xcconfig;
+			baseConfigurationReferenceRelativePath = release.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "Finora Icon";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -321,6 +327,8 @@
 		};
 		63CAE4232E6319CE00F111CD /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReferenceAnchor = 63CAE4022E6319CC00F111CD /* Portfolio.AI */;
+			baseConfigurationReferenceRelativePath = release.xcconfig;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "Finora Icon";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

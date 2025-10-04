@@ -2,5 +2,11 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <key>SUPABASE_INIT_URL</key>
+    <string>$(SUPABASE_INIT_URL)</string>
+    <key>ANON_KEY</key>
+    <string>$(ANON_KEY)</string>
+    <key>GEMINI_API_KEY</key>
+    <string>$(GEMINI_API_KEY)</string>
 </dict>
 </plist>
