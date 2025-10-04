@@ -80,8 +80,6 @@ struct AIDashboardView: View {
                     PortfolioSummaryByAiModel.Stock(
                         name: "AAPL",
                         invested: 40000,
-                        currentValue: 42000,
-                        pnlPercent: 5.0,
                         fairPriceEstimate: PortfolioSummaryByAiModel.Stock
                             .FairPriceEstimate(
                                 minPrice: 160,
@@ -96,8 +94,6 @@ struct AIDashboardView: View {
                     PortfolioSummaryByAiModel.Stock(
                         name: "TSLA",
                         invested: 30000,
-                        currentValue: 33000,
-                        pnlPercent: 10.0,
                         fairPriceEstimate: PortfolioSummaryByAiModel.Stock
                             .FairPriceEstimate(
                                 minPrice: 280,

@@ -140,6 +140,9 @@ class GeminiRepo {
             - Stock name  
             - Invested amount  
             - Current value  
+            
+            Portfolio Data:
+            \(portfolioData)
 
             Your job:  
             1. Fetch the latest relevant financial information from the internet (stock price, fair value estimates, analyst targets, technical support/resistance, sector outlook, and news if any). The prices should be accurate and correct according to the market.  
@@ -155,19 +158,18 @@ class GeminiRepo {
             - New stocks to purchase in underrepresented sectors to improve diversification
             6. Return all results strictly in JSON format with this schema: 
 
-            Portfolio Data:
-            \(portfolioData)
-
 
             Output Schema:
             \(PortfolioSummaryByAiModel.jsonSchema())
 
             Rules:
             - Always fill every field.
+            - Use latest financial/market data (don't invent values), search net to get the values dont get wrong data. 
+            - The "valuation" field MUST be exactly one of: "overvalued", "undervalued", "fairly valued", or "fair" (lowercase only, no other variations).
             - Be concise but clear in the "reason" and "rationale".
-            - Use latest financial/market data (don't invent values).  
             - Keep numbers as raw numbers, no formatting like ₹ or commas.  
             - Include at least 2-3 new stock recommendations in underrepresented sectors in the rebalancing plan.
+            - **Do not recommend the same stock more than once. unless they are highly suitable for the portfolio.**
             - For new stock recommendations, set action as "Buy" and provide strong rationale.
             - Do not output anything except the JSON object.
             """
