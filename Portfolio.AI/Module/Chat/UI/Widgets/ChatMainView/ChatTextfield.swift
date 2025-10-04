@@ -23,6 +23,7 @@ struct ChatTextfield: View {
                     text: $message,
                     axis: .vertical
                 )
+                .tint(AppColors.textPrimary)
                 .focused($isInputFocused)
                 .textFieldStyle(.automatic)
                 .font(.system(size: 14))
