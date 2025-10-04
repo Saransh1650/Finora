@@ -115,11 +115,11 @@ struct HelpCenterPage: View {
                                 ),
                                 FAQItem(
                                     question: "How do I delete my account?",
-                                    answer: "Go to Settings > Account > Delete Account. This action is permanent and will remove all your data from our servers."
+                                    answer: "Go to Settings > Scroll Down > Delete Account. This action is permanent and will remove all your data from our servers."
                                 ),
                                 FAQItem(
                                     question: "What data do you collect?",
-                                    answer: "We collect portfolio data you input, usage analytics, and account information. See our Privacy Policy for complete details."
+                                    answer: "We do not collect any of your data, once you delete your account, we clear your portfolio data, analysis and chat."
                                 )
                             ]
                         )
