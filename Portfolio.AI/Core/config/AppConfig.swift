@@ -9,23 +9,24 @@ import Foundation
 
 class AppConfig {
     static var supabaseInitUrl: String {
-        let url = ProcessInfo.processInfo.environment["SUPABASE_INIT_URL"]!
-        return "https://\(String(describing: url))"
+        let url = Bundle.main.object(forInfoDictionaryKey: "SUPABASE_INIT_URL")
+        return "https://\(url as! String)"
     }
 
     static var anonKey: String {
-        return ProcessInfo.processInfo.environment["ANON_KEY"]!
+        return Bundle.main.object(forInfoDictionaryKey: "ANON_KEY") as! String
     }
 
     static var geminiApiKey: String {
-        return ProcessInfo.processInfo.environment["GEMINI_API_KEY"]!
+        return Bundle.main.object(forInfoDictionaryKey: "GEMINI_API_KEY")
+            as! String
     }
 
     static var geminiModeFlash: String {
         return "gemini-2.5-flash"
     }
-    
-    static var geminiModelPro: String{
+
+    static var geminiModelPro: String {
         return "gemini-2.5-pro"
     }
 
