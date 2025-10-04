@@ -22,7 +22,7 @@ struct ChatPageMessageArea: View {
                                 chatManager.loadMoreMessages()
                             }
                     }
-                    
+
                     // Loading indicator for more messages
                     if chatManager.isLoadingMessages
                         && !chatManager.messages.isEmpty
@@ -30,18 +30,18 @@ struct ChatPageMessageArea: View {
                         ProgressView()
                             .frame(height: 50)
                     }
-                    
+
                     // Messages
                     ForEach(chatManager.messages, id: \.id) { message in
                         MessageBubbleView(message: message)
                             .id(message.id)
                     }
-                    
+
                     // Typing indicator
                     if chatManager.isSendingMessage {
                         TypingIndicatorView()
                     }
-                    
+
                     // Bottom spacer
                     Color.clear.frame(height: 20)
                 }
@@ -50,17 +50,14 @@ struct ChatPageMessageArea: View {
             .onTapGesture {
                 isInputFocused = false
             }
-            .onChange(
-                of: chatManager.messages.count,
-                perform: { _ in
-                    // Auto-scroll to bottom when new message arrives
-                    if let lastMessage = chatManager.messages.last {
-                        withAnimation(.easeOut(duration: 0.3)) {
-                            proxy.scrollTo(lastMessage.id, anchor: .bottom)
-                        }
+            .onChange(of: chatManager.messages.count) { _, _ in
+                // Auto-scroll to bottom when new message arrives
+                if let lastMessage = chatManager.messages.last {
+                    withAnimation(.easeOut(duration: 0.3)) {
+                        proxy.scrollTo(lastMessage.id, anchor: .bottom)
                     }
                 }
-            )
+            }
         }
         .onTapGesture {
             isInputFocused = false
