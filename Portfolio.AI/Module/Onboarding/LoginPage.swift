@@ -16,6 +16,7 @@ struct LoginPage: View {
     @State var showTermsAndCondition = false
     @State var showPrivacyPolicy = false
     @Environment(\.presentToast) var presentToast
+    @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
 
@@ -82,15 +83,17 @@ struct LoginPage: View {
                                 switch result {
                                 case .success(let authorization):
                                     Task {
-                                       let error = await authManager.signInWithApple(
-                                            authorization: authorization
-                                        )
+                                        let error =
+                                            await authManager.signInWithApple(
+                                                authorization: authorization
+                                            )
                                         if error != nil {
                                             let toast = ToastValue(
-                                                message: error?.message ?? "Apple Sign In failed"
+                                                message: error?.message
+                                                    ?? "Apple Sign In failed"
                                             )
                                             presentToast(toast)
-                                        
+
                                         }
                                     }
                                 case .failure(_):
@@ -102,6 +105,11 @@ struct LoginPage: View {
                             }
                             .frame(height: 56)
                             .cornerRadius(16)
+                            .signInWithAppleButtonStyle(
+                                colorScheme == .dark
+                                    ? .white
+                                    : .black
+                            )
                         }
                         .padding(.horizontal, 40)
                     }
