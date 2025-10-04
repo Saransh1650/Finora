@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "1640"
+   LastUpgradeVersion = "2600"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -16,7 +16,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "63CAE3FF2E6319CC00F111CD"
-               BuildableName = "Portfolio.AI.app"
+               BuildableName = "Finora.app"
                BlueprintName = "Portfolio.AI"
                ReferencedContainer = "container:Portfolio.AI.xcodeproj">
             </BuildableReference>
@@ -69,28 +69,11 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "63CAE3FF2E6319CC00F111CD"
-            BuildableName = "Portfolio.AI.app"
+            BuildableName = "Finora.app"
             BlueprintName = "Portfolio.AI"
             ReferencedContainer = "container:Portfolio.AI.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
-      <EnvironmentVariables>
-         <EnvironmentVariable
-            key = "SUPABASE_INIT_URL"
-            value = "ojghztuggyzvmilgeaxn.supabase.co"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-         <EnvironmentVariable
-            key = "GEMINI_API_KEY"
-            value = "API_KEY"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-         <EnvironmentVariable
-            key = "ANON_KEY"
-            value = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9qZ2h6dHVnZ3l6dm1pbGdlYXhuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY3MTIzMjAsImV4cCI6MjA3MjI4ODMyMH0.GTqRQrBn1QnfOKgONQQv5lapN-1QO4ngrZxn2X8b3a4"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -103,7 +86,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "63CAE3FF2E6319CC00F111CD"
-            BuildableName = "Portfolio.AI.app"
+            BuildableName = "Finora.app"
             BlueprintName = "Portfolio.AI"
             ReferencedContainer = "container:Portfolio.AI.xcodeproj">
          </BuildableReference>
