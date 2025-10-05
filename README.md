@@ -38,6 +38,11 @@ Finora is a modern iOS app for smart investment management, built with SwiftUI. 
 | <img src="https://github.com/user-attachments/assets/daeb7d20-706e-4d48-868f-4e72105909c9" width="270"/> | <img src="https://github.com/user-attachments/assets/fa82e9ce-9169-4c72-a7a2-71857100565f" width="270"/> |
 
 
+## 💬 Chat
+
+| Portfolio Chat | Conversations |
+|--------------------|-------|
+| <img src="https://github.com/user-attachments/assets/40f7e557-5af5-4dfe-9e6a-90349fbc276b" width="270"/> | <img src="https://github.com/user-attachments/assets/ddf4d6e4-9c75-4467-aa5e-3bb141421059" width="270"/> |
 
 
 ## 🛠️ Project Structure
