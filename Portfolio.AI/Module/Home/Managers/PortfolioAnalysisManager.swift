@@ -240,7 +240,7 @@ class PortfolioAnalysisManager: ObservableObject {
         guard let lastAnalysis = currentAnalysis,
               let lastAnalysisDate = lastAnalysis.analysisDate else {
             canAnalyzeToday = true
-            return
+            return 
         }
         
         let calendar = Calendar.current
