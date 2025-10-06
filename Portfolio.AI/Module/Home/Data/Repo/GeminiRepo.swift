@@ -136,7 +136,7 @@ class GeminiRepo {
     static func createPortfolioAnalysisPrompt(portfolioData: String) -> String {
         return """
             You are a financial research assistant.  
-            I will provide you with a list of Indian stocks in my portfolio with details like:  
+            I will provide you with a list of stocks in my portfolio with details like:  
             - Stock name  
             - Invested amount  
             - Current value  
