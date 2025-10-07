@@ -66,7 +66,7 @@ struct SettingsPage: View {
             .navigationBarTitleDisplayMode(.large)
             .sheet(isPresented: $showingShareSheet) {
                 ShareSheet(activityItems: [
-                    "Check out Portfolio.AI - The smartest way to manage your investments!",
+                    "Check out Finora - The smartest way to manage your investments!",
                     URL(string: "https://portfolio-ai.app")!,
                 ])
             }

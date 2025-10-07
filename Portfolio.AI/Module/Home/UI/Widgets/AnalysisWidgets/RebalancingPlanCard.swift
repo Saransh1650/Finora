@@ -45,20 +45,14 @@ struct RebalancingPlanItem: View {
 
     var body: some View {
         VStack(spacing: 8) {
-            // Action header
-            HStack {
-                Text(getActionText())
-                    .font(.subheadline)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(AppColors.textPrimary)
-
-                Spacer()
-
-                Text(getAmountText())
-                    .font(.caption)
-                    .fontWeight(.medium)
-                    .foregroundStyle(getAmountColor())
-            }
+            
+                HStack{
+                    Text(getActionText())
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(AppColors.textPrimary)
+                    Spacer()
+                }
 
             // Fair entry range (for buy actions)
             if plan.action.lowercased() == "buy" {
@@ -72,7 +66,7 @@ struct RebalancingPlanItem: View {
                         .foregroundStyle(.secondary)
 
                     Text(
-                        "₹\(String(format: "%.0f", plan.fairEntryRange.minPrice)) - ₹\(String(format: "%.0f", plan.fairEntryRange.maxPrice))"
+                        "\(String(format: "%.0f", plan.fairEntryRange.minPrice)) - \(String(format: "%.0f", plan.fairEntryRange.maxPrice))"
                     )
                     .font(.caption2)
                     .fontWeight(.semibold)
@@ -103,17 +97,6 @@ struct RebalancingPlanItem: View {
         return "\(plan.action) \(plan.stock)"
     }
 
-    private func getAmountText() -> String {
-        switch plan.action.lowercased() {
-        case "sell":
-            return "-₹\(String(format: "%.0f", plan.amount))"
-        case "buy":
-            return "+₹\(String(format: "%.0f", plan.amount))"
-        default:
-            return "No Change"
-        }
-    }
-
     private func getAmountColor() -> Color {
         switch plan.action.lowercased() {
         case "sell":
@@ -132,7 +115,6 @@ struct RebalancingPlanItem: View {
             PortfolioSummaryByAiModel.RebalancingPlan(
                 action: "Sell",
                 stock: "AAPL",
-                amount: 10000,
                 rationale:
                     "Reduce allocation from 39.9% to ~30% to decrease tech concentration.",
                 fairEntryRange: PortfolioSummaryByAiModel.RebalancingPlan
@@ -144,7 +126,6 @@ struct RebalancingPlanItem: View {
             PortfolioSummaryByAiModel.RebalancingPlan(
                 action: "Buy",
                 stock: "JNJ",
-                amount: 15000,
                 rationale:
                     "Increase Healthcare exposure. Current price is attractive for entry.",
                 fairEntryRange: PortfolioSummaryByAiModel.RebalancingPlan
@@ -156,7 +137,6 @@ struct RebalancingPlanItem: View {
             PortfolioSummaryByAiModel.RebalancingPlan(
                 action: "Hold",
                 stock: "TSLA",
-                amount: 0,
                 rationale:
                     "Maintain current position as it aligns with the strategy.",
                 fairEntryRange: PortfolioSummaryByAiModel.RebalancingPlan

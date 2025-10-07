@@ -233,7 +233,7 @@ struct TermsOfServicePage: View {
         }
         .background(AppColors.pureBackground)
         .navigationTitle("Terms of Service")
-        .navigationBarTitleDisplayMode(.large)
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

@@ -101,6 +101,7 @@ class GeminiRepo {
             - If asked about specific stocks, provide current market data
             - Keep it like a chat messaging between you and user, and answer in short like humans talk 
             - Ask questions if needed
+            - do not answer in parts, if the answer is getting long just end it with a question if the user wants more or not
             
             """
         

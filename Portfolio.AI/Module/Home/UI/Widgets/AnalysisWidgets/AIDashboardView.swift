@@ -110,7 +110,6 @@ struct AIDashboardView: View {
                     PortfolioSummaryByAiModel.RebalancingPlan(
                         action: "Sell",
                         stock: "AAPL",
-                        amount: 10000,
                         rationale: "Reduce tech concentration.",
                         fairEntryRange: PortfolioSummaryByAiModel
                             .RebalancingPlan
