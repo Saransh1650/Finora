@@ -14,52 +14,54 @@ struct HomePage: View {
     @State private var showChat = false
 
     var body: some View {
-        ZStack {
-            AppColors.pureBackground
-                .ignoresSafeArea()
-            
-            VStack(spacing: 0) {
-                if portfolioAnalysisManager.fetchLoading {
-                    PortfolioLoadingAnimation(showText: true)
-                } else if portfolioManager.stocks.count < 2 {
-                    // Show message when less than 2 stocks
-                    MinimumStocksRequiredView()
-                } else if let analysis = portfolioAnalysisManager
-                    .currentAnalysis
-                {
-                    VStack(spacing: 0) {
-                        ScrollView {
-                            HeaderWithAnalysisButton()
-                            AIDashboardView(analysis: analysis)
-                            Text("Have More Doubts ? Ask Finora AI")
-                                .font(.headline)
-                                .foregroundColor(AppColors.textPrimary)
-                                .padding(.top, 10)
-                                .padding(.bottom, 20)
+        NavigationStack{
+            ZStack {
+                AppColors.pureBackground
+                    .ignoresSafeArea()
+                
+                VStack(spacing: 0) {
+                    if portfolioAnalysisManager.fetchLoading {
+                        PortfolioLoadingAnimation(showText: true)
+                    } else if portfolioManager.stocks.count < 2 {
+                        // Show message when less than 2 stocks
+                        MinimumStocksRequiredView()
+                    } else if let analysis = portfolioAnalysisManager
+                        .currentAnalysis
+                    {
+                        VStack(spacing: 0) {
+                            ScrollView {
+                                HeaderWithAnalysisButton()
+                                AIDashboardView(analysis: analysis)
+                                Text("Have More Doubts ? Ask Finora AI")
+                                    .font(.headline)
+                                    .foregroundColor(AppColors.textPrimary)
+                                    .padding(.top, 10)
+                                    .padding(.bottom, 20)
+                            }
                         }
+                    } else {
+                        ReadyToAnalyzeView()
                     }
-                } else {
-                    ReadyToAnalyzeView()
                 }
             }
-        }
-        .overlay(alignment: .bottomTrailing) {
-            // Animated Chat FAB
-            AnimatedChatFAB {
-                showChat = true
+            .overlay(alignment: .bottomTrailing) {
+                // Animated Chat FAB
+                AnimatedChatFAB {
+                    showChat = true
+                }
+                .padding(.trailing, 20)
+                .padding(.bottom, 20)
             }
-            .padding(.trailing, 20)
-            .padding(.bottom, 20)
-        }
-        .sheet(isPresented: $showChat) {
-            NavigationStack {
-                ChatPage()
-                    .environmentObject(chatManager)
-                    .environmentObject(portfolioManager)
+            .sheet(isPresented: $showChat) {
+                NavigationStack {
+                    ChatPage()
+                        .environmentObject(chatManager)
+                        .environmentObject(portfolioManager)
+                }
             }
+            .navigationTitle("Welcome")
+            .navigationBarTitleDisplayMode(.large)
         }
-        .navigationTitle("Welcome")
-        .navigationBarTitleDisplayMode(.large)
     }
 }
 

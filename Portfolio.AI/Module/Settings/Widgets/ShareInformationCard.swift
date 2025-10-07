@@ -17,7 +17,7 @@ struct ShareInformationCard: View {
             SettingsRow(
                 icon: "square.and.arrow.up.fill",
                 title: "Share App",
-                subtitle: "Tell friends about Portfolio.AI",
+                subtitle: "Tell friends about Finora",
                 trailing: {
                     Image(systemName: "chevron.right")
                         .font(.caption)

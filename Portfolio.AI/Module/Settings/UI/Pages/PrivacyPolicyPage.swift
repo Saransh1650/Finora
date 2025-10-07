@@ -202,7 +202,7 @@ struct PrivacyPolicyPage: View {
         }
         .background(AppColors.pureBackground)
         .navigationTitle("Privacy Policy")
-        .navigationBarTitleDisplayMode(.large)
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

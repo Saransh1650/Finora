@@ -56,7 +56,6 @@ struct PortfolioSummaryByAiModel: Codable, JSONSchemaGeneratable {
                 RebalancingPlan(
                     action: "sample_string",
                     stock: "sample_string",
-                    amount: 0.0,
                     rationale: "sample_string",
                     fairEntryRange: RebalancingPlan.FairEntryRange(
                         minPrice: 0.0,
@@ -116,14 +115,12 @@ struct PortfolioSummaryByAiModel: Codable, JSONSchemaGeneratable {
     struct RebalancingPlan: Codable {
         let action: String
         let stock: String
-        let amount: Double
         let rationale: String
         let fairEntryRange: FairEntryRange
         
         enum CodingKeys: String, CodingKey {
             case action
             case stock
-            case amount
             case rationale
             case fairEntryRange = "fair_entry_range"
         }

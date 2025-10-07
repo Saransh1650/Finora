@@ -20,24 +20,21 @@ struct NavigationPage: View {
             ZStack {
                 switch selectedTab {
                 case .home:
-                    NavigationView {
-                        HomePage()
-                            .environmentObject(portfolioManager)
-                            .environmentObject(portfolioAnalysisManager)
-                            .environmentObject(chatManager)
-                    }
+                    HomePage()
+                        .environmentObject(portfolioManager)
+                        .environmentObject(portfolioAnalysisManager)
+                        .environmentObject(chatManager)
+
                 case .portfolio:
-                    NavigationView {
-                        PortfolioPage()
-                            .environmentObject(portfolioManager)
-                    }
+                    PortfolioPage()
+                        .environmentObject(portfolioManager)
+
                 case .settings:
-                    NavigationView {
-                        SettingsPage()
-                            .environmentObject(portfolioManager)
-                            .environmentObject(portfolioAnalysisManager)
-                            .environmentObject(chatManager)
-                    }
+                    SettingsPage()
+                        .environmentObject(portfolioManager)
+                        .environmentObject(portfolioAnalysisManager)
+                        .environmentObject(chatManager)
+
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -46,24 +43,28 @@ struct NavigationPage: View {
         }
         .ignoresSafeArea(.keyboard)
         .onAppear {
-            // Check for updates when app launches
             appUpdateManager.checkForUpdatesAutomatically()
         }
         .overlay {
-            // Show update dialog when needed
             if appUpdateManager.showUpdateDialog,
-               let updateResult = appUpdateManager.updateResult {
+                let updateResult = appUpdateManager.updateResult
+            {
                 ForceUpdateDialog(
                     updateResult: updateResult,
                     onUpdatePressed: {
                         appUpdateManager.handleUpdatePressed()
                     },
-                    onLaterPressed: updateResult.isForceUpdate ? nil : {
-                        appUpdateManager.handleLaterPressed()
-                    }
+                    onLaterPressed: updateResult.isForceUpdate
+                        ? nil
+                        : {
+                            appUpdateManager.handleLaterPressed()
+                        }
                 )
                 .transition(.opacity.combined(with: .scale))
-                .animation(.easeInOut(duration: 0.3), value: appUpdateManager.showUpdateDialog)
+                .animation(
+                    .easeInOut(duration: 0.3),
+                    value: appUpdateManager.showUpdateDialog
+                )
             }
         }
     }

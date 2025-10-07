@@ -57,7 +57,7 @@ struct StockDetailCard: View {
                         .font(.caption)
                         .foregroundStyle(.secondary)
                     Text(
-                        "₹\(String(format: "%.0f", stock.fairPriceEstimate.minPrice)) - ₹\(String(format: "%.0f", stock.fairPriceEstimate.maxPrice))"
+                        "\(String(format: "%.0f", stock.fairPriceEstimate.minPrice)) - \(String(format: "%.0f", stock.fairPriceEstimate.maxPrice))"
                     )
                     .font(.caption)
                     .fontWeight(.semibold)
@@ -88,7 +88,7 @@ struct StockDetailCard: View {
     }
 
     private func formatCurrency(_ amount: Double) -> String {
-        return "₹\(String(format: "%.0f", amount))"
+        return "\(String(format: "%.0f", amount))"
     }
 
 
