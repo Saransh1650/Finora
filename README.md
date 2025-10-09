@@ -3,7 +3,9 @@
 Finora is a modern iOS app for smart investment management, built with SwiftUI. It leverages Supabase for backend services and integrates Google Gemini for AI-powered insights.
 
 ---
-
+<a href="https://apps.apple.com/in/app/finora/id6753204750" target="_blank">
+  <img src="https://github.com/user-attachments/assets/d196ded0-1411-41d5-8e63-7afdf6984b31" width="200" />
+</a>
 
 ## 🚀 Features
 
