@@ -153,8 +153,8 @@ struct SupportFeedbackCard: View {
     
     private func openAppStoreReview() {
         // Replace with your actual App Store ID when available
-        let appStoreID = "YOUR_APP_ID"
-        if let url = URL(string: "https://apps.apple.com/app/id\(appStoreID)?action=write-review") {
+        
+        if let url = URL(string: "\(AppConstants.appUrl)?action=write-review") {
             UIApplication.shared.open(url)
         }
     }

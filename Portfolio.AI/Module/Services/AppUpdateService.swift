@@ -13,7 +13,7 @@ class AppUpdateService: ObservableObject {
     private init() {}
     
     // MARK: - Configuration
-    private let appStoreId = "YOUR_APP_STORE_ID" // Replace with your actual App Store ID
+    private let appStoreId = AppConstants.appUrl
     private var appStoreUrl: String {
         return "https://itunes.apple.com/lookup?id=\(appStoreId)"
     }

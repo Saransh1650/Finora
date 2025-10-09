@@ -8,14 +8,20 @@
 import SwiftUI
 
 struct AppVersionFooter: View {
+    var version: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "?"
+    }
+    var build: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String ?? "?"
+    }
     var body: some View {
         VStack(spacing: 8) {
-            Text("Portfolio.AI")
+            Text("Finora")
                 .font(.caption)
                 .fontWeight(.medium)
                 .foregroundColor(AppColors.textSecondary)
             
-            Text("Version 1.0.0 (Build 1)")
+            Text("Version \(version) (Build \(build))")
                 .font(.caption2)
                 .foregroundColor(AppColors.textSecondary.opacity(0.7))
             
