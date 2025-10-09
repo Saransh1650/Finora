@@ -32,9 +32,6 @@ struct PortfolioSummaryByAiModel: Codable, JSONSchemaGeneratable {
     static func createSampleInstance() -> PortfolioSummaryByAiModel {
         return PortfolioSummaryByAiModel(
             portfolioSummary: PortfolioSummary(
-                totalInvested: 0.0,
-                currentValue: 0.0,
-                pnlPercent: 0.0,
                 concentrationRisk: "sample_string",
                 diversificationAdvice: "sample_string"
             ),
@@ -67,16 +64,10 @@ struct PortfolioSummaryByAiModel: Codable, JSONSchemaGeneratable {
     }
     
     struct PortfolioSummary: Codable {
-        let totalInvested: Double
-        let currentValue: Double
-        let pnlPercent: Double
         let concentrationRisk: String
         let diversificationAdvice: String
         
         enum CodingKeys: String, CodingKey {
-            case totalInvested = "total_invested"
-            case currentValue = "current_value"
-            case pnlPercent = "pnl_percent"
             case concentrationRisk = "concentration_risk"
             case diversificationAdvice = "diversification_advice"
         }

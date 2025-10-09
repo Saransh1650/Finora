@@ -9,16 +9,13 @@ import SwiftUI
 
 struct PortfolioSummaryCard: View {
     let stocks: [StockModel]
-    let analysisData: PortfolioSummaryByAiModel.PortfolioSummary?
 
     @State private var isExpanded: Bool = false
 
     init(
         stocks: [StockModel],
-        analysisData: PortfolioSummaryByAiModel.PortfolioSummary? = nil
     ) {
         self.stocks = stocks
-        self.analysisData = analysisData
     }
 
     var body: some View {
@@ -44,7 +41,6 @@ struct PortfolioSummaryCard: View {
                     // Metrics Grid
                     PortfolioMetricsGrid(
                         stocks: stocks,
-                        analysisData: analysisData
                     )
 
                     // Stock list preview
@@ -82,22 +78,15 @@ struct PortfolioSummaryCard: View {
 
 }
 #if DEBUG
-#Preview {
-    VStack(spacing: 20) {
-        PortfolioSummaryCard(stocks: StockModel.samples)
-        
-        PortfolioSummaryCard(
-            stocks: StockModel.samples,
-            analysisData: PortfolioSummaryByAiModel.PortfolioSummary(
-                totalInvested: 5000,
-                currentValue: 5500,
-                pnlPercent: 10.0,
-                concentrationRisk: "Medium risk",
-                diversificationAdvice: "Consider diversification"
+    #Preview {
+        VStack(spacing: 20) {
+            PortfolioSummaryCard(stocks: StockModel.samples)
+
+            PortfolioSummaryCard(
+                stocks: StockModel.samples,
             )
-        )
+        }
+        .padding()
+        .background(AppColors.pureBackground)
     }
-    .padding()
-    .background(AppColors.pureBackground)
-}
 #endif

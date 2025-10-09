@@ -15,7 +15,9 @@ struct AIDashboardView: View {
             VStack(spacing: 20) {
 
                 // AI Overview Section
-                if let portfolioSummary = analysis.portfolioSummaryByAiModel?.portfolioSummary {
+                if let portfolioSummary = analysis.portfolioSummaryByAiModel?
+                    .portfolioSummary
+                {
                     AIOverviewCard(portfolioSummary: portfolioSummary)
                 }
 
@@ -38,10 +40,6 @@ struct AIDashboardView: View {
                             stock in
                             StockDetailCard(
                                 stock: stock,
-                                totalPortfolioValue: analysis
-                                    .portfolioSummaryByAiModel?
-                                    .portfolioSummary?
-                                    .currentValue ?? 0
                             )
                         }
                     }
@@ -68,9 +66,6 @@ struct AIDashboardView: View {
             userId: "String",
             portfolioSummaryByAiModel: PortfolioSummaryByAiModel(
                 portfolioSummary: PortfolioSummaryByAiModel.PortfolioSummary(
-                    totalInvested: 100000,
-                    currentValue: 105230,
-                    pnlPercent: 5.23,
                     concentrationRisk:
                         "High concentration in Technology sector",
                     diversificationAdvice:

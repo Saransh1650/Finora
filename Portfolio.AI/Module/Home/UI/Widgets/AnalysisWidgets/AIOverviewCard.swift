@@ -56,9 +56,6 @@ struct AIOverviewCard: View {
 #Preview {
     AIOverviewCard(
         portfolioSummary: PortfolioSummaryByAiModel.PortfolioSummary(
-            totalInvested: 100000,
-            currentValue: 105230,
-            pnlPercent: 5.23,
             concentrationRisk: "High concentration in Technology sector",
             diversificationAdvice: "Consider rebalancing towards Healthcare and Energy sectors."
         )

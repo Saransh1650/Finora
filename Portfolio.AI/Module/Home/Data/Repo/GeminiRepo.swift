@@ -186,7 +186,7 @@ class GeminiRepo {
         }
 
         let urlString =
-            "\(baseUrl)/models/\(geminiPro):generateContent?key=\(apiKey)"
+            "\(baseUrl)/models/\(geminiFlash):generateContent?key=\(apiKey)"
         guard let url = URL(string: urlString) else {
             completion(.failure(AIRepoError.invalidURL))
             return
