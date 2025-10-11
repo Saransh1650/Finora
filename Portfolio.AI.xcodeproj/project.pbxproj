@@ -22,6 +22,11 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		6300651C2E9AA107000A0A33 /* ci_scripts */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = ci_scripts;
+			sourceTree = "<group>";
+		};
 		63CAE4022E6319CC00F111CD /* Portfolio.AI */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = Portfolio.AI;
@@ -53,6 +58,7 @@
 				63CAE4022E6319CC00F111CD /* Portfolio.AI */,
 				63CAE4012E6319CC00F111CD /* Products */,
 				63EA7B552E9112C9005934F6 /* Portfolio-AI-Info.plist */,
+				6300651C2E9AA107000A0A33 /* ci_scripts */,
 			);
 			sourceTree = "<group>";
 		};
@@ -80,6 +86,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				6300651C2E9AA107000A0A33 /* ci_scripts */,
 				63CAE4022E6319CC00F111CD /* Portfolio.AI */,
 			);
 			name = Portfolio.AI;
