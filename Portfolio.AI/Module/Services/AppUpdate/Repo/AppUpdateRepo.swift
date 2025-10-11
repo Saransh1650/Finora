@@ -7,27 +7,27 @@
 
 import Foundation
 
-class AppUpdateService: ObservableObject {
-    static let shared = AppUpdateService()
-    
-    private init() {}
+class AppUpdateRepo {
     
     // MARK: - Configuration
-    private let appStoreId = AppConstants.appUrl
-    private var appStoreUrl: String {
+    static private let appStoreId = AppConstants.appId
+    static private var appStoreUrl: String {
         return "https://itunes.apple.com/lookup?id=\(appStoreId)"
     }
     
     // MARK: - Update Check
-    func checkForUpdate() async -> UpdateCheckResult {
+    static func checkForUpdate() async -> UpdateCheckResult {
+        
         do {
             let latestVersion = try await fetchLatestVersionFromAppStore()
+            
             let currentVersion = getCurrentAppVersion()
             
-            let isUpdateRequired = latestVersion.isNewerVersion
+            let isUpdateRequired = isVersionNewer(current: currentVersion, latest: latestVersion)
+            
             let isForceUpdate = shouldForceUpdate(current: currentVersion, latest: latestVersion)
             
-            return UpdateCheckResult(
+            let result = UpdateCheckResult(
                 isUpdateRequired: isUpdateRequired,
                 isForceUpdate: isForceUpdate,
                 latestVersion: latestVersion,
@@ -35,53 +35,79 @@ class AppUpdateService: ObservableObject {
                 updateUrl: getAppStoreUpdateUrl(),
                 releaseNotes: nil // Can be enhanced to fetch release notes
             )
+            return result
         } catch {
-            print("Failed to check for updates: \(error)")
             return UpdateCheckResult() // Return default result on error
         }
     }
     
     // MARK: - App Store Integration
-    private func fetchLatestVersionFromAppStore() async throws -> String {
+    static private func fetchLatestVersionFromAppStore() async throws -> String {
         guard let url = URL(string: appStoreUrl) else {
             throw URLError(.badURL)
         }
-        
         let (data, _) = try await URLSession.shared.data(from: url)
-        let response = try JSONDecoder().decode(AppStoreResponse.self, from: data)
         
-        guard let app = response.results.first else {
+        let jsonDecoded = try JSONDecoder().decode(AppStoreResponse.self, from: data)
+        
+        guard let app = jsonDecoded.results.first else {
             throw NSError(domain: "AppUpdateService", code: 1, userInfo: [NSLocalizedDescriptionKey: "App not found in App Store"])
         }
         
         return app.version
     }
     
-    private func getCurrentAppVersion() -> String {
-        return Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"
+    static private func getCurrentAppVersion() -> String {
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"
+        return version
     }
     
-    private func getAppStoreUpdateUrl() -> String {
+    static private func getAppStoreUpdateUrl() -> String {
         return "https://apps.apple.com/app/id\(appStoreId)"
     }
     
+    // MARK: - Version Comparison
+    static private func isVersionNewer(current: String, latest: String) -> Bool {
+        
+        let currentComponents = current.components(separatedBy: ".").compactMap { Int($0) }
+        let latestComponents = latest.components(separatedBy: ".").compactMap { Int($0) }
+        
+        
+        let maxCount = max(currentComponents.count, latestComponents.count)
+        
+        for i in 0..<maxCount {
+            let currentVersion = i < currentComponents.count ? currentComponents[i] : 0
+            let latestVersion = i < latestComponents.count ? latestComponents[i] : 0
+            
+            if latestVersion > currentVersion {
+                return true
+            } else if currentVersion > latestVersion {
+                return false
+            }
+        }
+        return false
+    }
+    
     // MARK: - Force Update Logic
-    private func shouldForceUpdate(current: String, latest: String) -> Bool {
+    static private func shouldForceUpdate(current: String, latest: String) -> Bool {
+        
         // Implement your force update logic here
         // For example, force update if major version is different
         let currentComponents = current.components(separatedBy: ".").compactMap { Int($0) }
         let latestComponents = latest.components(separatedBy: ".").compactMap { Int($0) }
+    
         
         if currentComponents.count > 0 && latestComponents.count > 0 {
             // Force update if major version (first component) is different
-            return currentComponents[0] < latestComponents[0]
+            let shouldForce = currentComponents[0] < latestComponents[0]
+            return shouldForce
         }
-        
+    
         return false
     }
     
     // MARK: - Manual Update Check (for testing)
-    func checkForUpdateWithCustomLogic(forceUpdate: Bool = false) -> UpdateCheckResult {
+    static func checkForUpdateWithCustomLogic(forceUpdate: Bool = false) -> UpdateCheckResult {
         let currentVersion = getCurrentAppVersion()
         let mockLatestVersion = "2.0.0" // For testing purposes
         
@@ -91,7 +117,7 @@ class AppUpdateService: ObservableObject {
             latestVersion: mockLatestVersion,
             currentVersion: currentVersion,
             updateUrl: getAppStoreUpdateUrl(),
-            releaseNotes: "• Bug fixes and performance improvements\n• New features added\n• Enhanced user experience"
+            releaseNotes: "• Bug fixes and performance improvements\n• aNew features dded\n• Enhanced user experience"
         )
     }
 }
