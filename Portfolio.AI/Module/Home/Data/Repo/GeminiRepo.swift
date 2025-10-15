@@ -10,14 +10,7 @@ import Foundation
 // Note: Import needed ChatMessage model - this may need to be adjusted based on your project structure
 // Assuming ChatMessage is accessible from this context
 
-// MARK: - OCR Stock Extraction Model
-struct ExtractedStock {
-    let symbol: String
-    let quantity: Double?
-    let totalInvestment: Double?
-    let avgPrice: Double?
-    let confidence: Float
-}
+
 
 // MARK: - Chat Response Model
 struct ChatResponseModel {
