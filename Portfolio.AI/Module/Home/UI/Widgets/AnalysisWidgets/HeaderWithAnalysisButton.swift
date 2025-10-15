@@ -38,9 +38,21 @@ struct HeaderWithAnalysisButton: View {
             Button {
                 Task {
                     if portfolioAnalysisManager.canAnalyzeToday {
-                        await portfolioAnalysisManager.generateSummaryAndSave(
-                            stocks: portfolioManager.stocks
-                        )
+                        let error =
+                            await portfolioAnalysisManager
+                            .generateSummaryAndSave(
+                                stocks: portfolioManager.stocks
+                            )
+                        if error != nil {
+                            let toast = ToastValue(
+                                icon: Image(
+                                    systemName: "exclamationmark.triangle"
+                                ),
+                                message:
+                                    "Error Parsing data, Please try again.",
+                            )
+                            presentToast(toast)
+                        }
                     } else {
                         let toast = ToastValue(
                             icon: Image(systemName: "exclamationmark.triangle"),
