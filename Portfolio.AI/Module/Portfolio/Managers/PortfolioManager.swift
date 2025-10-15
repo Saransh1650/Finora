@@ -39,22 +39,28 @@ class PortfolioManager: ObservableObject {
     }
 
     func addStock(_ newStocks: [StockModel]) async {
+        print("📊 [PortfolioManager] Adding \(newStocks.count) stock(s)")
+        
         for stock in newStocks {
             if let index = stocks.firstIndex(where: {
                 $0.symbol == stock.symbol
             }) {
+                // Update existing stock
                 stocks[index] = stock
+                print("📊 [PortfolioManager] Updated existing stock: \(stock.symbol)")
             } else {
+                // Add new stock
                 stocks.append(stock)
+                print("📊 [PortfolioManager] Added new stock: \(stock.symbol)")
             }
         }
+        
         await PortfolioRepo.addStock(newStocks) { result in
             switch result {
             case .success():
-                print("Stocks saved successfully to Supabase.")
+                print("✅ [PortfolioManager] Stocks saved successfully to Supabase.")
             case .failure(let error):
-                print("Failed to save stocks to Supabase: \(error)")
-
+                print("❌ [PortfolioManager] Failed to save stocks to Supabase: \(error)")
             }
         }
     }
