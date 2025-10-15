@@ -9,9 +9,12 @@ import SwiftUI
 
 struct PortfolioPage: View {
     @EnvironmentObject var portfolioManager: PortfolioManager
-    @State var addStock = false
+    @State private var showMethodSelection = false
+    @State private var showManualDialog = false
+    @State private var showOCRDialog = false
+
     var body: some View {
-        NavigationStack{
+        NavigationStack {
             ZStack {
                 AppColors.pureBackground.ignoresSafeArea()
 
@@ -20,10 +23,12 @@ struct PortfolioPage: View {
                 } else {
                     VStack(spacing: 0) {
                         ScrollView {
-                            PortfolioSummaryCard(stocks: portfolioManager.stocks)
-                                .padding(.horizontal, 16)
-                                .padding(.top, 8)
-                                .padding(.bottom, 4)
+                            PortfolioSummaryCard(
+                                stocks: portfolioManager.stocks
+                            )
+                            .padding(.horizontal, 16)
+                            .padding(.top, 8)
+                            .padding(.bottom, 4)
                             LazyVStack(spacing: 12) {
                                 ForEach(portfolioManager.stocks, id: \.id) {
                                     stock in
@@ -31,13 +36,16 @@ struct PortfolioPage: View {
                                         .contextMenu {
                                             Button(role: .destructive) {
                                                 if let index = portfolioManager
-                                                    .stocks.firstIndex(of: stock)
+                                                    .stocks.firstIndex(
+                                                        of: stock
+                                                    )
                                                 {
                                                     Task {
                                                         await portfolioManager
                                                             .removeStock(
                                                                 at: IndexSet(
-                                                                    integer: index
+                                                                    integer:
+                                                                        index
                                                                 )
                                                             )
                                                     }
@@ -49,28 +57,31 @@ struct PortfolioPage: View {
                                                 )
                                             }
                                             //TODO: implement later
-//                                            Button {
-//                                                Task {
-//                                                    await portfolioManager
-//                                                        .updateStock(stock)
-//                                                }
-//                                            } label: {
-//                                                Label(
-//                                                    "Update Stock",
-//                                                    systemImage: "pencil"
-//                                                )
-//                                            }
+                                            //                                            Button {
+                                            //                                                Task {
+                                            //                                                    await portfolioManager
+                                            //                                                        .updateStock(stock)
+                                            //                                                }
+                                            //                                            } label: {
+                                            //                                                Label(
+                                            //                                                    "Update Stock",
+                                            //                                                    systemImage: "pencil"
+                                            //                                                )
+                                            //                                            }
                                         }
                                         .swipeActions(edge: .trailing) {
                                             Button(role: .destructive) {
                                                 if let index = portfolioManager
-                                                    .stocks.firstIndex(of: stock)
+                                                    .stocks.firstIndex(
+                                                        of: stock
+                                                    )
                                                 {
                                                     Task {
                                                         await portfolioManager
                                                             .removeStock(
                                                                 at: IndexSet(
-                                                                    integer: index
+                                                                    integer:
+                                                                        index
                                                                 )
                                                             )
                                                     }
@@ -110,17 +121,31 @@ struct PortfolioPage: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button {
-                        addStock = true
+                        showMethodSelection = true
                     } label: {
                         Image(systemName: "plus")
                             .foregroundColor(AppColors.textPrimary)
                     }
-                    .fullScreenCover(isPresented: $addStock) {
-                        AddStockDialog()
-                            .background(ClearBackgroundView())
-                    }
-
                 }
+            }
+            .fullScreenCover(isPresented: $showMethodSelection) {
+                AddStockMethodDialog { method in
+                    switch method {
+                    case .ocr:
+                        showOCRDialog = true
+                    case .manual:
+                        showManualDialog = true
+                    }
+                }
+                .background(ClearBackgroundView())
+            }
+            .fullScreenCover(isPresented: $showManualDialog) {
+                AddStockDialog()
+                    .background(ClearBackgroundView())
+            }
+            .fullScreenCover(isPresented: $showOCRDialog) {
+                OCRStockSelectionDialog()
+                    .background(ClearBackgroundView())
             }
         }
     }
