@@ -8,7 +8,6 @@
 import Foundation
 import UIKit
 import Vision
-import VisionKit
 
 class AppOcr {
 
