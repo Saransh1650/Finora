@@ -37,7 +37,7 @@ struct OCRStockSelectionDialog: View {
             VStack(spacing: 24) {
                 // Header
                 VStack(spacing: 8) {
-                    Text("OCR Stock Import")
+                    Text("Import Your Stocks")
                         .font(.title3)
                         .fontWeight(.bold)
                         .foregroundColor(AppColors.textPrimary)
@@ -64,7 +64,7 @@ struct OCRStockSelectionDialog: View {
                         photoLibrary: .shared()
                     ) {
                         VStack(spacing: 16) {
-                            Image(systemName: "camera.fill")
+                            Image(systemName: "photo.badge.plus.fill")
                                 .font(.system(size: 48))
                                 .foregroundColor(AppColors.selected)
 
@@ -255,15 +255,24 @@ struct OCRStockSelectionDialog: View {
         isProcessing = true
         errorMessage = nil
 
-        AppOcr.extractStockData(from: image) { stocks in
+        AppOcr.extractStockData(from: image) { stocks, error in
             Task { @MainActor in
-                self.extractedStocks = stocks
-                self.isProcessing = false
 
-                if stocks.isEmpty {
+                if error != nil {
                     self.errorMessage =
-                        "No stocks detected in the image. Make sure the image contains clear stock information."
+                        "OCR processing failed: \(error!.localizedDescription)"
+                    self.isProcessing = false
+                    return
                 }
+
+                if let stocks = stocks, !stocks.isEmpty {
+                    self.extractedStocks = stocks
+                } else {
+                    self.errorMessage =
+                        "No stocks found in the image. Please try again with a clearer image."
+                }
+                isProcessing = false
+
             }
         }
     }

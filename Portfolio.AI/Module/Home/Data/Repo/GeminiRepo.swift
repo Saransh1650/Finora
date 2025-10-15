@@ -142,6 +142,7 @@ class GeminiRepo {
             - Handle Indian stock symbols (like RELIANCE, TCS, INFY) and US symbols (AAPL, TSLA)
             - Ignore common words that look like stock symbols
             - If data is unclear or incomplete, still include it but with lower confidence
+            - Do not answer in parts, provide all findings in one go
 
             Return ONLY a JSON array in this exact format:
             [
@@ -187,7 +188,7 @@ class GeminiRepo {
             - If asked about specific stocks, provide current market data
             - Keep it like a chat messaging between you and user, and answer in short like humans talk 
             - Ask questions if needed
-            - do not answer in parts, if the answer is getting long just end it with a question if the user wants more or not
+            - DO NOT ANSWER IN PARTS, if the answer is getting long just end it with a question
             
             """
         
