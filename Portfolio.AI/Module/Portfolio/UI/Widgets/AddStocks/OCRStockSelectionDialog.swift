@@ -317,4 +317,5 @@ struct OCRStockSelectionDialog: View {
 
 #Preview {
     OCRStockSelectionDialog()
+        .environmentObject(PortfolioManager())
 }
