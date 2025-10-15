@@ -127,7 +127,9 @@ class PortfolioAnalysisManager: ObservableObject {
                         self.errorMessage =
                             "Failed to analyze portfolio. Please try again."
 
+                        
                     }
+                    
                 }
 
             }
@@ -137,12 +139,6 @@ class PortfolioAnalysisManager: ObservableObject {
             errorMessage =
                 "Error encoding portfolio data: \(error.localizedDescription)"
             print("Error encoding portfolio data: \(error)")
-            return Failure(
-                message: errorMessage,
-                errorType: ErrorType.geminiDataParseError
-            )
-        }
-        if errorMessage != nil {
             return Failure(
                 message: errorMessage,
                 errorType: ErrorType.geminiDataParseError
