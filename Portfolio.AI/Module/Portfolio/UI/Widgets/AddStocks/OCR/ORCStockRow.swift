@@ -38,9 +38,9 @@ struct OCRStockRow: View {
                     HStack(spacing: 4) {
                         Circle()
                             .fill(
-                                stock.confidence > 0.7
+                                Double(stock.confidence) > 0.7
                                     ? .green
-                                    : stock.confidence > 0.5 ? .orange : .red
+                                    : Double(stock.confidence) > 0.5 ? .orange : .red
                             )
                             .frame(width: 6, height: 6)
                         Text("\(Int(stock.confidence * 100))%")
