@@ -75,13 +75,17 @@ class PortfolioAnalysisManager: ObservableObject {
     // MARK: - Generate summary and save portfolio
 
     /// Generate portfolio summary using Gemini API and save it
-    func generateSummaryAndSave(stocks: [StockModel]) async {
+    func generateSummaryAndSave(stocks: [StockModel]) async -> Failure? {
         // Check daily limit first
         guard canAnalyzeToday else {
-            errorMessage = "You can only perform one analysis per day. Next analysis available \(timeUntilNextAnalysis ?? "tomorrow")."
-            return
+            errorMessage =
+                "You can only perform one analysis per day. Next analysis available \(timeUntilNextAnalysis ?? "tomorrow")."
+            return Failure(
+                message: errorMessage,
+                errorType: ErrorType.limitExceed
+            )
         }
-        
+
         isLoading = true
         errorMessage = nil
 
@@ -115,7 +119,6 @@ class PortfolioAnalysisManager: ObservableObject {
                             // Update daily limit after successful analysis
                             self.checkDailyAnalysisLimit()
                         }
-
                     case .failure(let error):
                         print(
                             "Portfolio Analysis Error: \(error.localizedDescription)"
@@ -123,6 +126,7 @@ class PortfolioAnalysisManager: ObservableObject {
 
                         self.errorMessage =
                             "Failed to analyze portfolio. Please try again."
+
                     }
                 }
 
@@ -133,8 +137,18 @@ class PortfolioAnalysisManager: ObservableObject {
             errorMessage =
                 "Error encoding portfolio data: \(error.localizedDescription)"
             print("Error encoding portfolio data: \(error)")
+            return Failure(
+                message: errorMessage,
+                errorType: ErrorType.geminiDataParseError
+            )
         }
-
+        if errorMessage != nil {
+            return Failure(
+                message: errorMessage,
+                errorType: ErrorType.geminiDataParseError
+            )
+        }
+        return nil
     }
 
     // MARK: - Save Operations
@@ -234,30 +248,40 @@ class PortfolioAnalysisManager: ObservableObject {
     }
 
     // MARK: - Daily Limit Checking
-    
+
     /// Check if user can perform analysis today (max 1 per day)
     private func checkDailyAnalysisLimit() {
         guard let lastAnalysis = currentAnalysis,
-              let lastAnalysisDate = lastAnalysis.analysisDate else {
+            let lastAnalysisDate = lastAnalysis.analysisDate
+        else {
             canAnalyzeToday = true
-            return 
+            return
         }
-        
+
         let calendar = Calendar.current
         canAnalyzeToday = !calendar.isDateInToday(lastAnalysisDate)
     }
-    
+
     /// Get time until next analysis is allowed
     var timeUntilNextAnalysis: String? {
         guard !canAnalyzeToday,
-              let lastAnalysis = currentAnalysis,
-              let lastAnalysisDate = lastAnalysis.analysisDate else {
+            let lastAnalysis = currentAnalysis,
+            let lastAnalysisDate = lastAnalysis.analysisDate
+        else {
             return nil
         }
-        
+
         let calendar = Calendar.current
-        if let tomorrow = calendar.date(byAdding: .day, value: 1, to: lastAnalysisDate),
-           let startOfTomorrow = calendar.dateInterval(of: .day, for: tomorrow)?.start {
+        if let tomorrow = calendar.date(
+            byAdding: .day,
+            value: 1,
+            to: lastAnalysisDate
+        ),
+            let startOfTomorrow = calendar.dateInterval(
+                of: .day,
+                for: tomorrow
+            )?.start
+        {
             let timeRemaining = startOfTomorrow.timeIntervalSinceNow
             if timeRemaining > 0 {
                 let hours = Int(timeRemaining) / 3600
