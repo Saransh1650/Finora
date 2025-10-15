@@ -15,7 +15,7 @@ enum AddStockMethod {
 struct AddStockMethodDialog: View {
     @Environment(\.dismiss) private var dismiss
     let onMethodSelected: (AddStockMethod) -> Void
-    
+
     var body: some View {
         ZStack {
             // Background overlay
@@ -24,7 +24,7 @@ struct AddStockMethodDialog: View {
                 .onTapGesture {
                     dismiss()
                 }
-            
+
             // Dialog content
             VStack(spacing: 24) {
                 // Header
@@ -33,13 +33,13 @@ struct AddStockMethodDialog: View {
                         .font(.title3)
                         .fontWeight(.bold)
                         .foregroundColor(AppColors.textPrimary)
-                    
+
                     Text("Choose how you'd like to add stocks")
                         .font(.subheadline)
                         .foregroundColor(AppColors.textSecondary)
                         .multilineTextAlignment(.center)
                 }
-                
+
                 // Method options
                 VStack(spacing: 12) {
                     // OCR Method
@@ -53,37 +53,43 @@ struct AddStockMethodDialog: View {
                                 Circle()
                                     .fill(AppColors.selected.opacity(0.1))
                                     .frame(width: 48, height: 48)
-                                
+
                                 Image(systemName: "doc.text.viewfinder")
                                     .foregroundColor(AppColors.selected)
                                     .font(.title3)
                             }
-                            
+
                             // Content
                             VStack(alignment: .leading, spacing: 4) {
                                 HStack {
                                     Text("OCR Scan")
                                         .font(.headline)
                                         .foregroundColor(AppColors.textPrimary)
-                                    
-                                    Text("FAST")
-                                        .font(.caption2)
-                                        .fontWeight(.bold)
-                                        .foregroundColor(.white)
-                                        .padding(.horizontal, 8)
-                                        .padding(.vertical, 2)
-                                        .background(AppColors.selected)
-                                        .cornerRadius(4)
+
+                                    HStack {
+                                        Image(systemName: "bolt.fill")
+                                            .padding(.trailing, -4)
+                                        Text("FAST")
+                                    }
+                                    .font(.caption2)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.white)
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 2)
+                                    .background(AppColors.textSecondary)
+                                    .cornerRadius(4)
                                 }
-                                
-                                Text("Take a photo of your portfolio and let AI extract the stock data")
-                                    .font(.caption)
-                                    .foregroundColor(AppColors.textSecondary)
-                                    .multilineTextAlignment(.leading)
+
+                                Text(
+                                    "Take a photo of your portfolio and let AI extract the stock data"
+                                )
+                                .font(.caption)
+                                .foregroundColor(AppColors.textSecondary)
+                                .multilineTextAlignment(.leading)
                             }
-                            
+
                             Spacer()
-                            
+
                             Image(systemName: "chevron.right")
                                 .foregroundColor(AppColors.textSecondary)
                                 .font(.caption)
@@ -92,12 +98,15 @@ struct AddStockMethodDialog: View {
                         .background(AppColors.background)
                         .overlay(
                             RoundedRectangle(cornerRadius: 12)
-                                .stroke(AppColors.selected.opacity(0.3), lineWidth: 1)
+                                .stroke(
+                                    AppColors.selected.opacity(0.3),
+                                    lineWidth: 1
+                                )
                         )
                         .cornerRadius(12)
                     }
                     .buttonStyle(PlainButtonStyle())
-                    
+
                     // Manual Method
                     Button(action: {
                         onMethodSelected(.manual)
@@ -109,26 +118,26 @@ struct AddStockMethodDialog: View {
                                 Circle()
                                     .fill(AppColors.textSecondary.opacity(0.1))
                                     .frame(width: 48, height: 48)
-                                
+
                                 Image(systemName: "keyboard")
                                     .foregroundColor(AppColors.textSecondary)
                                     .font(.title3)
                             }
-                            
+
                             // Content
                             VStack(alignment: .leading, spacing: 4) {
                                 Text("Manual Entry")
                                     .font(.headline)
                                     .foregroundColor(AppColors.textPrimary)
-                                
+
                                 Text("Enter stock details manually one by one")
                                     .font(.caption)
                                     .foregroundColor(AppColors.textSecondary)
                                     .multilineTextAlignment(.leading)
                             }
-                            
+
                             Spacer()
-                            
+
                             Image(systemName: "chevron.right")
                                 .foregroundColor(AppColors.textSecondary)
                                 .font(.caption)
@@ -143,7 +152,7 @@ struct AddStockMethodDialog: View {
                     }
                     .buttonStyle(PlainButtonStyle())
                 }
-                
+
                 // Cancel Button
                 Button("Cancel") {
                     dismiss()
@@ -162,7 +171,12 @@ struct AddStockMethodDialog: View {
             .background(AppColors.background)
             .border(AppColors.border, width: 1)
             .cornerRadius(16)
-            .shadow(color: AppColors.textPrimary.opacity(0.1), radius: 20, x: 0, y: 8)
+            .shadow(
+                color: AppColors.textPrimary.opacity(0.1),
+                radius: 20,
+                x: 0,
+                y: 8
+            )
             .padding(.horizontal, 32)
         }
     }

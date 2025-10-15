@@ -16,10 +16,10 @@ class AppOcr {
 
     static func extractStockData(
         from image: UIImage,
-        completion: @escaping ([ExtractedStock]) -> Void
+        completion: @escaping ([ExtractedStock]?, Error?) -> Void
     ) {
         guard let cgImage = image.cgImage else {
-            completion([])
+            completion([], nil)
             return
         }
 
@@ -29,7 +29,7 @@ class AppOcr {
                     as? [VNRecognizedTextObservation]
             else {
                 DispatchQueue.main.async {
-                    completion([])
+                    completion([], nil)
                 }
                 return
             }
@@ -51,16 +51,15 @@ class AppOcr {
                             print(
                                 "✅ [AppOcr] Gemini extracted \(extractedStocks.count) stocks"
                             )
-                            completion(extractedStocks)
+                            completion(extractedStocks, nil)
                         case .failure(let error):
                             print(
                                 "❌ [AppOcr] Gemini extraction failed: \(error)"
                             )
-                            // Fallback to rule-based parsing if Gemini fails
-                            let fallbackStocks = parseStockDataFallback(
-                                from: recognizedText
+                            completion(
+                                nil,
+                                error
                             )
-                            completion(fallbackStocks)
                         }
                     }
                 }
@@ -77,7 +76,7 @@ class AppOcr {
         } catch {
             print("❌ [AppOcr] Error performing OCR: \(error)")
             DispatchQueue.main.async {
-                completion([])
+                completion(nil, error)
             }
         }
     }
