@@ -248,6 +248,7 @@ struct OCRStockSelectionDialog: View {
             }
         } catch {
             errorMessage = "Failed to load image: \(error.localizedDescription)"
+            resetToImageSelection()
         }
     }
 
@@ -262,6 +263,7 @@ struct OCRStockSelectionDialog: View {
                     self.errorMessage =
                         "OCR processing failed: \(error!.localizedDescription)"
                     self.isProcessing = false
+                    resetToImageSelection()
                     return
                 }
 
