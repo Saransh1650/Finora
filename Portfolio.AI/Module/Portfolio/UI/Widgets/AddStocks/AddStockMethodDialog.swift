@@ -69,7 +69,7 @@ struct AddStockMethodDialog: View {
                                     HStack {
                                         Image(systemName: "bolt.fill")
                                             .padding(.trailing, -4)
-                                        Text("FAST")
+                                        Text("FASTER")
                                     }
                                     .font(.caption2)
                                     .fontWeight(.bold)

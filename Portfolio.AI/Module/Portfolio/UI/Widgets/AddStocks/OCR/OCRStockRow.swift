@@ -16,16 +16,7 @@ struct OCRStockRow: View {
     var body: some View {
         HStack(spacing: 12) {
             // Selection checkbox
-            Button(action: onToggle) {
-                Image(
-                    systemName: isSelected ? "checkmark.circle.fill" : "circle"
-                )
-                .foregroundColor(
-                    isSelected ? AppColors.selected : AppColors.textSecondary
-                )
-                .font(.title3)
-            }
-
+           
             VStack(alignment: .leading, spacing: 8) {
                 // Stock symbol and confidence
                 HStack {
@@ -34,19 +25,20 @@ struct OCRStockRow: View {
                         .foregroundColor(AppColors.textPrimary)
 
                     Spacer()
-
-                    HStack(spacing: 4) {
-                        Circle()
-                            .fill(
-                                Double(stock.confidence) > 0.7
-                                    ? .green
-                                    : Double(stock.confidence) > 0.5 ? .orange : .red
+                    
+                    VStack{
+                        Button(action: onToggle) {
+                            Image(
+                                systemName: isSelected ? "checkmark.circle.fill" : "circle"
                             )
-                            .frame(width: 6, height: 6)
-                        Text("\(Int(stock.confidence * 100))%")
-                            .font(.caption2)
-                            .foregroundColor(AppColors.textSecondary)
+                            .foregroundColor(
+                                isSelected ? AppColors.selected : AppColors.textSecondary
+                            )
+                            .font(.title3)
+                        }
+                        Spacer()
                     }
+
                 }
 
                 if isSelected {
