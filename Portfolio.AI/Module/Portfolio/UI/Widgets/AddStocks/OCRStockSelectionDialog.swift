@@ -107,7 +107,7 @@ struct OCRStockSelectionDialog: View {
                             )
                             .scaleEffect(1.2)
 
-                        Text("Analyzing image with OCR...")
+                        Text("Analyzing image. Please wait.")
                             .font(.subheadline)
                             .foregroundColor(AppColors.textSecondary)
                     }

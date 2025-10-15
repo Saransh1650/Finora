@@ -70,10 +70,7 @@ class GeminiRepo {
                 )
             ],
             generationConfig: GenerationConfig(
-                temperature: 0.1, // Low temperature for more consistent extraction
-                topP: 0.8,
-                topK: 40,
-                maxOutputTokens: 2048
+                temperature: 0.5,
             )
         )
 
@@ -135,7 +132,7 @@ class GeminiRepo {
             - Handle Indian stock symbols (like RELIANCE, TCS, INFY) and US symbols (AAPL, TSLA)
             - Ignore common words that look like stock symbols
             - If data is unclear or incomplete, still include it but with lower confidence
-            - Do not answer in parts, provide all findings in one go
+            - DO NOT ANSWER IN PARTS, provide all findings in one go
 
             Return ONLY a JSON array in this exact format:
             [
