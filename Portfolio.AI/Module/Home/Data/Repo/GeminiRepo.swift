@@ -10,6 +10,15 @@ import Foundation
 // Note: Import needed ChatMessage model - this may need to be adjusted based on your project structure
 // Assuming ChatMessage is accessible from this context
 
+// MARK: - OCR Stock Extraction Model
+struct ExtractedStock {
+    let symbol: String
+    let quantity: Double?
+    let totalInvestment: Double?
+    let avgPrice: Double?
+    let confidence: Float
+}
+
 // MARK: - Chat Response Model
 struct ChatResponseModel {
     let content: String
@@ -47,6 +56,37 @@ class GeminiRepo {
         await sendGeminiRequest(request: request, completion: completion)
     }
 
+    /// Extract stock information from OCR text using Gemini AI
+    /// - Parameters:
+    ///   - ocrText: Raw text extracted from OCR
+    ///   - completion: Completion handler with extracted stocks or error
+    static func extractStocksFromOCRText(
+        ocrText: String,
+        completion: @escaping (Result<[ExtractedStock], Error>) -> Void
+    ) async {
+        print("🤖 [GeminiRepo] Starting intelligent stock extraction from OCR text")
+        print("📝 [GeminiRepo] OCR text length: \(ocrText.count) characters")
+        
+        let prompt = createStockExtractionPrompt(ocrText: ocrText)
+
+        let request = GeminiRequest(
+            contents: [
+                GeminiContent(
+                    role: "user",
+                    parts: [Part(text: prompt)]
+                )
+            ],
+            generationConfig: GenerationConfig(
+                temperature: 0.1, // Low temperature for more consistent extraction
+                topP: 0.8,
+                topK: 40,
+                maxOutputTokens: 2048
+            )
+        )
+
+        await sendStockExtractionRequest(request: request, completion: completion)
+    }
+
     static func getChatResponse(
         userMessage: String,
         conversationHistory: [ChatMessage]? = nil,
@@ -75,6 +115,52 @@ class GeminiRepo {
         )
 
         await sendChatRequest(request: request, completion: completion)
+    }
+
+    static func createStockExtractionPrompt(ocrText: String) -> String {
+        return """
+            You are an expert financial data extraction AI. I will provide you with OCR text from a portfolio screenshot or document, and you need to extract stock information from it.
+
+            Your task:
+            1. Identify stock symbols (like AAPL, TSLA, RELIANCE, TCS, etc.)
+            2. Extract quantities (number of shares)
+            3. Extract investment amounts or current values
+            4. Calculate average prices when possible
+            5. Assign confidence scores based on how clear the data is
+
+            OCR Text to analyze:
+            ```
+            \(ocrText)
+            ```
+
+            Rules:
+            - Only extract data that clearly represents stocks/equities
+            - Ignore headers, footers, dates, or non-stock related text
+            - Stock symbols are typically 2-6 uppercase letters
+            - Be conservative with confidence scores (0.0 to 1.0)
+            - If a number could be quantity OR investment, use context clues
+            - Handle Indian stock symbols (like RELIANCE, TCS, INFY) and US symbols (AAPL, TSLA)
+            - Ignore common words that look like stock symbols
+            - If data is unclear or incomplete, still include it but with lower confidence
+
+            Return ONLY a JSON array in this exact format:
+            [
+              {
+                "symbol": "AAPL",
+                "quantity": 10.0,
+                "totalInvestment": 1500.0,
+                "avgPrice": 150.0,
+                "confidence": 0.9
+              }
+            ]
+
+            Important:
+            - If you can't find quantity or investment, set to null
+            - avgPrice = totalInvestment / quantity (if both available)
+            - confidence should reflect how certain you are about the data
+            - Return empty array [] if no stocks found
+            - Do not include any explanation, only the JSON array
+            """
     }
 
     static func createChatPrompt(
@@ -248,6 +334,65 @@ class GeminiRepo {
         }
     }
 
+    static func sendStockExtractionRequest(
+        request: GeminiRequest,
+        completion: @escaping (Result<[ExtractedStock], Error>) -> Void
+    ) async {
+        guard !apiKey.isEmpty else {
+            completion(.failure(AIRepoError.missingApiKey))
+            return
+        }
+
+        let urlString = "\(baseUrl)/models/\(geminiFlash):generateContent?key=\(apiKey)"
+        guard let url = URL(string: urlString) else {
+            completion(.failure(AIRepoError.invalidURL))
+            return
+        }
+
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        do {
+            let jsonData = try JSONEncoder().encode(request)
+            urlRequest.httpBody = jsonData
+            
+            let config = URLSessionConfiguration.default
+            config.timeoutIntervalForRequest = 60
+            config.timeoutIntervalForResource = 60
+            let session = URLSession(configuration: config)
+
+            let (data, response) = try await session.data(for: urlRequest)
+
+            if let httpResponse = response as? HTTPURLResponse {
+                print("🌐 [GeminiRepo] Stock Extraction HTTP Status: \(httpResponse.statusCode)")
+            }
+
+            if let responseString = String(data: data, encoding: .utf8) {
+                print("📄 [GeminiRepo] Raw Stock Extraction Response: \(responseString)")
+            }
+
+            let geminiResponse = try JSONDecoder().decode(GeminiResponse.self, from: data)
+
+            guard let candidate = geminiResponse.candidates?.first,
+                  let content = candidate.content,
+                  let part = content.parts.first else {
+                completion(.failure(AIRepoError.invalidResponse))
+                return
+            }
+
+            let responseText = part.text
+            print("🔍 [GeminiRepo] Stock Extraction Response Text: \(responseText)")
+
+            let extractedStocks = try parseStockExtractionResponse(from: responseText)
+            completion(.success(extractedStocks))
+
+        } catch {
+            print("❌ [GeminiRepo] Stock Extraction Error: \(error)")
+            completion(.failure(error))
+        }
+    }
+
     static func sendChatRequest(
         request: GeminiRequest,
         completion: @escaping (Result<ChatResponseModel, Error>) -> Void
@@ -317,6 +462,61 @@ class GeminiRepo {
         } catch {
             print("Chat AIRepo Error: \(error)")
             completion(.failure(error))
+        }
+    }
+
+    static func parseStockExtractionResponse(from text: String) throws -> [ExtractedStock] {
+        // Clean the response text to extract JSON
+        var cleanedText = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        // Remove markdown code blocks if present
+        cleanedText = cleanedText.replacingOccurrences(of: "```json", with: "")
+        cleanedText = cleanedText.replacingOccurrences(of: "```", with: "")
+        cleanedText = cleanedText.trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        // Find JSON array bounds
+        guard let startIndex = cleanedText.firstIndex(of: "["),
+              let endIndex = cleanedText.lastIndex(of: "]") else {
+            print("⚠️ [GeminiRepo] No JSON array found in response")
+            return []
+        }
+        
+        let jsonString = String(cleanedText[startIndex...endIndex])
+        print("🔍 [GeminiRepo] Extracted JSON: \(jsonString)")
+        
+        guard let jsonData = jsonString.data(using: .utf8) else {
+            throw AIRepoError.invalidJSONFormat
+        }
+        
+        // Define a temporary struct for decoding
+        struct TempExtractedStock: Codable {
+            let symbol: String
+            let quantity: Double?
+            let totalInvestment: Double?
+            let avgPrice: Double?
+            let confidence: Double
+        }
+        
+        do {
+            let tempStocks = try JSONDecoder().decode([TempExtractedStock].self, from: jsonData)
+            
+            // Convert to ExtractedStock with Float confidence
+            let extractedStocks = tempStocks.map { tempStock in
+                ExtractedStock(
+                    symbol: tempStock.symbol.uppercased(),
+                    quantity: tempStock.quantity,
+                    totalInvestment: tempStock.totalInvestment,
+                    avgPrice: tempStock.avgPrice,
+                    confidence: Float(tempStock.confidence)
+                )
+            }
+            
+            print("✅ [GeminiRepo] Successfully parsed \(extractedStocks.count) stocks")
+            return extractedStocks
+            
+        } catch {
+            print("❌ [GeminiRepo] JSON parsing error: \(error)")
+            throw AIRepoError.invalidJSONFormat
         }
     }
 

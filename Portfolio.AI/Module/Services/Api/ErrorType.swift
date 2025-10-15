@@ -37,6 +37,8 @@ enum ErrorType {
     case fileTypeError
     case sessionError
     case networkError
+    case limitExceed
+    case geminiDataParseError
 
     var message: String {
         switch self {
@@ -69,6 +71,8 @@ enum ErrorType {
         case .fileTypeError: return "File type not supported."
         case .sessionError: return "Session error."
         case .networkError: return "Network error."
+        case .limitExceed: return "Limit exceeded."
+        case .geminiDataParseError: return "Failed to parse Gemini data."
         }
     }
 }
