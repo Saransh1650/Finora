@@ -62,7 +62,7 @@ struct AddStockMethodDialog: View {
                             // Content
                             VStack(alignment: .leading, spacing: 4) {
                                 HStack {
-                                    Text("OCR Scan")
+                                    Text("Screenshot Scan")
                                         .font(.headline)
                                         .foregroundColor(AppColors.textPrimary)
 
@@ -81,7 +81,7 @@ struct AddStockMethodDialog: View {
                                 }
 
                                 Text(
-                                    "Take a photo of your portfolio and let AI extract the stock data"
+                                    "Upload a screenshot of your portfolio and let AI extract the stock data"
                                 )
                                 .font(.caption)
                                 .foregroundColor(AppColors.textSecondary)
