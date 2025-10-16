@@ -57,7 +57,6 @@ class GeminiRepo {
         ocrText: String,
         completion: @escaping (Result<[ExtractedStock], Error>) -> Void
     ) async {
-        print("🤖 [GeminiRepo] Starting intelligent stock extraction from OCR text")
         print("📝 [GeminiRepo] OCR text length: \(ocrText.count) characters")
         
         let prompt = createStockExtractionPrompt(ocrText: ocrText)
