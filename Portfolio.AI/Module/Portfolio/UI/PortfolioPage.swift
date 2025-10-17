@@ -19,7 +19,10 @@ struct PortfolioPage: View {
                 AppColors.pureBackground.ignoresSafeArea()
 
                 if portfolioManager.stocks.isEmpty {
-                    EmptyPortfolioView()
+                    EmptyPortfolioView(
+                        showManualDialog: $showManualDialog,
+                        showOCRDialog: $showOCRDialog
+                    )
                 } else {
                     VStack(spacing: 0) {
                         ScrollView {
@@ -111,6 +114,20 @@ struct PortfolioPage: View {
                             }
                             .padding(.horizontal, 16)
                             .padding(.top, 8)
+
+                            //Info text
+                            HStack {
+                                Image(systemName: "info.circle")
+
+                                Text(
+                                    "Hold any stock to delete or update its data."
+                                )
+                            }
+                            .font(.caption)
+                            .foregroundColor(AppColors.textSecondary)
+                            .padding(.horizontal, 16)
+                            .padding(.top, 16)
+                            .padding(.bottom, 24)
                         }
                         .background(AppColors.pureBackground)
                     }

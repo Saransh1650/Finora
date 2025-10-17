@@ -10,7 +10,9 @@ import SwiftUI
 struct AddStockButton: View {
     @EnvironmentObject var portfolioManager: PortfolioManager
     @State private var showingAddDialog = false
-    
+    @Binding var showManualDialog: Bool
+    @Binding var showOCRDialog: Bool
+
     var body: some View {
         Button(action: {
             showingAddDialog = true
@@ -28,16 +30,30 @@ struct AddStockButton: View {
             .padding(.vertical, 12)
             .background(AppColors.selected)
             .cornerRadius(25)
-            .shadow(color: AppColors.selected.opacity(0.3), radius: 8, x: 0, y: 4)
+            .shadow(
+                color: AppColors.selected.opacity(0.3),
+                radius: 8,
+                x: 0,
+                y: 4
+            )
         }
         .fullScreenCover(isPresented: $showingAddDialog) {
-            AddStockDialog()
-                .background(ClearBackgroundView())
+            AddStockMethodDialog(onMethodSelected: { method in
+                switch method {
+                case .manual:
+                    showManualDialog = true
+                case .ocr:
+                    showOCRDialog = true
+                }
+            })
+            .background(ClearBackgroundView())
         }
     }
 }
 
-
 #Preview {
-    AddStockButton()
+    AddStockButton(
+        showManualDialog: .constant(false),
+        showOCRDialog: .constant(false)
+    )
 }
