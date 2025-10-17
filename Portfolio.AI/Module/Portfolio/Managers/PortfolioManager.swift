@@ -41,45 +41,62 @@ class PortfolioManager: ObservableObject {
     func addStock(_ newStocks: [StockModel]) async {
         print("📊 [PortfolioManager] Adding \(newStocks.count) stock(s)")
 
+        var stocksToAdd: [StockModel] = []
+        var stocksToUpdate: [StockModel] = []
+
         for stock in newStocks {
             if let index = stocks.firstIndex(where: {
                 $0.symbol == stock.symbol
             }) {
-                // Update existing stock
+                stocksToUpdate.append(stock)
                 stocks[index] = stock
-                await PortfolioRepo.updateStock(stock) { result in
-                    switch result {
-                    case .success():
-                        print(
-                            "✅ [PortfolioManager] Stock updated successfully in Supabase."
-                        )
-                    case .failure(let error):
-                        print(
-                            "❌ [PortfolioManager] Failed to update stock in Supabase: \(error)"
-                        )
-                    }
-                }
             } else {
-                // Add new stock
+                stocksToAdd.append(stock)
                 stocks.append(stock)
-                print("Added new stocks")
-                await PortfolioRepo.addStock(newStocks) { result in
-                    switch result {
-                    case .success():
-                        print(
-                            "✅ [PortfolioManager] Stocks saved successfully to Supabase."
-                        )
-                    case .failure(let error):
-                        print(
-                            "❌ [PortfolioManager] Failed to save stocks to Supabase: \(error)"
-                        )
-                    }
-                }
             }
         }
 
+        let finalStocksToAdd = stocksToAdd
+        let finalStocksToUpdate = stocksToUpdate
+
+        if !finalStocksToAdd.isEmpty {
+            await addStocksBatch(finalStocksToAdd)
+        }
+
+        if !finalStocksToUpdate.isEmpty {
+            await updateStocksBatch(finalStocksToUpdate)
+        }
     }
 
+    private func addStocksBatch(_ stocks: [StockModel]) async {
+        await PortfolioRepo.addStock(stocks) { result in
+            switch result {
+            case .success():
+                print(
+                    "✅ [PortfolioManager] \(stocks.count) stocks added successfully"
+                )
+            case .failure(let error):
+                print("❌ [PortfolioManager] Failed to add stocks: \(error)")
+            }
+        }
+    }
+
+    private func updateStocksBatch(_ stocks: [StockModel]) async {
+        // You'll need to implement batch update in PortfolioRepo
+        for stock in stocks {
+            await PortfolioRepo.updateStock(stock) { result in
+                switch result {
+                case .success():
+                    break
+                case .failure(let error):
+                    print(
+                        "❌ [PortfolioManager] Failed to update stock \(stock.symbol): \(error)"
+                    )
+
+                }
+            }
+        }
+    }
     func removeStock(at indexSet: IndexSet) async {
         let idsToRemove = indexSet.map { stocks[$0].id.uuidString }
         stocks.remove(atOffsets: indexSet)

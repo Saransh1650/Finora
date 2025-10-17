@@ -106,10 +106,6 @@ struct OCRStockSelectionDialog: View {
                                 )
                             )
                             .scaleEffect(1.2)
-
-                        Text("Analyzing image...")
-                            .font(.subheadline)
-                            .foregroundColor(AppColors.textSecondary)
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 40)
