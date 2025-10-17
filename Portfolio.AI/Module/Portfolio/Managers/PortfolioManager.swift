@@ -82,7 +82,6 @@ class PortfolioManager: ObservableObject {
     }
 
     private func updateStocksBatch(_ stocks: [StockModel]) async {
-        // You'll need to implement batch update in PortfolioRepo
         for stock in stocks {
             await PortfolioRepo.updateStock(stock) { result in
                 switch result {

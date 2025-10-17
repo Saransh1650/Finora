@@ -114,6 +114,20 @@ struct PortfolioPage: View {
                             }
                             .padding(.horizontal, 16)
                             .padding(.top, 8)
+
+                            //Info text
+                            HStack {
+                                Image(systemName: "info.circle")
+
+                                Text(
+                                    "Hold any stock to delete or update its data."
+                                )
+                            }
+                            .font(.caption)
+                            .foregroundColor(AppColors.textSecondary)
+                            .padding(.horizontal, 16)
+                            .padding(.top, 16)
+                            .padding(.bottom, 24)
                         }
                         .background(AppColors.pureBackground)
                     }
