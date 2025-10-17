@@ -40,29 +40,44 @@ class PortfolioManager: ObservableObject {
 
     func addStock(_ newStocks: [StockModel]) async {
         print("📊 [PortfolioManager] Adding \(newStocks.count) stock(s)")
-        
+
         for stock in newStocks {
             if let index = stocks.firstIndex(where: {
                 $0.symbol == stock.symbol
             }) {
                 // Update existing stock
                 stocks[index] = stock
-                print("📊 [PortfolioManager] Updated existing stock: \(stock.symbol)")
+                await PortfolioRepo.updateStock(stock) { result in
+                    switch result {
+                    case .success():
+                        print(
+                            "✅ [PortfolioManager] Stock updated successfully in Supabase."
+                        )
+                    case .failure(let error):
+                        print(
+                            "❌ [PortfolioManager] Failed to update stock in Supabase: \(error)"
+                        )
+                    }
+                }
             } else {
                 // Add new stock
                 stocks.append(stock)
-                print("📊 [PortfolioManager] Added new stock: \(stock.symbol)")
+                print("Added new stocks")
+                await PortfolioRepo.addStock(newStocks) { result in
+                    switch result {
+                    case .success():
+                        print(
+                            "✅ [PortfolioManager] Stocks saved successfully to Supabase."
+                        )
+                    case .failure(let error):
+                        print(
+                            "❌ [PortfolioManager] Failed to save stocks to Supabase: \(error)"
+                        )
+                    }
+                }
             }
         }
-        
-        await PortfolioRepo.addStock(newStocks) { result in
-            switch result {
-            case .success():
-                print("✅ [PortfolioManager] Stocks saved successfully to Supabase.")
-            case .failure(let error):
-                print("❌ [PortfolioManager] Failed to save stocks to Supabase: \(error)")
-            }
-        }
+
     }
 
     func removeStock(at indexSet: IndexSet) async {

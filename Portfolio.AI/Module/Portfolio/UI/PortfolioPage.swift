@@ -19,7 +19,10 @@ struct PortfolioPage: View {
                 AppColors.pureBackground.ignoresSafeArea()
 
                 if portfolioManager.stocks.isEmpty {
-                    EmptyPortfolioView()
+                    EmptyPortfolioView(
+                        showManualDialog: $showManualDialog,
+                        showOCRDialog: $showOCRDialog
+                    )
                 } else {
                     VStack(spacing: 0) {
                         ScrollView {
