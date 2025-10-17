@@ -41,7 +41,7 @@ struct IntroChatPage: View {
                     .onAppear {
                         isAnimating = true
                     }
-
+                
                 // Content
                 VStack(alignment: .center, spacing: 16) {
                     Text("Chat with Your AI Advisor")

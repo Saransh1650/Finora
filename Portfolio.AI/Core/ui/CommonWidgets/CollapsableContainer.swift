@@ -11,7 +11,7 @@ struct CollapsiblePortfolioHeader: View {
     let stockCount: Int
     let isReady: Bool
     let isExpanded: Bool
-    
+
     var body: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
@@ -19,14 +19,16 @@ struct CollapsiblePortfolioHeader: View {
                     .font(.headline)
                     .fontWeight(.bold)
                     .foregroundColor(AppColors.textPrimary)
-                
-                Text("\(stockCount) holdings \(isReady ? "ready for analysis" : "added")")
-                    .font(.caption)
-                    .foregroundColor(AppColors.textSecondary)
+
+                Text(
+                    "\(stockCount) holdings \(isReady ? "ready for analysis" : "added")"
+                )
+                .font(.caption)
+                .foregroundColor(AppColors.textSecondary)
             }
-            
+
             Spacer()
-            
+
             HStack(spacing: 12) {
                 // Status badge
                 if isReady {
@@ -34,16 +36,18 @@ struct CollapsiblePortfolioHeader: View {
                 } else {
                     StatusBadge.pending("Building")
                 }
-                
+
                 // Expand/collapse chevron
                 Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
                     .font(.caption)
                     .fontWeight(.semibold)
                     .foregroundColor(AppColors.textSecondary)
                     .rotationEffect(.degrees(isExpanded ? 180 : 0))
-                    .animation(.spring(response: 0.4, dampingFraction: 0.8), value: isExpanded)
+                    .animation(
+                        .spring(response: 0.4, dampingFraction: 0.8),
+                        value: isExpanded
+                    )
             }
         }
-        .contentShape(Rectangle())
     }
-    }
+}
