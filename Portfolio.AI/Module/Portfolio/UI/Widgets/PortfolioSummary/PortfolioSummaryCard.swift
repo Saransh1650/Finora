@@ -74,6 +74,7 @@ struct PortfolioSummaryCard: View {
                 .stroke(AppColors.border.opacity(0.5), lineWidth: 1)
         )
         .clipped()
+        .cornerRadius(20)
     }
 
 }

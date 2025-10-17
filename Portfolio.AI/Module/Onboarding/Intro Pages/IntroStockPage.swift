@@ -18,7 +18,7 @@ struct IntroStockPage: View {
 
             VStack(spacing: 30) {
                 Spacer()
-
+                
                 Image(systemName: "chart.line.uptrend.xyaxis")
                     .padding()
                     .font(.system(size: 50))
