@@ -48,6 +48,7 @@ class AuthManager: ObservableObject {
             currentUser = user
             isAuthenticated = true
             errorMessage = nil
+            print(supabaseClient.auth.currentSession?.accessToken ?? "")
         } else {
             errorMessage = failure?.message
         }
@@ -110,23 +111,6 @@ class AuthManager: ObservableObject {
         } else {
             errorMessage = failure?.message
             print("Profile update failed: \(failure?.message ?? "")")
-        }
-        loading = false
-        return failure
-    }
-
-    func deleteAccount() async -> Failure? {
-        loading = true
-        let failure = await AuthRepo.deleteAccount()
-
-        if failure == nil {
-            currentUser = nil
-            isAuthenticated = false
-            errorMessage = nil
-            print("Account deleted successfully")
-        } else {
-            errorMessage = failure?.message
-            print("Account deletion failed: \(failure?.message ?? "")")
         }
         loading = false
         return failure

@@ -130,26 +130,6 @@ class AuthRepo {
         }
     }
 
-    // MARK: - Account Management
-    static func deleteAccount() async -> Failure? {
-        guard let currentUser = currentUser else {
-            return Failure(
-                message: ErrorType.unAuthorized.message,
-                errorType: ErrorType.unAuthorized
-            )
-        }
-
-        do {
-            try await supabase.auth.admin.deleteUser(id: currentUser.id)
-            return nil
-        } catch {
-            return Failure(
-                message: ErrorType.unKnownError.message,
-                errorType: ErrorType.unKnownError
-            )
-        }
-    }
-
     static func updateUserProfile(fullName: String?, avatarUrl: String?) async
         -> (
             User?, Failure?
