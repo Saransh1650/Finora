@@ -9,17 +9,18 @@ import Foundation
 import Supabase
 
 class ChatRepo {
-    static private let supabase = SupabaseManager.shared.client
+    private static let apiClient = Api.shared
+    private static let supabase = SupabaseManager.shared.client
 
     static private var currentUserId: String? {
         supabase.auth.currentUser?.id.uuidString
     }
 
-    /// Fetch all conversations for the current user (optimized with retry logic)
+    /// Fetch all conversations for the current user
     static func fetchConversations(
         pagination: PaginationRequest = PaginationRequest()
     ) async -> (PaginatedResponse<ConversationSummary>?, Failure?) {
-        guard let userId = currentUserId else {
+        guard currentUserId != nil else {
             return (
                 nil,
                 Failure(
@@ -29,152 +30,49 @@ class ChatRepo {
             )
         }
 
-        print(
-            "🟢 ChatRepo Debug: Starting fetchConversations for userId: \(userId)"
+        let (result, error) = await apiClient.sendRequest(
+            path: AppEndpoints.conversation(page: pagination.page, limit: pagination.limit),
+            method: .get
         )
-
-        let maxRetries = 2
-        var retryCount = 0
-
-        while retryCount < maxRetries {
-            do {
-                let offset = (pagination.page - 1) * pagination.limit
-                let countResponse: Int =
-                    try await supabase
-                    .from("chat_conversations")
-                    .select("*", head: true, count: .exact)
-                    .eq("user_id", value: userId)
-                    .eq("is_active", value: true)
-                    .execute()
-                    .count ?? 0
-
-                print(
-                    "🟢 ChatRepo Debug: Total active conversations count: \(countResponse)"
-                )
-                let rawResponse: [[String: AnyJSON]] =
-                    try await supabase
-                    .from("chat_conversations")
-                    .select("*")
-                    .eq("user_id", value: userId)
-                    .eq("is_active", value: true)
-                    .order("updated_at", ascending: false)
-                    .range(from: offset, to: offset + pagination.limit - 1)
-                    .execute()
-                    .value
-
-                print(
-                    "🟢 ChatRepo Debug: Raw response count: \(rawResponse.count)"
-                )
-                let conversations: [ConversationSummary] =
-                    rawResponse.compactMap { row in
-                        guard let idString = row["id"]?.stringValue,
-                            let id = UUID(uuidString: idString),
-                            let userIdString = row["user_id"]?.stringValue
-                        else {
-                            print(
-                                "🔴 ChatRepo Debug: Failed to parse basic fields from row"
-                            )
-                            return nil
-                        }
-
-                        let title =
-                            row["title"]?.stringValue ?? "New Conversation"
-                        let contextTypeString =
-                            row["context_type"]?.stringValue ?? "general"
-                        let contextType =
-                            ContextType(rawValue: contextTypeString) ?? .general
-                        let sessionId =
-                            row["session_id"]?.stringValue ?? UUID().uuidString
-                        let sessionTypeString =
-                            row["session_type"]?.stringValue ?? "chat"
-                        let sessionType =
-                            SessionType(rawValue: sessionTypeString) ?? .chat
-                        let isActive = row["is_active"]?.boolValue ?? true
-
-                        let createdAt =
-                            DateParser.parseDate(from: row["created_at"])
-                            ?? Date()
-                        let updatedAt =
-                            DateParser.parseDate(from: row["updated_at"])
-                            ?? Date()
-
-                        return ConversationSummary(
-                            id: id,
-                            userId: userIdString,
-                            title: title,
-                            contextType: contextType,
-                            sessionContext: SessionContext(),
-                            sessionId: sessionId,
-                            sessionType: sessionType,
-                            isActive: isActive,
-                            createdAt: createdAt,
-                            updatedAt: updatedAt,
-                            messageCount: 0,
-                            lastMessageAt: nil,
-                            lastMessagePreview: ""
-                        )
-                    }
-
-                print(
-                    "🟢 ChatRepo Debug: Successfully converted \(conversations.count) conversations"
-                )
-
-                let totalPages = Int(
-                    ceil(Double(countResponse) / Double(pagination.limit))
-                )
-                let paginationInfo = PaginationInfo(
-                    currentPage: pagination.page,
-                    totalPages: totalPages,
-                    totalItems: countResponse,
-                    itemsPerPage: pagination.limit
-                )
-
-                let paginatedResponse = PaginatedResponse(
-                    data: conversations,
-                    pagination: paginationInfo
-                )
-                return (paginatedResponse, nil)
-
-            } catch {
-                print(
-                    "🔴 ChatRepo Debug: Attempt \(retryCount + 1) failed with error: \(error)"
-                )
-                if shouldRetryError(error) {
-                    print(
-                        "🟡 ChatRepo Debug: Detected retryable error in fetchConversations, retrying..."
-                    )
-
-                    retryCount += 1
-                    if retryCount < maxRetries {
-                        // Brief delay before retry
-                        try? await Task.sleep(nanoseconds: 500_000_000)
-                        continue
-                    }
-                }
-                if let decodingError = error as? DecodingError {
-                    print(
-                        "🔴 ChatRepo Debug: Decoding error details: \(decodingError)"
-                    )
-                }
-                return (
-                    nil,
-                    Failure(
-                        message:
-                            "Error fetching conversations: \(error.localizedDescription)",
-                        errorType: .fetchError
-                    )
-                )
-            }
+        
+        if let error = error {
+            return (nil, error)
         }
-
-        return (
-            nil,
-            Failure(
-                message:
-                    "Failed to fetch conversations after \(maxRetries) attempts",
-                errorType: .fetchError
+        
+        guard let resultDict = result as? [String: Any],
+              let success = resultDict["success"] as? Bool,
+              success == true,
+              let dataArray = resultDict["data"] as? [[String: Any]],
+              let paginationDict = resultDict["pagination"] as? [String: Any] else {
+            return (nil, Failure(message: "Invalid response format", errorType: .parseError))
+        }
+        
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: dataArray)
+            let conversations = try JSONDecoder().decode([ConversationSummary].self, from: jsonData)
+            
+            let paginationInfo = PaginationInfo(
+                currentPage: paginationDict["page"] as? Int ?? pagination.page,
+                totalPages: paginationDict["totalPages"] as? Int ?? 1,
+                totalItems: paginationDict["total"] as? Int ?? conversations.count,
+                itemsPerPage: pagination.limit
             )
-        )
+            
+            let paginatedResponse = PaginatedResponse(
+                data: conversations,
+                pagination: paginationInfo
+            )
+            
+            return (paginatedResponse, nil)
+        } catch {
+            return (
+                nil,
+                Failure(
+                    message: "Error parsing conversations: \(error.localizedDescription)",
+                    errorType: .parseError
+                )
+            )
+        }
     }
 
     /// Fetch a specific conversation by ID with retry logic
@@ -512,7 +410,7 @@ class ChatRepo {
         conversationId: UUID,
         pagination: PaginationRequest = PaginationRequest()
     ) async -> (PaginatedResponse<ChatMessage>?, Failure?) {
-        guard let _ = currentUserId else {
+        guard currentUserId != nil else {
             return (
                 nil,
                 Failure(
