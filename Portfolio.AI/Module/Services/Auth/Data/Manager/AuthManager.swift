@@ -28,6 +28,7 @@ class AuthManager: ObservableObject {
                 currentUser = user
                 isAuthenticated = user != nil
                 loading = false
+                LocalStorage.set(LocalStorageKeys.accessToken, value: supabaseClient.auth.currentSession!.accessToken)
             } else {
                 currentUser = nil
                 isAuthenticated = false
@@ -48,7 +49,8 @@ class AuthManager: ObservableObject {
             currentUser = user
             isAuthenticated = true
             errorMessage = nil
-            print(supabaseClient.auth.currentSession?.accessToken ?? "")
+            let accessToken : String = supabaseClient.auth.currentSession!.accessToken
+            LocalStorage.set(LocalStorageKeys.accessToken, value: accessToken)
         } else {
             errorMessage = failure?.message
         }

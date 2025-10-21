@@ -12,4 +12,5 @@ enum MethodType: String {
     case post = "POST"
     case patch = "PATCH"
     case delete = "DELETE"
+    case put = "PUT"
 }
