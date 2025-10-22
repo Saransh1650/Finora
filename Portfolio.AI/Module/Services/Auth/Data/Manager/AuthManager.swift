@@ -28,7 +28,9 @@ class AuthManager: ObservableObject {
                 currentUser = user
                 isAuthenticated = user != nil
                 loading = false
+                
                 LocalStorage.set(LocalStorageKeys.accessToken, value: supabaseClient.auth.currentSession!.accessToken)
+                print(LocalStorage.get(LocalStorageKeys.accessToken) ?? "No Access Token")
             } else {
                 currentUser = nil
                 isAuthenticated = false
