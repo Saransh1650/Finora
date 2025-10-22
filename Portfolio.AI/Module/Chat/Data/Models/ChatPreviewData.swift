@@ -40,6 +40,74 @@ struct ConversationSummary: Codable, Identifiable {
         case lastMessagePreview = "last_message_preview"
     }
     
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        id = try container.decode(UUID.self, forKey: .id)
+        userId = try container.decode(String.self, forKey: .userId)
+        title = try container.decode(String.self, forKey: .title)
+        
+        // Handle context_type string to enum conversion
+        let contextTypeString = try container.decode(String.self, forKey: .contextType)
+        contextType = ContextType(rawValue: contextTypeString) ?? .general
+        
+        // Handle session_context - backend now ensures it's always an object
+        sessionContext = try container.decode(SessionContext.self, forKey: .sessionContext)
+        
+        sessionId = try container.decode(String.self, forKey: .sessionId)
+        
+        // Handle session_type string to enum conversion
+        let sessionTypeString = try container.decode(String.self, forKey: .sessionType)
+        sessionType = SessionType(rawValue: sessionTypeString) ?? .chat
+        
+        // Handle is_active - backend now sends proper boolean
+        isActive = try container.decode(Bool.self, forKey: .isActive)
+        
+        // Handle date parsing - backend now sends consistent ISO strings
+        let dateFormatter = ISO8601DateFormatter()
+        
+        let createdAtString = try container.decode(String.self, forKey: .createdAt)
+        createdAt = dateFormatter.date(from: createdAtString) ?? Date()
+        
+        let updatedAtString = try container.decode(String.self, forKey: .updatedAt)
+        updatedAt = dateFormatter.date(from: updatedAtString) ?? Date()
+        
+        messageCount = try container.decode(Int.self, forKey: .messageCount)
+        
+        // Handle optional last_message_at
+        if let lastMessageAtString = try? container.decode(String.self, forKey: .lastMessageAt) {
+            lastMessageAt = dateFormatter.date(from: lastMessageAtString)
+        } else {
+            lastMessageAt = nil
+        }
+        
+        lastMessagePreview = try container.decode(String.self, forKey: .lastMessagePreview)
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        
+        try container.encode(id, forKey: .id)
+        try container.encode(userId, forKey: .userId)
+        try container.encode(title, forKey: .title)
+        try container.encode(contextType.rawValue, forKey: .contextType)
+        try container.encode(sessionContext, forKey: .sessionContext)
+        try container.encode(sessionId, forKey: .sessionId)
+        try container.encode(sessionType.rawValue, forKey: .sessionType)
+        try container.encode(isActive, forKey: .isActive)
+        
+        let dateFormatter = ISO8601DateFormatter()
+        try container.encode(dateFormatter.string(from: createdAt), forKey: .createdAt)
+        try container.encode(dateFormatter.string(from: updatedAt), forKey: .updatedAt)
+        try container.encode(messageCount, forKey: .messageCount)
+        
+        if let lastMessageAt = lastMessageAt {
+            try container.encode(dateFormatter.string(from: lastMessageAt), forKey: .lastMessageAt)
+        }
+        
+        try container.encode(lastMessagePreview, forKey: .lastMessagePreview)
+    }
+    
     init(
         id: UUID,
         userId: String,
@@ -253,12 +321,31 @@ struct PaginationInfo: Codable {
     let hasPreviousPage: Bool
     
     enum CodingKeys: String, CodingKey {
-        case currentPage = "current_page"
-        case totalPages = "total_pages"
-        case totalItems = "total_items"
-        case itemsPerPage = "items_per_page"
-        case hasNextPage = "has_next_page"
-        case hasPreviousPage = "has_previous_page"
+        case currentPage = "page"        // Backend sends "page"
+        case totalPages = "totalPages"   // Backend sends "totalPages"
+        case totalItems = "total"        // Backend sends "total"
+        case itemsPerPage = "limit"      // Backend sends "limit"
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        currentPage = try container.decode(Int.self, forKey: .currentPage)
+        totalPages = try container.decode(Int.self, forKey: .totalPages)
+        totalItems = try container.decode(Int.self, forKey: .totalItems)
+        itemsPerPage = try container.decode(Int.self, forKey: .itemsPerPage)
+        
+        // Calculate computed properties
+        hasNextPage = currentPage < totalPages
+        hasPreviousPage = currentPage > 1
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(currentPage, forKey: .currentPage)
+        try container.encode(totalPages, forKey: .totalPages)
+        try container.encode(totalItems, forKey: .totalItems)
+        try container.encode(itemsPerPage, forKey: .itemsPerPage)
     }
     
     init(
