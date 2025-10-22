@@ -45,8 +45,6 @@ class ChatRepo {
                 )
             )
         }
-        
-        print("Data: \(resultDict)")
 
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: dataArray)
