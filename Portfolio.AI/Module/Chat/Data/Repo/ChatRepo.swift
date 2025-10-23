@@ -147,7 +147,7 @@ class ChatRepo {
             "title": request.title ?? "New Conversation",
             "context_type": request.contextType?.rawValue ?? "general",
             "session_type": request.sessionType?.rawValue ?? "chat",
-            "session_context": try? request.initialSessionContext?
+            "session_context": try! request.initialSessionContext?
                 .toDictionary() ?? [:],
         ]
 
@@ -288,7 +288,7 @@ class ChatRepo {
 
             if let error = error {
                 print(
-                    "🔴 ChatRepo Debug: API error updating context: \(error.message)"
+                    "🔴 ChatRepo Debug: API error updating context: \(error.message ?? "")"
                 )
                 return (false, error)
             }
