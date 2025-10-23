@@ -85,12 +85,12 @@ class PortfolioAnalysisRepo {
         guard let resultDict = result as? [String: Any],
               let success = resultDict["success"] as? Bool,
               success == true,
-              let dataDict = resultDict["data"] as? [String: Any] else {
-            return (nil, Failure(message: "Invalid response format", errorType: .parseError))
+              let dataDict = resultDict["data"] as? [String: Any]? else {
+            //return if no portfolio analysis data is found
+            return (nil, nil)
         }
-        
         do {
-            let jsonData = try JSONSerialization.data(withJSONObject: dataDict)
+            let jsonData = try JSONSerialization.data(withJSONObject: dataDict ?? [])
             let analysis = try JSONDecoder().decode(PortfolioAnalysisModel.self, from: jsonData)
             return (analysis, nil)
         } catch {
