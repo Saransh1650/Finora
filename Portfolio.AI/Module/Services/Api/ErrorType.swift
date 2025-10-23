@@ -39,6 +39,7 @@ enum ErrorType {
     case networkError
     case limitExceed
     case geminiDataParseError
+    case parseError
 
     var message: String {
         switch self {
@@ -73,6 +74,7 @@ enum ErrorType {
         case .networkError: return "Network error."
         case .limitExceed: return "Limit exceeded."
         case .geminiDataParseError: return "Failed to parse Gemini data."
+        case .parseError: return "Data parsing error."
         }
     }
 }

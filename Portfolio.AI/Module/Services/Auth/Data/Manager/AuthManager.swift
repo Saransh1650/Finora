@@ -28,6 +28,9 @@ class AuthManager: ObservableObject {
                 currentUser = user
                 isAuthenticated = user != nil
                 loading = false
+                
+                LocalStorage.set(LocalStorageKeys.accessToken, value: supabaseClient.auth.currentSession!.accessToken)
+                print(LocalStorage.get(LocalStorageKeys.accessToken) ?? "No Access Token")
             } else {
                 currentUser = nil
                 isAuthenticated = false
@@ -48,6 +51,8 @@ class AuthManager: ObservableObject {
             currentUser = user
             isAuthenticated = true
             errorMessage = nil
+            let accessToken : String = supabaseClient.auth.currentSession!.accessToken
+            LocalStorage.set(LocalStorageKeys.accessToken, value: accessToken)
         } else {
             errorMessage = failure?.message
         }
@@ -110,23 +115,6 @@ class AuthManager: ObservableObject {
         } else {
             errorMessage = failure?.message
             print("Profile update failed: \(failure?.message ?? "")")
-        }
-        loading = false
-        return failure
-    }
-
-    func deleteAccount() async -> Failure? {
-        loading = true
-        let failure = await AuthRepo.deleteAccount()
-
-        if failure == nil {
-            currentUser = nil
-            isAuthenticated = false
-            errorMessage = nil
-            print("Account deleted successfully")
-        } else {
-            errorMessage = failure?.message
-            print("Account deletion failed: \(failure?.message ?? "")")
         }
         loading = false
         return failure
