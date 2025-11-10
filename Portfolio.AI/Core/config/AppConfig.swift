@@ -44,4 +44,8 @@ class AppConfig {
     static var geminiBaseUrl: String {
         return "https://generativelanguage.googleapis.com/v1beta"
     }
+
+    static var backendUrl: String {
+        return secrets()["BACKEND_URL"] as! String
+    }
 }

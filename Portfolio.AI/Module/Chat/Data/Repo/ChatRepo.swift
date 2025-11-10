@@ -3,400 +3,197 @@
 //  Portfolio.AI
 //
 //  Created by Saransh Singhal on 9/20/25.
+//  Updated to use backend API on 10/21/25
 //
 
 import Foundation
-import Supabase
 
 class ChatRepo {
-    static private let supabase = SupabaseManager.shared.client
+    private static let apiClient = Api.shared
 
-    static private var currentUserId: String? {
-        supabase.auth.currentUser?.id.uuidString
-    }
+    // MARK: - Conversation Management
 
-    /// Fetch all conversations for the current user (optimized with retry logic)
+    /// Fetch all conversations for the current user
     static func fetchConversations(
         pagination: PaginationRequest = PaginationRequest()
     ) async -> (PaginatedResponse<ConversationSummary>?, Failure?) {
-        guard let userId = currentUserId else {
+
+        let (result, error) = await apiClient.sendRequest(
+            path: AppEndpoints.conversations,
+            method: .get,
+            queryParameters: [
+                "page": pagination.page,
+                "limit": pagination.limit,
+            ]
+        )
+
+        if let error = error {
+            return (nil, error)
+        }
+
+        guard let resultDict = result as? [String: Any],
+            let success = resultDict["success"] as? Bool,
+            success == true,
+            let dataArray = resultDict["data"] as? [[String: Any]],
+            let paginationDict = resultDict["pagination"] as? [String: Any]
+        else {
             return (
                 nil,
                 Failure(
-                    message: "User not authenticated",
-                    errorType: .fetchError
-                )
-            )
-        }
-
-        print(
-            "🟢 ChatRepo Debug: Starting fetchConversations for userId: \(userId)"
-        )
-
-        let maxRetries = 2
-        var retryCount = 0
-
-        while retryCount < maxRetries {
-            do {
-                let offset = (pagination.page - 1) * pagination.limit
-                let countResponse: Int =
-                    try await supabase
-                    .from("chat_conversations")
-                    .select("*", head: true, count: .exact)
-                    .eq("user_id", value: userId)
-                    .eq("is_active", value: true)
-                    .execute()
-                    .count ?? 0
-
-                print(
-                    "🟢 ChatRepo Debug: Total active conversations count: \(countResponse)"
-                )
-                let rawResponse: [[String: AnyJSON]] =
-                    try await supabase
-                    .from("chat_conversations")
-                    .select("*")
-                    .eq("user_id", value: userId)
-                    .eq("is_active", value: true)
-                    .order("updated_at", ascending: false)
-                    .range(from: offset, to: offset + pagination.limit - 1)
-                    .execute()
-                    .value
-
-                print(
-                    "🟢 ChatRepo Debug: Raw response count: \(rawResponse.count)"
-                )
-                let conversations: [ConversationSummary] =
-                    rawResponse.compactMap { row in
-                        guard let idString = row["id"]?.stringValue,
-                            let id = UUID(uuidString: idString),
-                            let userIdString = row["user_id"]?.stringValue
-                        else {
-                            print(
-                                "🔴 ChatRepo Debug: Failed to parse basic fields from row"
-                            )
-                            return nil
-                        }
-
-                        let title =
-                            row["title"]?.stringValue ?? "New Conversation"
-                        let contextTypeString =
-                            row["context_type"]?.stringValue ?? "general"
-                        let contextType =
-                            ContextType(rawValue: contextTypeString) ?? .general
-                        let sessionId =
-                            row["session_id"]?.stringValue ?? UUID().uuidString
-                        let sessionTypeString =
-                            row["session_type"]?.stringValue ?? "chat"
-                        let sessionType =
-                            SessionType(rawValue: sessionTypeString) ?? .chat
-                        let isActive = row["is_active"]?.boolValue ?? true
-
-                        let createdAt =
-                            DateParser.parseDate(from: row["created_at"])
-                            ?? Date()
-                        let updatedAt =
-                            DateParser.parseDate(from: row["updated_at"])
-                            ?? Date()
-
-                        return ConversationSummary(
-                            id: id,
-                            userId: userIdString,
-                            title: title,
-                            contextType: contextType,
-                            sessionContext: SessionContext(),
-                            sessionId: sessionId,
-                            sessionType: sessionType,
-                            isActive: isActive,
-                            createdAt: createdAt,
-                            updatedAt: updatedAt,
-                            messageCount: 0,
-                            lastMessageAt: nil,
-                            lastMessagePreview: ""
-                        )
-                    }
-
-                print(
-                    "🟢 ChatRepo Debug: Successfully converted \(conversations.count) conversations"
-                )
-
-                let totalPages = Int(
-                    ceil(Double(countResponse) / Double(pagination.limit))
-                )
-                let paginationInfo = PaginationInfo(
-                    currentPage: pagination.page,
-                    totalPages: totalPages,
-                    totalItems: countResponse,
-                    itemsPerPage: pagination.limit
-                )
-
-                let paginatedResponse = PaginatedResponse(
-                    data: conversations,
-                    pagination: paginationInfo
-                )
-                return (paginatedResponse, nil)
-
-            } catch {
-                print(
-                    "🔴 ChatRepo Debug: Attempt \(retryCount + 1) failed with error: \(error)"
-                )
-                if shouldRetryError(error) {
-                    print(
-                        "🟡 ChatRepo Debug: Detected retryable error in fetchConversations, retrying..."
-                    )
-
-                    retryCount += 1
-                    if retryCount < maxRetries {
-                        // Brief delay before retry
-                        try? await Task.sleep(nanoseconds: 500_000_000)
-                        continue
-                    }
-                }
-                if let decodingError = error as? DecodingError {
-                    print(
-                        "🔴 ChatRepo Debug: Decoding error details: \(decodingError)"
-                    )
-                }
-                return (
-                    nil,
-                    Failure(
-                        message:
-                            "Error fetching conversations: \(error.localizedDescription)",
-                        errorType: .fetchError
-                    )
-                )
-            }
-        }
-
-        return (
-            nil,
-            Failure(
-                message:
-                    "Failed to fetch conversations after \(maxRetries) attempts",
-                errorType: .fetchError
-            )
-        )
-    }
-
-    /// Fetch a specific conversation by ID with retry logic
-    static func fetchConversation(id: UUID) async -> (
-        ChatConversation?, Failure?
-    ) {
-        guard let userId = currentUserId else {
-            return (
-                nil,
-                Failure(
-                    message: "User not authenticated",
-                    errorType: .fetchError
-                )
-            )
-        }
-
-        print("🟢 ChatRepo Debug: Fetching conversation with ID: \(id)")
-
-        let maxRetries = 3
-        var retryCount = 0
-
-        while retryCount < maxRetries {
-            do {
-                let rawResponse: [[String: AnyJSON]] =
-                    try await supabase
-                    .from("chat_conversations")
-                    .select("*")
-                    .eq("id", value: id.uuidString)
-                    .eq("user_id", value: userId)
-                    .limit(1)
-                    .execute()
-                    .value
-
-                print(
-                    "🟢 ChatRepo Debug: Raw conversation response count: \(rawResponse.count)"
-                )
-
-                guard let conversationData = rawResponse.first else {
-                    print(
-                        "🔴 ChatRepo Debug: No conversation found with ID: \(id)"
-                    )
-                    return (
-                        nil,
-                        Failure(
-                            message: "Conversation not found",
-                            errorType: .fetchError
-                        )
-                    )
-                }
-
-                print(
-                    "🟢 ChatRepo Debug: Found conversation data keys: \(conversationData.keys)"
-                )
-
-                // Manually construct ChatConversation with better error handling
-                guard let idString = conversationData["id"]?.stringValue,
-                    let conversationId = UUID(uuidString: idString)
-                else {
-                    print(
-                        "🔴 ChatRepo Debug: Failed to parse ID from: \(conversationData["id"] ?? "nil")"
-                    )
-                    return (
-                        nil,
-                        Failure(
-                            message: "Invalid conversation ID",
-                            errorType: .fetchError
-                        )
-                    )
-                }
-
-                guard
-                    let userIdString = conversationData["user_id"]?.stringValue
-                else {
-                    print("🔴 ChatRepo Debug: Failed to parse user_id")
-                    return (
-                        nil,
-                        Failure(
-                            message: "Invalid user ID",
-                            errorType: .fetchError
-                        )
-                    )
-                }
-
-                let title =
-                    conversationData["title"]?.stringValue ?? "New Conversation"
-
-                let contextTypeString =
-                    conversationData["context_type"]?.stringValue ?? "general"
-                let contextType =
-                    ContextType(rawValue: contextTypeString) ?? .general
-
-                _ =
-                    conversationData["session_id"]?.stringValue
-                    ?? UUID().uuidString
-
-                let sessionTypeString =
-                    conversationData["session_type"]?.stringValue ?? "chat"
-                let sessionType =
-                    SessionType(rawValue: sessionTypeString) ?? .chat
-
-                let isActive = conversationData["is_active"]?.boolValue ?? true
-
-                // Simplified date parsing
-                let createdAt =
-                    DateParser.parseDate(from: conversationData["created_at"])
-                    ?? Date()
-                let updatedAt =
-                    DateParser.parseDate(from: conversationData["updated_at"])
-                    ?? Date()
-
-                let conversation = ChatConversation(
-                    id: conversationId,
-                    userId: userIdString,
-                    title: title,
-                    contextType: contextType,
-                    sessionContext: SessionContext(),
-                    sessionType: sessionType,
-                    isActive: isActive,
-                    createdAt: createdAt,
-                    updatedAt: updatedAt
-                )
-
-                print(
-                    "🟢 ChatRepo Debug: Successfully created ChatConversation object"
-                )
-                return (conversation, nil)
-
-            } catch {
-                print(
-                    "🔴 ChatRepo Debug: Attempt \(retryCount + 1) failed with error: \(error)"
-                )
-
-                // Check if it's a retryable error (including "Message too long")
-                if shouldRetryError(error) {
-                    print(
-                        "🟡 ChatRepo Debug: Detected retryable error in fetchConversation, retrying with delay..."
-                    )
-
-                    retryCount += 1
-                    if retryCount < maxRetries {
-                        // Wait before retrying (exponential backoff)
-                        let delay = Double(retryCount) * 0.5
-                        try? await Task.sleep(
-                            nanoseconds: UInt64(delay * 1_000_000_000)
-                        )
-                        continue
-                    }
-                } else {
-                    print(
-                        "🔴 ChatRepo Debug: Non-retryable error, failing immediately"
-                    )
-                }
-
-                // For other errors or max retries reached
-                return (
-                    nil,
-                    Failure(
-                        message:
-                            "Error fetching conversation: \(error.localizedDescription)",
-                        errorType: .fetchError
-                    )
-                )
-            }
-        }
-
-        return (
-            nil,
-            Failure(
-                message:
-                    "Failed to fetch conversation after \(maxRetries) attempts",
-                errorType: .fetchError
-            )
-        )
-    }
-
-    /// Create a new conversation using the SQL function
-    static func createConversation(
-        request: CreateConversationRequest
-    ) async -> (ChatConversation?, Failure?) {
-        guard let userId = currentUserId else {
-            return (
-                nil,
-                Failure(
-                    message: "User not authenticated",
-                    errorType: .authError
+                    message: "Invalid response format",
+                    errorType: .parseError
                 )
             )
         }
 
         do {
-            let encoder = JSONEncoder()
-            let initialSessionContextData = try encoder.encode(
-                request.initialSessionContext ?? SessionContext()
+            let jsonData = try JSONSerialization.data(withJSONObject: dataArray)
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            let conversations = try decoder.decode(
+                [ConversationSummary].self,
+                from: jsonData
             )
-            let initialSessionContextString =
-                String(data: initialSessionContextData, encoding: .utf8) ?? "{}"
 
-            let parameters: [String: String] = [
-                "p_user_id": userId,
-                "p_title": request.title ?? "New Conversation",
-                "p_context_type": request.contextType?.rawValue ?? "general",
-                "p_session_type": request.sessionType?.rawValue ?? "chat",
-                "p_initial_session_context": initialSessionContextString,
-            ]
-
-            let response: UUID = try await supabase.rpc(
-                "create_new_chat_session",
-                params: parameters
+            let paginationInfo = PaginationInfo(
+                currentPage: paginationDict["page"] as? Int ?? pagination.page,
+                totalPages: paginationDict["totalPages"] as? Int ?? 1,
+                totalItems: paginationDict["total"] as? Int
+                    ?? conversations.count,
+                itemsPerPage: pagination.limit
             )
-            .execute()
-            .value
 
-            // Fetch the created conversation
-            return await fetchConversation(id: response)
+            let paginatedResponse = PaginatedResponse(
+                data: conversations,
+                pagination: paginationInfo
+            )
 
+            return (paginatedResponse, nil)
         } catch {
             return (
                 nil,
                 Failure(
                     message:
-                        "Error creating conversation: \(error.localizedDescription)",
-                    errorType: .insertError
+                        "Error parsing conversations: \(error.localizedDescription)",
+                    errorType: .parseError
+                )
+            )
+        }
+    }
+
+    /// Fetch a specific conversation by ID
+    static func fetchConversation(id: UUID) async -> (
+        ChatConversation?, Failure?
+    ) {
+        print("🟢 ChatRepo Debug: Fetching conversation with ID: \(id)")
+
+        let (result, error) = await apiClient.sendRequest(
+            path: AppEndpoints.conversationById(id: id.uuidString),
+            method: .get
+        )
+        print(
+            "result: \(String(describing: result)), error: \(String(describing: error))"
+        )
+        if let error = error {
+            return (nil, error)
+        }
+
+        guard let resultDict = result as? [String: Any],
+            let success = resultDict["success"] as? Bool,
+            success == true,
+            let conversationData = resultDict["data"] as? [String: Any]
+        else {
+            return (
+                nil,
+                Failure(
+                    message: "Invalid response format",
+                    errorType: .parseError
+                )
+            )
+        }
+
+        do {
+            let jsonData = try JSONSerialization.data(
+                withJSONObject: conversationData
+            )
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            let conversation = try decoder.decode(
+                ChatConversation.self,
+                from: jsonData
+            )
+
+            print("🟢 ChatRepo Debug: Successfully fetched conversation")
+            return (conversation, nil)
+        } catch {
+            print("🔴 ChatRepo Debug: Error parsing conversation: \(error)")
+            return (
+                nil,
+                Failure(
+                    message:
+                        "Error parsing conversation: \(error.localizedDescription)",
+                    errorType: .parseError
+                )
+            )
+        }
+    }
+
+    /// Create a new conversation
+    static func createConversation(
+        request: CreateConversationRequest
+    ) async -> (ChatConversation?, Failure?) {
+
+        let requestBody: [String: Any] = [
+            "title": request.title ?? "New Conversation",
+            "context_type": request.contextType?.rawValue ?? "general",
+            "session_type": request.sessionType?.rawValue ?? "chat",
+            "session_context": try! request.initialSessionContext?
+                .toDictionary() ?? [:],
+        ]
+
+        let (result, error) = await apiClient.sendRequest(
+            path: AppEndpoints.conversations,
+            method: .post,
+            body: requestBody
+        )
+
+        if let error = error {
+            return (nil, error)
+        }
+
+        guard let resultDict = result as? [String: Any],
+            let success = resultDict["success"] as? Bool,
+            success == true,
+            let conversationData = resultDict["data"] as? [String: Any]
+        else {
+            return (
+                nil,
+                Failure(
+                    message: "Invalid response format",
+                    errorType: .parseError
+                )
+            )
+        }
+
+        do {
+            let jsonData = try JSONSerialization.data(
+                withJSONObject: conversationData
+            )
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            let conversation = try decoder.decode(
+                ChatConversation.self,
+                from: jsonData
+            )
+
+            return (conversation, nil)
+        } catch {
+            return (
+                nil,
+                Failure(
+                    message:
+                        "Error parsing created conversation: \(error.localizedDescription)",
+                    errorType: .parseError
                 )
             )
         }
@@ -408,85 +205,121 @@ class ChatRepo {
         title: String? = nil,
         isActive: Bool? = nil
     ) async -> (ChatConversation?, Failure?) {
-        guard let userId = currentUserId else {
+
+        var requestBody: [String: Any] = [:]
+        if let title = title {
+            requestBody["title"] = title
+        }
+        if let isActive = isActive {
+            requestBody["is_active"] = isActive
+        }
+
+        let (result, error) = await apiClient.sendRequest(
+            path: AppEndpoints.conversationById(id: id.uuidString),
+            method: .put,
+            body: requestBody
+        )
+
+        if let error = error {
+            return (nil, error)
+        }
+
+        guard let resultDict = result as? [String: Any],
+            let success = resultDict["success"] as? Bool,
+            success == true,
+            let conversationData = resultDict["data"] as? [String: Any]
+        else {
             return (
                 nil,
                 Failure(
-                    message: "User not authenticated",
-                    errorType: .authError
+                    message: "Invalid response format",
+                    errorType: .parseError
                 )
             )
         }
 
         do {
-            // Create a struct for the update to ensure proper encoding
-            struct ConversationUpdate: Encodable {
-                let title: String?
-                let is_active: Bool?
+            let jsonData = try JSONSerialization.data(
+                withJSONObject: conversationData
+            )
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            let conversation = try decoder.decode(
+                ChatConversation.self,
+                from: jsonData
+            )
 
-                init(title: String?, isActive: Bool?) {
-                    self.title = title
-                    self.is_active = isActive
-                }
-            }
-
-            let update = ConversationUpdate(title: title, isActive: isActive)
-
-            let response: [ChatConversation] =
-                try await supabase
-                .from("chat_conversations")
-                .update(update)
-                .eq("id", value: id.uuidString)
-                .eq("user_id", value: userId)
-                .select()
-                .execute()
-                .value
-
-            return (response.first, nil)
-
+            return (conversation, nil)
         } catch {
             return (
                 nil,
                 Failure(
                     message:
-                        "Error updating conversation: \(error.localizedDescription)",
-                    errorType: .updateError
+                        "Error parsing updated conversation: \(error.localizedDescription)",
+                    errorType: .parseError
                 )
             )
         }
     }
 
-    /// Update session context using the SQL function
+    /// Update session context
     static func updateSessionContext(
         conversationId: UUID,
         sessionContext: SessionContext
     ) async -> (Bool, Failure?) {
-        do {
-            let encoder = JSONEncoder()
-            let contextData = try encoder.encode(sessionContext)
-            let contextString =
-                String(data: contextData, encoding: .utf8) ?? "{}"
 
-            let parameters: [String: String] = [
-                "p_conversation_id": conversationId.uuidString,
-                "p_context_updates": contextString,
+        do {
+            let contextDict = try sessionContext.toDictionary()
+            print(
+                "🟢 ChatRepo Debug: Updating session context with data: \(contextDict)"
+            )
+
+            let requestBody: [String: Any] = [
+                "context_updates": contextDict
             ]
 
-            let response: Bool =
-                try await supabase
-                .rpc("update_session_context", params: parameters)
-                .execute()
-                .value
+            let (result, error) = await apiClient.sendRequest(
+                path: AppEndpoints.conversationContext(
+                    id: conversationId.uuidString
+                ),
+                method: .put,
+                body: requestBody
+            )
 
-            return (response, nil)
+            if let error = error {
+                print(
+                    "🔴 ChatRepo Debug: API error updating context: \(error.message ?? "")"
+                )
+                return (false, error)
+            }
 
+            guard let resultDict = result as? [String: Any],
+                let success = resultDict["success"] as? Bool
+            else {
+                print(
+                    "🔴 ChatRepo Debug: Invalid response format: \(String(describing: result))"
+                )
+                return (
+                    false,
+                    Failure(
+                        message: "Invalid response format",
+                        errorType: .parseError
+                    )
+                )
+            }
+
+            print(
+                "🟢 ChatRepo Debug: Session context update success: \(success)"
+            )
+            return (success, nil)
         } catch {
+            print("🔴 ChatRepo Debug: Error encoding session context: \(error)")
             return (
                 false,
                 Failure(
                     message:
-                        "Error updating session context: \(error.localizedDescription)",
-                    errorType: .updateError
+                        "Error encoding session context: \(error.localizedDescription)",
+                    errorType: .parseError
                 )
             )
         }
@@ -494,216 +327,155 @@ class ChatRepo {
 
     /// Delete a conversation (soft delete by setting is_active to false)
     static func deleteConversation(id: UUID) async -> (Bool, Failure?) {
-        return await updateConversation(id: id, isActive: false).0 != nil
-            ? (true, nil)
-            : (
-                false,
-                Failure(
-                    message: "Failed to delete conversation",
-                    errorType: .deleteError
-                )
-            )
+        let (conversation, error) = await updateConversation(
+            id: id,
+            isActive: false
+        )
+        if let error = error {
+            return (false, error)
+        }
+        return (conversation != nil, nil)
     }
 
     // MARK: - Message Management
 
-    /// Fetch messages for a conversation with retry logic
+    /// Fetch messages for a conversation
     static func fetchMessages(
         conversationId: UUID,
         pagination: PaginationRequest = PaginationRequest()
     ) async -> (PaginatedResponse<ChatMessage>?, Failure?) {
-        guard let _ = currentUserId else {
-            return (
-                nil,
-                Failure(
-                    message: "User not authenticated",
-                    errorType: .fetchError
-                )
-            )
-        }
 
         print(
             "🟢 ChatRepo Debug: Fetching messages for conversation: \(conversationId)"
         )
 
-        let maxRetries = 3
-        var retryCount = 0
+        let (result, error) = await apiClient.sendRequest(
+            path: "/conversations/\(conversationId.uuidString)/messages",
+            method: .get,
+            queryParameters: [
+                "page": pagination.page,
+                "limit": pagination.limit,
+            ]
+        )
 
-        while retryCount < maxRetries {
-            do {
-                let offset = (pagination.page - 1) * pagination.limit
-
-                // Get total count with retry logic
-                let countResponse: Int =
-                    try await supabase
-                    .from("chat_messages")
-                    .select("*", head: true, count: .exact)
-                    .eq("conversation_id", value: conversationId.uuidString)
-                    .execute()
-                    .count ?? 0
-
-                print(
-                    "🟢 ChatRepo Debug: Total messages count: \(countResponse)"
-                )
-
-                // Get paginated messages - simplified approach
-                let response: [ChatMessage] =
-                    try await supabase
-                    .from("chat_messages")
-                    .select("*")  // Using * instead of select() to reduce URL length
-                    .eq("conversation_id", value: conversationId.uuidString)
-                    .order("created_at", ascending: true)
-                    .range(from: offset, to: offset + pagination.limit - 1)
-                    .execute()
-                    .value
-
-                print(
-                    "🟢 ChatRepo Debug: Successfully fetched \(response.count) messages"
-                )
-
-                let totalPages = Int(
-                    ceil(Double(countResponse) / Double(pagination.limit))
-                )
-                let paginationInfo = PaginationInfo(
-                    currentPage: pagination.page,
-                    totalPages: totalPages,
-                    totalItems: countResponse,
-                    itemsPerPage: pagination.limit
-                )
-
-                let paginatedResponse = PaginatedResponse(
-                    data: response,
-                    pagination: paginationInfo
-                )
-                return (paginatedResponse, nil)
-
-            } catch {
-                print(
-                    "🔴 ChatRepo Debug: Messages fetch attempt \(retryCount + 1) failed with error: \(error)"
-                )
-
-                // Handle retryable errors (including "Message too long")
-                if shouldRetryError(error) {
-                    print(
-                        "🟡 ChatRepo Debug: Detected retryable error in fetchMessages, retrying..."
-                    )
-
-                    retryCount += 1
-                    if retryCount < maxRetries {
-                        // Brief delay before retry with exponential backoff
-                        let delay = Double(retryCount) * 0.3
-                        try? await Task.sleep(
-                            nanoseconds: UInt64(delay * 1_000_000_000)
-                        )
-                        continue
-                    }
-                }
-
-                // For other errors or max retries reached
-                return (
-                    nil,
-                    Failure(
-                        message:
-                            "Error fetching messages: \(error.localizedDescription)",
-                        errorType: .fetchError
-                    )
-                )
-            }
+        if let error = error {
+            return (nil, error)
         }
 
-        return (
-            nil,
-            Failure(
-                message:
-                    "Failed to fetch messages after \(maxRetries) attempts",
-                errorType: .fetchError
+        guard let resultDict = result as? [String: Any],
+            let success = resultDict["success"] as? Bool,
+            success == true,
+            let dataArray = resultDict["data"] as? [[String: Any]],
+            let paginationDict = resultDict["pagination"] as? [String: Any]
+        else {
+            return (
+                nil,
+                Failure(
+                    message: "Invalid response format",
+                    errorType: .parseError
+                )
             )
-        )
+        }
+
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: dataArray)
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            let messages = try decoder.decode(
+                [ChatMessage].self,
+                from: jsonData
+            )
+
+            let paginationInfo = PaginationInfo(
+                currentPage: paginationDict["page"] as? Int ?? pagination.page,
+                totalPages: paginationDict["totalPages"] as? Int ?? 1,
+                totalItems: paginationDict["total"] as? Int ?? messages.count,
+                itemsPerPage: pagination.limit
+            )
+
+            let paginatedResponse = PaginatedResponse(
+                data: messages,
+                pagination: paginationInfo
+            )
+
+            return (paginatedResponse, nil)
+        } catch {
+            return (
+                nil,
+                Failure(
+                    message:
+                        "Error parsing messages: \(error.localizedDescription)",
+                    errorType: .parseError
+                )
+            )
+        }
     }
 
-    /// Send a new message with retry logic
+    /// Send a new message
     static func sendMessage(
         conversationId: UUID,
         content: String,
         role: MessageRole = .user,
         metadata: MessageMetadata? = nil
     ) async -> (ChatMessage?, Failure?) {
-        guard let userId = currentUserId else {
-            return (
-                nil,
-                Failure(
-                    message: "User not authenticated",
-                    errorType: .authError
-                )
-            )
-        }
 
         print(
             "🟢 ChatRepo Debug: Sending message to conversation: \(conversationId)"
         )
 
-        let maxRetries = 2
-        var retryCount = 0
+        var requestBody: [String: Any] = [
+            "conversation_id": conversationId.uuidString,
+            "role": role.rawValue,
+            "content": content,
+        ]
 
-        while retryCount < maxRetries {
-            do {
-                let message = ChatMessage(
-                    conversationId: conversationId,
-                    userId: userId,
-                    role: role,
-                    content: content,
-                    metadata: metadata
-                )
-
-                let response: [ChatMessage] =
-                    try await supabase
-                    .from("chat_messages")
-                    .insert(message)
-                    .select("*")
-                    .execute()
-                    .value
-
-                print("🟢 ChatRepo Debug: Successfully sent message")
-                return (response.first, nil)
-
-            } catch {
-                print(
-                    "🔴 ChatRepo Debug: Send message attempt \(retryCount + 1) failed: \(error)"
-                )
-
-                if shouldRetryError(error) {
-                    print(
-                        "🟡 ChatRepo Debug: Detected retryable error in sendMessage, retrying..."
-                    )
-
-                    retryCount += 1
-                    if retryCount < maxRetries {
-                        let delay = Double(retryCount) * 0.3
-                        try? await Task.sleep(
-                            nanoseconds: UInt64(delay * 1_000_000_000)
-                        )
-                        continue
-                    }
-                }
-
-                return (
-                    nil,
-                    Failure(
-                        message:
-                            "Error sending message: \(error.localizedDescription)",
-                        errorType: .insertError
-                    )
-                )
-            }
+        if let metadata = metadata {
+            requestBody["metadata"] = try? metadata.toDictionary()
         }
 
-        return (
-            nil,
-            Failure(
-                message: "Failed to send message after \(maxRetries) attempts",
-                errorType: .insertError
-            )
+        let (result, error) = await apiClient.sendRequest(
+            path: AppEndpoints.messages,
+            method: .post,
+            body: requestBody
         )
+
+        if let error = error {
+            return (nil, error)
+        }
+
+        guard let resultDict = result as? [String: Any],
+            let success = resultDict["success"] as? Bool,
+            success == true,
+            let messageData = resultDict["data"] as? [String: Any]
+        else {
+            return (
+                nil,
+                Failure(
+                    message: "Invalid response format",
+                    errorType: .parseError
+                )
+            )
+        }
+
+        do {
+            let jsonData = try JSONSerialization.data(
+                withJSONObject: messageData
+            )
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            let message = try decoder.decode(ChatMessage.self, from: jsonData)
+
+            return (message, nil)
+        } catch {
+            return (
+                nil,
+                Failure(
+                    message:
+                        "Error parsing sent message: \(error.localizedDescription)",
+                    errorType: .parseError
+                )
+            )
+        }
     }
 
     /// Update message content or metadata
@@ -714,43 +486,61 @@ class ChatRepo {
         tokensUsed: Int? = nil,
         processingTimeMs: Int? = nil
     ) async -> (ChatMessage?, Failure?) {
-        guard let userId = currentUserId else {
+
+        var requestBody: [String: Any] = [:]
+        if let content = content {
+            requestBody["content"] = content
+        }
+        if let metadata = metadata {
+            requestBody["metadata"] = try? metadata.toDictionary()
+        }
+        if let tokensUsed = tokensUsed {
+            requestBody["tokens_used"] = tokensUsed
+        }
+        if let processingTimeMs = processingTimeMs {
+            requestBody["processing_time_ms"] = processingTimeMs
+        }
+
+        let (result, error) = await apiClient.sendRequest(
+            path: AppEndpoints.messageById(id: id.uuidString),
+            method: .put,
+            body: requestBody
+        )
+
+        if let error = error {
+            return (nil, error)
+        }
+
+        guard let resultDict = result as? [String: Any],
+            let success = resultDict["success"] as? Bool,
+            success == true,
+            let messageData = resultDict["data"] as? [String: Any]
+        else {
             return (
                 nil,
                 Failure(
-                    message: "User not authenticated",
-                    errorType: .authError
+                    message: "Invalid response format",
+                    errorType: .parseError
                 )
             )
         }
 
         do {
-            let update = MessageUpdate(
-                content: content,
-                metadata: metadata,
-                tokensUsed: tokensUsed,
-                processingTimeMs: processingTimeMs
+            let jsonData = try JSONSerialization.data(
+                withJSONObject: messageData
             )
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            let message = try decoder.decode(ChatMessage.self, from: jsonData)
 
-            let response: [ChatMessage] =
-                try await supabase
-                .from("chat_messages")
-                .update(update)
-                .eq("id", value: id.uuidString)
-                .eq("user_id", value: userId)
-                .select()
-                .execute()
-                .value
-
-            return (response.first, nil)
-
+            return (message, nil)
         } catch {
             return (
                 nil,
                 Failure(
                     message:
-                        "Error updating message: \(error.localizedDescription)",
-                    errorType: .updateError
+                        "Error parsing updated message: \(error.localizedDescription)",
+                    errorType: .parseError
                 )
             )
         }
@@ -758,61 +548,59 @@ class ChatRepo {
 
     /// Delete a message
     static func deleteMessage(id: UUID) async -> (Bool, Failure?) {
-        guard let userId = currentUserId else {
+        let (result, error) = await apiClient.sendRequest(
+            path: AppEndpoints.messageById(id: id.uuidString),
+            method: .delete
+        )
+
+        if let error = error {
+            return (false, error)
+        }
+
+        guard let resultDict = result as? [String: Any],
+            let success = resultDict["success"] as? Bool
+        else {
             return (
                 false,
                 Failure(
-                    message: "User not authenticated",
-                    errorType: .authError
+                    message: "Invalid response format",
+                    errorType: .parseError
                 )
             )
         }
 
-        do {
-            try await supabase
-                .from("chat_messages")
-                .delete()
-                .eq("id", value: id.uuidString)
-                .eq("user_id", value: userId)
-                .execute()
-
-            return (true, nil)
-
-        } catch {
-            return (
-                false,
-                Failure(
-                    message:
-                        "Error deleting message: \(error.localizedDescription)",
-                    errorType: .deleteError
-                )
-            )
-        }
+        return (success, nil)
     }
 
+    /// Delete all chats for the current user
     static func deleteAllChat() async -> Failure? {
-        guard let userId = currentUserId else {
-            return Failure(
-                message: "User not authenticated",
-                errorType: .authError
-            )
-        }
-
-        do {
-            try await supabase
-                .from("chat_conversations")
-                .delete()
-                .eq("user_id", value: userId)
-                .execute()
-            return nil
-        } catch {
-            return Failure(
-                message:
-                    "Error deleting all chat: \(error.localizedDescription)",
-                errorType: .deleteError
-            )
-        }
-
+        // This would need to be implemented on the backend as a bulk delete endpoint
+        // For now, we'll return an error indicating this is not implemented
+        return Failure(
+            message: "Delete all chats not implemented via API",
+            errorType: .unKnownError
+        )
     }
+}
 
+// MARK: - Helper Extensions
+
+extension SessionContext {
+    func toDictionary() throws -> [String: Any] {
+        let encoder = JSONEncoder()
+        let data = try encoder.encode(self)
+        let dict =
+            try JSONSerialization.jsonObject(with: data) as? [String: Any]
+        return dict ?? [:]
+    }
+}
+
+extension MessageMetadata {
+    func toDictionary() throws -> [String: Any] {
+        let encoder = JSONEncoder()
+        let data = try encoder.encode(self)
+        let dict =
+            try JSONSerialization.jsonObject(with: data) as? [String: Any]
+        return dict ?? [:]
+    }
 }
