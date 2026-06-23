@@ -26,6 +26,19 @@ class ChatManager: ObservableObject {
     @Published var isSendingMessage: Bool = false
     @Published var isCreatingConversation: Bool = false
 
+    // MARK: - Streaming State
+
+    /// In-progress assistant reply, one entry per bubble. This is the *displayed*
+    /// text — revealed gradually by the typewriter so it grows smoothly instead
+    /// of jumping a whole network chunk at a time. Cleared once the final
+    /// messages are persisted.
+    @Published var streamingBubbles: [String] = []
+    @Published var isStreaming: Bool = false
+
+    /// Full text received from the model so far; the typewriter catches up to it.
+    private var targetBubbles: [String] = []
+    private var typewriterTask: Task<Void, Never>?
+
     // MARK: - Error Handling
 
     @Published var errorMessage: String?
@@ -302,7 +315,7 @@ class ChatManager: ObservableObject {
         isSendingMessage = false
     }
 
-    /// Generate AI response using Gemini API
+    /// Generate AI response using Gemini API (streamed).
     private func generateAIResponse(
         for userMessage: String,
         portfolioContext: String
@@ -313,30 +326,55 @@ class ChatManager: ObservableObject {
         // Get portfolio context from current conversation
         let portfolioContext = portfolioContext
 
-        await GeminiRepo.getChatResponse(
+        isStreaming = true
+        streamingBubbles = []
+        targetBubbles = []
+
+        await GeminiRepo.streamChatResponse(
             userMessage: userMessage,
             conversationHistory: recentMessages,
-            portfolioContext: portfolioContext
+            portfolioContext: portfolioContext,
+            onUpdate: { [weak self] bubbles in
+                Task { @MainActor in
+                    self?.enqueueStreamUpdate(bubbles)
+                }
+            }
         ) { [weak self] result in
             Task { @MainActor in
                 guard let self = self else { return }
 
                 switch result {
                 case .success(let chatResponse):
-                    _ = await self.sendMessage(
-                        content: chatResponse.content,
-                        role: .assistant,
-                        metadata: MessageMetadata(
-                            temperature: 0.7,
-                            maxTokens: chatResponse.tokensUsed
-                        )
-                    )
+                    // Stop the typewriter and reveal any remaining tail so the
+                    // final on-screen text matches what we persist.
+                    self.stopTypewriter()
+                    self.streamingBubbles = chatResponse.parts
+                    // Persist each streamed bubble as its own assistant message,
+                    // then swap the live bubbles for the persisted ones in a
+                    // single step to avoid any flicker.
+                    var persisted: [ChatMessage] = []
+                    for part in chatResponse.parts
+                    where !part.trimmingCharacters(in: .whitespacesAndNewlines)
+                        .isEmpty {
+                        if let saved = await self.persistAssistantMessage(
+                            content: part,
+                            tokensUsed: chatResponse.tokensUsed
+                        ) {
+                            persisted.append(saved)
+                        }
+                    }
+                    self.messages.append(contentsOf: persisted)
+                    self.streamingBubbles = []
+                    self.isStreaming = false
+                    self.updateConversationInList()
 
                 case .failure(let error):
-                    // Fallback to a generic error response
                     let errorResponse =
                         "I apologize, but I'm experiencing some technical difficulties at the moment. Please try again in a few moments. Error: \(error.localizedDescription)"
 
+                    self.stopTypewriter()
+                    self.streamingBubbles = []
+                    self.isStreaming = false
                     _ = await self.sendMessage(
                         content: errorResponse,
                         role: .assistant,
@@ -348,6 +386,91 @@ class ChatManager: ObservableObject {
                 }
             }
         }
+    }
+
+    /// Persist an assistant message to the backend without mutating local
+    /// state, returning the saved message so callers can append it atomically.
+    private func persistAssistantMessage(
+        content: String,
+        tokensUsed: Int
+    ) async -> ChatMessage? {
+        guard let conversationId = currentConversation?.id else { return nil }
+
+        let (message, error) = await ChatRepo.sendMessage(
+            conversationId: conversationId,
+            content: content,
+            role: .assistant,
+            metadata: MessageMetadata(
+                temperature: 0.7,
+                maxTokens: tokensUsed
+            )
+        )
+
+        if let error = error {
+            handleError(error)
+        }
+        return message
+    }
+
+    // MARK: - Streaming Typewriter
+
+    /// Record the latest full text from the model and make sure the typewriter
+    /// is running to reveal it smoothly.
+    private func enqueueStreamUpdate(_ bubbles: [String]) {
+        targetBubbles = bubbles
+        // Grow the displayed array so new bubbles exist (empty) before filling.
+        if streamingBubbles.count < bubbles.count {
+            streamingBubbles.append(
+                contentsOf: Array(
+                    repeating: "",
+                    count: bubbles.count - streamingBubbles.count
+                )
+            )
+        }
+        startTypewriterIfNeeded()
+    }
+
+    private func startTypewriterIfNeeded() {
+        guard typewriterTask == nil else { return }
+
+        typewriterTask = Task { @MainActor in
+            while !Task.isCancelled {
+                var displayed = streamingBubbles
+                var changed = false
+
+                for i in targetBubbles.indices {
+                    if i >= displayed.count { displayed.append("") }
+                    let target = targetBubbles[i]
+                    let shownCount = displayed[i].count
+                    guard shownCount < target.count else { continue }
+
+                    // Reveal a slice each tick; step scales with how far behind
+                    // we are so the text never lags far yet still eases in.
+                    let remaining = target.count - shownCount
+                    let step = max(2, remaining / 6)
+                    let end = target.index(
+                        target.startIndex,
+                        offsetBy: min(target.count, shownCount + step)
+                    )
+                    displayed[i] = String(target[..<end])
+                    changed = true
+                }
+
+                if changed {
+                    withAnimation(.easeOut(duration: 0.18)) {
+                        streamingBubbles = displayed
+                    }
+                }
+
+                // ~60fps reveal cadence.
+                try? await Task.sleep(nanoseconds: 16_000_000)
+            }
+        }
+    }
+
+    private func stopTypewriter() {
+        typewriterTask?.cancel()
+        typewriterTask = nil
     }
 
     // MARK: - Message Management

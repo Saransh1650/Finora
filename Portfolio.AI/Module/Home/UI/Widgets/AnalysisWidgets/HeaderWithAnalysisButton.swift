@@ -50,6 +50,7 @@ struct HeaderWithAnalysisButton: View {
                                 ),
                                 message:
                                     "Error Parsing data, Please try again.",
+                                
                             )
                             presentToast(toast)
                         }

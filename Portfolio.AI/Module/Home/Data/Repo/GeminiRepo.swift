@@ -14,7 +14,9 @@ import Foundation
 
 // MARK: - Chat Response Model
 struct ChatResponseModel {
-    let content: String
+    /// One entry per Gemini response part. Each part is shown as its own
+    /// sequential chat bubble, mirroring how a person sends multiple messages.
+    let parts: [String]
     let tokensUsed: Int
     let finishReason: String?
 }
@@ -104,6 +106,140 @@ class GeminiRepo {
         )
 
         await sendChatRequest(request: request, completion: completion)
+    }
+
+    /// Streaming variant of `getChatResponse`. Hits Gemini's SSE endpoint and
+    /// reports the reply as it arrives. `onUpdate` is called with the current
+    /// accumulated bubbles every time new text streams in; `completion` fires
+    /// once at the end with the final bubbles.
+    static func streamChatResponse(
+        userMessage: String,
+        conversationHistory: [ChatMessage]? = nil,
+        portfolioContext: String? = nil,
+        onUpdate: @escaping ([String]) -> Void,
+        completion: @escaping (Result<ChatResponseModel, Error>) -> Void
+    ) async {
+        guard !apiKey.isEmpty else {
+            completion(.failure(AIRepoError.missingApiKey))
+            return
+        }
+
+        let prompt = createChatPrompt(
+            userMessage: userMessage,
+            conversationHistory: conversationHistory,
+            portfolioContext: portfolioContext
+        )
+
+        let request = GeminiRequest(
+            contents: [
+                GeminiContent(role: "user", parts: [Part(text: prompt)])
+            ],
+            generationConfig: GenerationConfig(
+                thinkingConfig: ThinkingConfig(thinkingBudget: -1)
+            ),
+            tools: [Tool(googleSearch: GoogleSearch())]
+        )
+
+        let urlString =
+            "\(baseUrl)/models/\(geminiFlash):streamGenerateContent?alt=sse&key=\(apiKey)"
+        guard let url = URL(string: urlString) else {
+            completion(.failure(AIRepoError.invalidURL))
+            return
+        }
+
+        var urlRequest = URLRequest(url: url)
+        urlRequest.httpMethod = "POST"
+        urlRequest.setValue(
+            "application/json",
+            forHTTPHeaderField: "Content-Type"
+        )
+
+        do {
+            urlRequest.httpBody = try JSONEncoder().encode(request)
+
+            let config = URLSessionConfiguration.default
+            config.timeoutIntervalForRequest = 120
+            config.timeoutIntervalForResource = 120
+            let session = URLSession(configuration: config)
+
+            let (bytes, response) = try await session.bytes(for: urlRequest)
+
+            if let httpResponse = response as? HTTPURLResponse,
+                !(200...299).contains(httpResponse.statusCode)
+            {
+                print(
+                    "Stream Chat HTTP Status Code: \(httpResponse.statusCode)"
+                )
+                completion(.failure(AIRepoError.invalidResponse))
+                return
+            }
+
+            // Accumulated bubbles. Gemini streams text deltas; each SSE chunk
+            // usually carries one part that continues the current bubble. When a
+            // chunk introduces extra parts, those start new bubbles — mirroring
+            // the multi-part segmentation of the non-streaming response.
+            var bubbles: [String] = []
+            var totalTokens = 0
+            var finishReason: String? = nil
+
+            for try await line in bytes.lines {
+                guard line.hasPrefix("data:") else { continue }
+                let payload = line.dropFirst("data:".count)
+                    .trimmingCharacters(in: .whitespaces)
+                if payload.isEmpty || payload == "[DONE]" { continue }
+
+                guard let data = payload.data(using: .utf8),
+                    let chunk = try? JSONDecoder().decode(
+                        GeminiResponse.self,
+                        from: data
+                    )
+                else { continue }
+
+                if let tokens = chunk.usageMetadata?.totalTokenCount {
+                    totalTokens = tokens
+                }
+
+                guard let candidate = chunk.candidates?.first else { continue }
+                finishReason = candidate.finishReason ?? finishReason
+
+                let deltas = (candidate.content?.parts ?? [])
+                    .map { $0.text }
+                    .filter { !$0.isEmpty }
+                guard !deltas.isEmpty else { continue }
+
+                if bubbles.isEmpty {
+                    bubbles = deltas
+                } else {
+                    // Continue the current bubble with the first delta; any
+                    // additional parts begin fresh bubbles.
+                    bubbles[bubbles.count - 1] += deltas[0]
+                    if deltas.count > 1 {
+                        bubbles.append(contentsOf: deltas[1...])
+                    }
+                }
+
+                let snapshot = bubbles
+                onUpdate(snapshot)
+            }
+
+            let finalBubbles =
+                bubbles
+                .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+                .filter { !$0.isEmpty }
+
+            completion(
+                .success(
+                    ChatResponseModel(
+                        parts: finalBubbles.isEmpty ? [""] : finalBubbles,
+                        tokensUsed: totalTokens,
+                        finishReason: finishReason
+                    )
+                )
+            )
+        } catch {
+            print("Stream Chat AIRepo Error: \(error)")
+            completion(.failure(error))
+        }
     }
 
     static func createStockExtractionPrompt(ocrText: String) -> String {
@@ -304,13 +440,16 @@ class GeminiRepo {
 
             guard let candidate = geminiResponse.candidates?.first,
                 let content = candidate.content,
-                let part = content.parts.first
+                !content.parts.isEmpty
             else {
                 completion(.failure(AIRepoError.invalidResponse))
                 return
             }
 
-            let responseText = part.text
+            // Join all parts: grounded responses can be split across parts.
+            let responseText = content.parts
+                .map { $0.text }
+                .joined(separator: "")
             print("Gemini Response Text: \(responseText)")
 
             let portfolioSummaryByAi = try parsePortfolioAnalysis(
@@ -366,12 +505,14 @@ class GeminiRepo {
 
             guard let candidate = geminiResponse.candidates?.first,
                   let content = candidate.content,
-                  let part = content.parts.first else {
+                  !content.parts.isEmpty else {
                 completion(.failure(AIRepoError.invalidResponse))
                 return
             }
 
-            let responseText = part.text
+            let responseText = content.parts
+                .map { $0.text }
+                .joined(separator: "")
             print("🔍 [GeminiRepo] Stock Extraction Response Text: \(responseText)")
 
             let extractedStocks = try parseStockExtractionResponse(from: responseText)
@@ -433,17 +574,27 @@ class GeminiRepo {
 
             guard let candidate = geminiResponse.candidates?.first,
                 let content = candidate.content,
-                let part = content.parts.first
+                !content.parts.isEmpty
             else {
                 completion(.failure(AIRepoError.invalidResponse))
                 return
             }
 
-            let responseText = part.text
-            print("Chat Response Text: \(responseText)")
+            // Gemini (with googleSearch grounding / thinking) can split a single
+            // turn across multiple parts: a short preamble part ("Let me look...")
+            // followed by the actual answer part(s). Only reading parts.first
+            // dropped the rest and left the message "dead". Keep each part as its
+            // own chunk so the UI can show them as separate sequential chat
+            // bubbles instead of one merged blob.
+            let parts = content.parts
+                .map { $0.text }
+                .filter {
+                    !$0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                }
+            print("Chat Response Parts: \(parts)")
 
             let chatResponse = ChatResponseModel(
-                content: responseText,
+                parts: parts.isEmpty ? [""] : parts,
                 tokensUsed: geminiResponse.usageMetadata?.totalTokenCount ?? 0,
                 finishReason: candidate.finishReason
             )
