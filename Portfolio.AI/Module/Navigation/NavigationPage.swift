@@ -15,31 +15,37 @@ struct NavigationPage: View {
     @StateObject var appUpdateManager = AppUpdateManager()
 
     var body: some View {
-        VStack(spacing: 0) {
-
-            ZStack {
-                switch selectedTab {
-                case .home:
-                    HomePage()
-                        .environmentObject(portfolioManager)
-                        .environmentObject(portfolioAnalysisManager)
-                        .environmentObject(chatManager)
-
-                case .portfolio:
-                    PortfolioPage()
-                        .environmentObject(portfolioManager)
-
-                case .settings:
-                    SettingsPage()
-                        .environmentObject(portfolioManager)
-                        .environmentObject(portfolioAnalysisManager)
-                        .environmentObject(chatManager)
-
+        TabView(selection: $selectedTab) {
+            HomePage()
+                .environmentObject(portfolioManager)
+                .environmentObject(portfolioAnalysisManager)
+                .environmentObject(chatManager)
+                .tabItem {
+                    Label(TabItem.home.title, systemImage: TabItem.home.icon)
                 }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .tag(TabItem.home)
 
-            CustomNavBar(selectedTab: $selectedTab)
+            PortfolioPage()
+                .environmentObject(portfolioManager)
+                .tabItem {
+                    Label(
+                        TabItem.portfolio.title,
+                        systemImage: TabItem.portfolio.icon
+                    )
+                }
+                .tag(TabItem.portfolio)
+
+            SettingsPage()
+                .environmentObject(portfolioManager)
+                .environmentObject(portfolioAnalysisManager)
+                .environmentObject(chatManager)
+                .tabItem {
+                    Label(
+                        TabItem.settings.title,
+                        systemImage: TabItem.settings.icon
+                    )
+                }
+                .tag(TabItem.settings)
         }
         .ignoresSafeArea(.keyboard)
         .onAppear {
