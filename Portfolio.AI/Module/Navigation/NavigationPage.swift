@@ -47,6 +47,7 @@ struct NavigationPage: View {
                 }
                 .tag(TabItem.settings)
         }
+        .tint(AppColors.selected)
         .ignoresSafeArea(.keyboard)
         .onAppear {
             appUpdateManager.checkForUpdatesAutomatically()
